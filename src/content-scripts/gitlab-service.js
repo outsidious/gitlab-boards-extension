@@ -9,7 +9,8 @@ export function GitlabService(urlOrigin, projectName) {
         var url =
             this.origin + this.apiURL + this.projectId + "/issues/?scope=all";
         $.get(url, function(data) {
-            console.log(data);
+            //console.log(data)
+            data.toString
         });
     };
 }
