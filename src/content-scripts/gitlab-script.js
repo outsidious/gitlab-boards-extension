@@ -15,5 +15,9 @@ setTimeout(() => {
         var wrapper = document.createElement('qoollab-card');
         elements[i].parentNode.insertBefore(wrapper, elements[i]);
         wrapper.appendChild(elements[i]);
+        var children = elements[i].getElementsByClassName("board-card-number");
+        var strIssueId = children[0].innerHTML.toString().replace(/[^\d]/g, ''); // удаляем из innerHTML всё кроме цифр
+        var issueId = Number.parseInt(strIssueId);
+        wrapper.setAttribute("issue-id", issueId)
     }
-}, 1000);
+}, 10000);
