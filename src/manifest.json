@@ -30,7 +30,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["*://gitlab.loc/*/boards*", "*://git.iu7.bmstu.ru/*/boards*"],
+      "matches": ["*://gitlab.loc/*/boards*"],
       "run_at": "document_idle",
       "js": ["js/gitlab-script.js", "js/remove-boards.js"]
     }
