@@ -1,16 +1,16 @@
 <template>
     <div>
-         <clock-time-four-outline />
-         Nov 20
+        <account-check-outline />
+        2
     </div>
 </template>
 
 <script>
-import ClockTimeFourOutline from "vue-material-design-icons/ClockTimeFourOutline.vue";
+import AccountCheckOutline from "vue-material-design-icons/AccountCheckOutline.vue";
 export default {
     components: {
-        ClockTimeFourOutline
-    }
+        AccountCheckOutline,
+    },
 };
 </script>
 

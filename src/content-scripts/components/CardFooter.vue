@@ -1,6 +1,8 @@
 <template>
-    <div>
+    <div class="flex-container">
         <milestone-component> </milestone-component>
+        <merge-request> </merge-request>
+        <approve> </approve>
     </div>
 </template>
 
@@ -15,9 +17,11 @@ export default {
 </script>
 
 <style scoped>
-div {
+.flex-container {
+    width: 50%;
     display: flex;
     align-items: center;
     padding-top: 10px;
+    justify-content: space-between;
 }
 </style>

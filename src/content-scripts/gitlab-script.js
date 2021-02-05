@@ -3,6 +3,8 @@ import Vue from "vue";
 import 'vue-material-design-icons/styles.css'
 import CardFooter from "./components/CardFooter";
 import Milestone from "./components/Milestone";
+import MergeRequest from "./components/MergeRequest";
+import Approve from "./components/Approve";
 
 var pathName = window.location.pathname;
 var projectName = pathName.slice(1, pathName.indexOf("/-/"));
@@ -67,6 +69,8 @@ setTimeout(() => {
         cardFooter.appendChild(milestoneElement);
 
         Vue.component("milestone-component", Milestone);
+        Vue.component("merge-request", MergeRequest);
+        Vue.component("approve", Approve); 
         new Vue({
             el: "#card-footer" + issueId,
             render: (h) => h(CardFooter),
