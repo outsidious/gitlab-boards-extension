@@ -1,7 +1,7 @@
 <template>
     <div>
         <account-check-outline />
-        2
+        200
     </div>
 </template>
 
@@ -16,7 +16,6 @@ export default {
 
 <style scoped>
 .material-design-icon__svg {
-    padding-right: 2px;
     position: relative;
     bottom: -0.1rem;
 }

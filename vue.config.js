@@ -1,4 +1,5 @@
 module.exports = {
+  runtimeCompiler: true,
   pages: {
     popup: {
       template: 'public/browser-extension.html',
@@ -16,7 +17,7 @@ module.exports = {
           entries:
           {
               'gitlab-script': 'src/content-scripts/gitlab-script.js',
-              'remove-boards': 'src/content-scripts/remove-boards.js'
+              'restruct-card': 'src/content-scripts/restruct-card.js'
           }
         }
       }

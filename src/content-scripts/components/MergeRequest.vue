@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div class="merge-flex-container">
         <source-branch />
-        1
+        <div> 1111 </div>
         <check-circle-outline fillColor="#27AE60"/>
     </div>
 </template>
@@ -27,5 +27,16 @@ export default {
 
 chech-circle-outline {
     fill: "#27AE60";
+}
+
+.merge-flex-container {
+    display: flex;
+}
+
+div {
+    padding-right: 1px;
+    padding-left: 0;
+    position: relative;
+    right: 1px;
 }
 </style>

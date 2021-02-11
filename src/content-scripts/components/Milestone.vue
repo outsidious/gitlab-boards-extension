@@ -1,22 +1,22 @@
 <template>
     <div>
          <clock-time-four-outline />
-         Nov 20
+         {{ due_date }}
     </div>
 </template>
 
 <script>
 import ClockTimeFourOutline from "vue-material-design-icons/ClockTimeFourOutline.vue";
 export default {
+    props: ['due_date'],
     components: {
         ClockTimeFourOutline
-    }
+    },
 };
 </script>
 
 <style scoped>
 .material-design-icon__svg {
-    padding-right: 2px;
     position: relative;
     bottom: -0.1rem;
 }

@@ -13,4 +13,12 @@ export function GitlabService(urlOrigin, projectName) {
             data.toString
         });
     };
+
+    this.getCurrentIssue = function(issueId, callback) {
+        var url =
+            this.origin + this.apiURL + this.projectId + "/issues/?iids[]=" + issueId;
+        $.get(url, function(data) {
+            callback(data[0])
+        });
+    }
 }
