@@ -1,7 +1,7 @@
 <template>
     <div class="merge-flex-container">
         <source-branch />
-        <div> 1111 </div>
+        <div> {{mergesQua}} </div>
         <check-circle-outline fillColor="#27AE60"/>
     </div>
 </template>
@@ -11,6 +11,7 @@ import CheckCircleOutline from "vue-material-design-icons/CheckCircleOutline";
 import SourceBranch from "vue-material-design-icons/SourceBranch";
 import "vue-material-design-icons/styles.css"
 export default {
+    props: ['mergesQua'],
     components: {
         CheckCircleOutline,
         SourceBranch

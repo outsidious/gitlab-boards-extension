@@ -6,6 +6,7 @@ import CardFooterComponent from "./components/CardFooterComponent";
 import Milestone from "./components/Milestone";
 import MergeRequest from "./components/MergeRequest";
 import Approve from "./components/Approve";
+import VueMaterial from 'vue-material'
 
 var pathName = window.location.pathname;
 var projectName = pathName.slice(1, pathName.indexOf("/-/"));
@@ -32,12 +33,12 @@ setTimeout(() => {
             cardFooter.removeChild(cardFooter.firstChild);
         }
 
-        gitlabService.getCurrentIssue(issueId, getMilestoneCallback);
-
         //var milestoneElement = document.createElement("div");
         //milestoneElement.setAttribute("id", "app");
         //cardFooter.appendChild(milestoneElement);
 
+        
+        Vue.use(VueMaterial);
         Vue.component("milestone-component", Milestone);
         Vue.component("merge-request", MergeRequest);
         Vue.component("approve", Approve);
@@ -48,11 +49,4 @@ setTimeout(() => {
 
         
     }
-}, 2000);
-
-function getMilestoneCallback(issueInfo) {
-    var milestoneInfo = issueInfo["milestone"];
-    var dueDate = "null";
-    if (milestoneInfo) dueDate = milestoneInfo["due_date"];
-    console.log(dueDate);
-}
+}, 6000);
