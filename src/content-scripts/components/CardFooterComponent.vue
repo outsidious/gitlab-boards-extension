@@ -1,21 +1,34 @@
 <template>
-    <div class="flex-container">
-        <div class="gitlab-info">
-            <milestone-component v-bind:due_date="issueInfo.due_date">
-            </milestone-component>
-            <merge-request v-bind:mergesQua="issueInfo.mergesQua">
-            </merge-request>
-            <approve> </approve>
+    <div>
+        <div v-if="buttonMore">
+            <br/>
+            <br/>
+            show me
         </div>
-        <div> 
-            <md-button class="md-dense md-primary">more</md-button>
+        <div class="tail-flex-container">
+            <div class="gitlab-info">
+                <milestone-component v-bind:due_date="issueInfo.due_date">
+                </milestone-component>
+                <merge-request v-bind:mergesQua="issueInfo.mergesQua">
+                </merge-request>
+                <approve> </approve>
+            </div>
+            <div>
+                <md-button
+                    v-on:click="changeButtonMoreState()"
+                    class="md-dense md-primary"
+                >
+                    <div v-if="buttonMore">less</div>
+                    <div v-else>more</div>
+                </md-button>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
 import * as gitlab from "../gitlab-service";
-import 'vue-material/dist/vue-material.min.css'
+import "vue-material/dist/vue-material.min.css";
 var pathName = window.location.pathname;
 var projectName = pathName.slice(1, pathName.indexOf("/-/"));
 //console.log(projectName);
@@ -49,8 +62,7 @@ export default {
         },
         changeButtonMoreState() {
             this.buttonMore = !this.buttonMore;
-            console.log(this.buttonMore);
-        }
+        },
     },
     mounted() {
         var isuueId = this.$el.parentElement.parentElement.parentElement.getAttribute(
@@ -63,7 +75,7 @@ export default {
 </script>
 
 <style scoped>
-.flex-container {
+.tail-flex-container {
     display: flex;
     align-content: flex-end;
     justify-content: space-between;
@@ -76,5 +88,9 @@ export default {
     align-items: center;
     justify-content: space-between;
     align-content: flex-end;
+}
+
+.md-buton {
+    z-index: 10000;
 }
 </style>
