@@ -35,7 +35,8 @@ export function addIssueIdToCardHeader(document, qoollabCard, issueId) {
 
 export function restructCardBody(document, qoollabCard) {
     var assigneElement = qoollabCard.getElementsByClassName("avatar")[0]; // перемещаем assigne в один flex с лейблами и увеличиваем аватарку
-    assigneElement.style = "width: 40px; height: 40px; margin-right: 0";
+    assigneElement.style = "width: 40px; height: 40px; margin-right: 0; max-width: none";
+    //assigneElement.querySelector("img").style = "max-width: innerhit"
     var cardBodyDiv = document.createElement("div");
     cardBodyDiv.style =
         "padding-left: 20px; margin-left: auto; margin-right: 0; margin-top: auto; margin-bottom: auto;";

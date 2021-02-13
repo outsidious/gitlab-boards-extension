@@ -2,7 +2,7 @@ var $ = require("jquery");
  
 export function GitlabService(urlOrigin, projectName) {
     this.origin = urlOrigin;
-    this.projectId = projectName.replace("/", "%2F"); //formated project name might be used as id
+    this.projectId = projectName.replaceAll("/", "%2F"); //formated project name might be used as id
     this.apiURL = "/api/v4/projects/";
 
     this.getAllIssues = function() {
@@ -14,11 +14,19 @@ export function GitlabService(urlOrigin, projectName) {
         });
     };
 
+    this.getRelatedMerges = function(issueId, callback) {
+        var url =
+            this.origin + this.apiURL + this.projectId + "/issues/" + issueId + "/related_merge_requests";
+        $.get(url, function(data) {
+            callback(data);
+        });
+    };
+
     this.getCurrentIssue = function(issueId, callback) {
         var url =
             this.origin + this.apiURL + this.projectId + "/issues/?iids[]=" + issueId;
         $.get(url, function(data) {
-            callback(data[0])
+            callback(data[0]);
         });
-    }
+    };
 }

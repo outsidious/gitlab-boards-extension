@@ -4,6 +4,8 @@
             <br/>
             <br/>
             show me
+            <br/>
+            <br/>
         </div>
         <div class="tail-flex-container">
             <div class="gitlab-info">
@@ -31,7 +33,7 @@ import * as gitlab from "../gitlab-service";
 import "vue-material/dist/vue-material.min.css";
 var pathName = window.location.pathname;
 var projectName = pathName.slice(1, pathName.indexOf("/-/"));
-//console.log(projectName);
+console.log(projectName);
 var origin = window.location.origin;
 var gitlabService = new gitlab.GitlabService(origin, projectName);
 
@@ -41,6 +43,12 @@ export default {
             issueInfo: {
                 due_date: "",
                 mergesQua: "",
+                lastRelatedMerge: {
+                    mergeId: 0,
+                    mergeConflicts: false,
+                    pipelineStatus: true,
+                    mergeApprovals: [],
+                },
             },
             buttonMore: false,
         };
@@ -55,21 +63,40 @@ export default {
                 //console.log(dueDate);
             }
             this.issueInfo.due_date = strDueDate;
+            return;
         },
-        getMergeCallback(issueInfo) {
+        getQuaMergesCallback(issueInfo) {
             var mergesQua = issueInfo["merge_requests_count"];
             this.issueInfo.mergesQua = mergesQua;
+        },
+        getRelatedMergesCallback(mergesInfo) {
+            console.log(mergesInfo);
+            if (mergesInfo.length != 0) {
+                var theLatest = mergesInfo[0];
+                for (var i = 0; i < mergesInfo.length; ++i) {
+                    if (Date(mergesInfo[i]["created_at"]) > Date((theLatest["created_at"])))
+                        theLatest = mergesInfo[i];
+                }
+                this.issueInfo.lastRelatedMerge.mergeId = theLatest["iid"];
+                this.issueInfo.lastRelatedMerge.mergeConflicts = theLatest["has_conflicts"];
+                this.issueInfo.lastRelatedMerge.pipelineStatus = (theLatest["head_pipeline"].status != "failed"); 
+            }
+            console.log(this.issueInfo.lastRelatedMerge.mergeId);
+            console.log(this.issueInfo.lastRelatedMerge.mergeConflicts);
+            console.log(this.issueInfo.lastRelatedMerge.pipelineStatus);
+            return;
         },
         changeButtonMoreState() {
             this.buttonMore = !this.buttonMore;
         },
     },
     mounted() {
-        var isuueId = this.$el.parentElement.parentElement.parentElement.getAttribute(
+        var issueId = this.$el.parentElement.parentElement.parentElement.getAttribute(
             "issue-id"
         );
-        gitlabService.getCurrentIssue(isuueId, this.getMilestoneCallback);
-        gitlabService.getCurrentIssue(isuueId, this.getMergeCallback);
+        gitlabService.getCurrentIssue(issueId, this.getMilestoneCallback);
+        gitlabService.getCurrentIssue(issueId, this.getQuaMergesCallback);
+        gitlabService.getRelatedMerges(issueId, this.getRelatedMergesCallback);
     },
 };
 </script>
