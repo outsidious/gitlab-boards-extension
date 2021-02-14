@@ -29,4 +29,12 @@ export function GitlabService(urlOrigin, projectName) {
             callback(data[0]);
         });
     };
+
+    this.getMergeApprovals = function(MergeId, callback) {
+        var url =
+            this.origin + this.apiURL + this.projectId + "/merge_requests/" + MergeId + "/approvals";
+        $.get(url, function(data) {
+            callback(data["approved_by"]);
+        });
+    };
 }

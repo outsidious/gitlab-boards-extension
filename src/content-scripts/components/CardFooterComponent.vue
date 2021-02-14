@@ -1,19 +1,33 @@
 <template>
     <div>
+        <link
+            href="https://fonts.googleapis.com/icon?family=Material+Icons"
+            rel="stylesheet"
+        />
         <div v-if="buttonMore">
-            <br/>
-            <br/>
+            <br />
+            <br />
             show me
-            <br/>
-            <br/>
+            <br />
+            <br />
         </div>
         <div class="tail-flex-container">
             <div class="gitlab-info">
                 <milestone-component v-bind:due_date="issueInfo.due_date">
                 </milestone-component>
-                <merge-request v-bind:mergesQua="issueInfo.mergesQua">
+                <merge-request
+                    v-bind:mergesQua="issueInfo.mergesQua"
+                    v-bind:mergeStatus="
+                        issueInfo.lastRelatedMerge.pipelineStatus
+                    "
+                >
                 </merge-request>
-                <approve> </approve>
+                <approve
+                    v-bind:approvalsQua="
+                        issueInfo.lastRelatedMerge.mergeApprovals
+                    "
+                >
+                </approve>
             </div>
             <div>
                 <md-button
@@ -46,8 +60,8 @@ export default {
                 lastRelatedMerge: {
                     mergeId: 0,
                     mergeConflicts: false,
-                    pipelineStatus: true,
-                    mergeApprovals: [],
+                    pipelineStatus: "undefined",
+                    mergeApprovals: 0,
                 },
             },
             buttonMore: false,
@@ -63,28 +77,37 @@ export default {
                 //console.log(dueDate);
             }
             this.issueInfo.due_date = strDueDate;
-            return;
         },
         getQuaMergesCallback(issueInfo) {
             var mergesQua = issueInfo["merge_requests_count"];
             this.issueInfo.mergesQua = mergesQua;
         },
         getRelatedMergesCallback(mergesInfo) {
-            console.log(mergesInfo);
             if (mergesInfo.length != 0) {
                 var theLatest = mergesInfo[0];
                 for (var i = 0; i < mergesInfo.length; ++i) {
-                    if (Date(mergesInfo[i]["created_at"]) > Date((theLatest["created_at"])))
+                    if (
+                        Date(mergesInfo[i]["created_at"]) >
+                        Date(theLatest["created_at"])
+                    )
                         theLatest = mergesInfo[i];
                 }
                 this.issueInfo.lastRelatedMerge.mergeId = theLatest["iid"];
-                this.issueInfo.lastRelatedMerge.mergeConflicts = theLatest["has_conflicts"];
-                this.issueInfo.lastRelatedMerge.pipelineStatus = (theLatest["head_pipeline"].status != "failed"); 
+                if (theLatest["has_conflicts"])
+                    this.issueInfo.lastRelatedMerge.mergeConflicts =
+                        theLatest["has_conflicts"];
+                if (theLatest["head_pipeline"])
+                    this.issueInfo.lastRelatedMerge.pipelineStatus =
+                        theLatest["head_pipeline"].status;
             }
-            console.log(this.issueInfo.lastRelatedMerge.mergeId);
-            console.log(this.issueInfo.lastRelatedMerge.mergeConflicts);
-            console.log(this.issueInfo.lastRelatedMerge.pipelineStatus);
-            return;
+            this.$emit("merge_loaded", this.issueInfo.lastRelatedMerge.mergeId)
+            //console.log(this.issueInfo.lastRelatedMerge.mergeId);
+            //console.log(this.issueInfo.lastRelatedMerge.mergeConflicts);
+            //console.log(this.issueInfo.lastRelatedMerge.pipelineStatus);
+        },
+        getApprovalsCallback(approvers) {
+            //console.log(approvers);
+            this.issueInfo.lastRelatedMerge.mergeApprovals = approvers.length;
         },
         changeButtonMoreState() {
             this.buttonMore = !this.buttonMore;
@@ -97,7 +120,11 @@ export default {
         gitlabService.getCurrentIssue(issueId, this.getMilestoneCallback);
         gitlabService.getCurrentIssue(issueId, this.getQuaMergesCallback);
         gitlabService.getRelatedMerges(issueId, this.getRelatedMergesCallback);
+        this.$on("merge_loaded", function(merge) {
+            gitlabService.getMergeApprovals(merge, this.getApprovalsCallback);
+        })
     },
+    
 };
 </script>
 

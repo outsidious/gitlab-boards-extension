@@ -1,43 +1,30 @@
 <template>
     <div class="merge-flex-container">
         <source-branch />
-        <div> {{mergesQua}} </div>
-        <check-circle-outline fillColor="#27AE60"/>
+        {{mergesQua}}
+        <md-icon v-if= "mergeStatus==='passed'" style="color: green">check_circle_outline</md-icon>
+        <md-icon v-else-if= "mergeStatus==='failed'" style="color: red">cancel</md-icon>
+        <md-icon v-else style="color: yellow">help_outline</md-icon>
     </div>
 </template>
 
 <script>
-import CheckCircleOutline from "vue-material-design-icons/CheckCircleOutline";
 import SourceBranch from "vue-material-design-icons/SourceBranch";
 import "vue-material-design-icons/styles.css"
 export default {
-    props: ['mergesQua'],
+    props: ['mergesQua', 'mergeStatus'],
     components: {
-        CheckCircleOutline,
         SourceBranch
+    },
+    mounted() {
+        
     }
 };
 </script>
 
 <style scoped>
-.material-design-icon__svg {
-    padding-right: 0px;
+.md-icon {
     position: relative;
-    bottom: -0.1rem;
-}
-
-chech-circle-outline {
-    fill: "#27AE60";
-}
-
-.merge-flex-container {
-    display: flex;
-}
-
-div {
-    padding-right: 1px;
-    padding-left: 0;
-    position: relative;
-    right: 1px;
+    bottom: 0.1rem;
 }
 </style>

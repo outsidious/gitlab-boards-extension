@@ -1,22 +1,19 @@
 <template>
     <div>
-        <account-check-outline />
-        200
+        <md-icon>how_to_reg</md-icon>
+        {{ approvalsQua }}
     </div>
 </template>
 
 <script>
-import AccountCheckOutline from "vue-material-design-icons/AccountCheckOutline.vue";
 export default {
-    components: {
-        AccountCheckOutline,
-    },
+    props: ["approvalsQua"],
 };
 </script>
 
 <style scoped>
-.material-design-icon__svg {
+.md-icon {
     position: relative;
-    bottom: -0.1rem;
+    bottom: 0.1rem;
 }
 </style>
