@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="qoollo-card-footer">
         <link
             href="https://fonts.googleapis.com/icon?family=Material+Icons"
             rel="stylesheet"
@@ -7,7 +7,10 @@
         <div v-if="buttonMore">
             <br />
             <br />
-            show me
+            <hidden-part
+                v-bind:changesUrl="issueInfo.lastRelatedMerge.changesUrl"
+            >
+            </hidden-part>
             <br />
             <br />
         </div>
@@ -45,13 +48,15 @@
 <script>
 import * as gitlab from "../gitlab-service";
 import "vue-material/dist/vue-material.min.css";
+import HiddenPart from "./HiddenPart.vue";
 var pathName = window.location.pathname;
 var projectName = pathName.slice(1, pathName.indexOf("/-/"));
-console.log(projectName);
+//console.log(projectName);
 var origin = window.location.origin;
 var gitlabService = new gitlab.GitlabService(origin, projectName);
 
 export default {
+    components: { HiddenPart },
     data() {
         return {
             issueInfo: {
@@ -62,6 +67,7 @@ export default {
                     mergeConflicts: false,
                     pipelineStatus: "undefined",
                     mergeApprovals: 0,
+                    changesUrl: "",
                 },
             },
             buttonMore: false,
@@ -72,7 +78,9 @@ export default {
             var milestoneInfo = issueInfo["milestone"];
             var strDueDate = "-";
             if (milestoneInfo) {
-                strDueDate = milestoneInfo["due_date"];
+                var dueDate = Date(milestoneInfo["due_date"]).toString();
+                var dueDateArr = dueDate.split(" ");
+                strDueDate = dueDateArr[1] + " " + dueDateArr[2];
                 //var dueDate = Date.parse(strDueDate);
                 //console.log(dueDate);
             }
@@ -100,7 +108,7 @@ export default {
                     this.issueInfo.lastRelatedMerge.pipelineStatus =
                         theLatest["head_pipeline"].status;
             }
-            this.$emit("merge_loaded", this.issueInfo.lastRelatedMerge.mergeId)
+            this.$emit("merge_loaded", this.issueInfo.lastRelatedMerge.mergeId);
             //console.log(this.issueInfo.lastRelatedMerge.mergeId);
             //console.log(this.issueInfo.lastRelatedMerge.mergeConflicts);
             //console.log(this.issueInfo.lastRelatedMerge.pipelineStatus);
@@ -122,13 +130,18 @@ export default {
         gitlabService.getRelatedMerges(issueId, this.getRelatedMergesCallback);
         this.$on("merge_loaded", function(merge) {
             gitlabService.getMergeApprovals(merge, this.getApprovalsCallback);
-        })
+            this.issueInfo.lastRelatedMerge.changesUrl = gitlabService.getChangesUrl(merge);
+        });
     },
-    
 };
 </script>
 
 <style scoped>
+.qoollo-card-footer {
+    position: relative;
+    top: 20px;
+}
+
 .tail-flex-container {
     display: flex;
     align-content: flex-end;
@@ -137,7 +150,7 @@ export default {
 }
 
 .gitlab-info {
-    width: 60%;
+    width: 65%;
     display: flex;
     align-items: center;
     justify-content: space-between;

@@ -6,6 +6,7 @@ import CardFooterComponent from "./components/CardFooterComponent";
 import Milestone from "./components/Milestone";
 import MergeRequest from "./components/MergeRequest";
 import Approve from "./components/Approve";
+import HiddenPart from "./components/HiddenPart";
 import VueMaterial from 'vue-material'
 
 var pathName = window.location.pathname;
@@ -42,6 +43,7 @@ setTimeout(() => {
         Vue.component("milestone-component", Milestone);
         Vue.component("merge-request", MergeRequest);
         Vue.component("approve", Approve);
+        Vue.component("hidden-part", HiddenPart);
         new Vue({
             el: "#card-footer" + issueId,
             render: (h) => h(CardFooterComponent),
@@ -49,4 +51,4 @@ setTimeout(() => {
 
         
     }
-}, 3000);
+}, 5000);
