@@ -48,7 +48,6 @@
 <script>
 import * as gitlab from "../gitlab-service";
 import "vue-material/dist/vue-material.min.css";
-import HiddenPart from "./HiddenPart.vue";
 var pathName = window.location.pathname;
 var projectName = pathName.slice(1, pathName.indexOf("/-/"));
 //console.log(projectName);
@@ -56,7 +55,6 @@ var origin = window.location.origin;
 var gitlabService = new gitlab.GitlabService(origin, projectName);
 
 export default {
-    components: { HiddenPart },
     data() {
         return {
             issueInfo: {
