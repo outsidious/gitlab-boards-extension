@@ -5,14 +5,12 @@
             rel="stylesheet"
         />
         <div v-if="buttonMore">
-            <br />
-            <br />
             <hidden-part
                 v-bind:changesUrl="issueInfo.lastRelatedMerge.changesUrl"
+                v-on:signalRunPipeline="runLastPipeline"
+                v-on:signalMerge="mergeRequest"
             >
             </hidden-part>
-            <br />
-            <br />
         </div>
         <div class="tail-flex-container">
             <div class="gitlab-info">
@@ -50,7 +48,7 @@ import * as gitlab from "../gitlab-service";
 import "vue-material/dist/vue-material.min.css";
 var pathName = window.location.pathname;
 var projectName = pathName.slice(1, pathName.indexOf("/-/"));
-//console.log(projectName);
+console.log(projectName);
 var origin = window.location.origin;
 var gitlabService = new gitlab.GitlabService(origin, projectName);
 
@@ -61,10 +59,11 @@ export default {
                 due_date: "",
                 mergesQua: "",
                 lastRelatedMerge: {
-                    mergeId: 0,
+                    mergeId: -1,
                     mergeConflicts: false,
+                    pipelineId: -1,
                     pipelineStatus: "undefined",
-                    mergeApprovals: 0,
+                    mergeApprovals: -1,
                     changesUrl: "",
                 },
             },
@@ -72,6 +71,20 @@ export default {
         };
     },
     methods: {
+        runLastPipeline() {
+            if (this.issueInfo.lastRelatedMerge.pipelineId != -1) {
+                gitlabService.runPipeline(this.issueInfo.lastRelatedMerge.pipelineId, function(data){
+                    console.log(data);
+                });
+            }
+        },
+        mergeRequest() {
+            if (this.issueInfo.lastRelatedMerge.mergeId != -1) {
+                gitlabService.mergeRequest(this.issueInfo.lastRelatedMerge.mergeId, function(data){
+                    console.log(data);
+                });
+            }
+        },
         getMilestoneCallback(issueInfo) {
             var milestoneInfo = issueInfo["milestone"];
             var strDueDate = "-";
@@ -105,8 +118,10 @@ export default {
                 if (theLatest["head_pipeline"])
                     this.issueInfo.lastRelatedMerge.pipelineStatus =
                         theLatest["head_pipeline"].status;
+                this.issueInfo.lastRelatedMerge.pipelineId =
+                    theLatest["head_pipeline"].id;
             }
-            this.$emit("merge_loaded", this.issueInfo.lastRelatedMerge.mergeId);
+            this.$emit("signalMergeLoaded", this.issueInfo.lastRelatedMerge.mergeId);
             //console.log(this.issueInfo.lastRelatedMerge.mergeId);
             //console.log(this.issueInfo.lastRelatedMerge.mergeConflicts);
             //console.log(this.issueInfo.lastRelatedMerge.pipelineStatus);
@@ -120,16 +135,25 @@ export default {
         },
     },
     mounted() {
-        var issueId = this.$el.parentElement.parentElement.parentElement.getAttribute(
+        var qoollabCard = this.$el.parentElement.parentElement.parentElement;
+        var issueId = qoollabCard.getAttribute(
             "issue-id"
         );
         gitlabService.getCurrentIssue(issueId, this.getMilestoneCallback);
         gitlabService.getCurrentIssue(issueId, this.getQuaMergesCallback);
         gitlabService.getRelatedMerges(issueId, this.getRelatedMergesCallback);
-        this.$on("merge_loaded", function(merge) {
+
+        this.$on("signalMergeLoaded", function(merge) {
             gitlabService.getMergeApprovals(merge, this.getApprovalsCallback);
-            this.issueInfo.lastRelatedMerge.changesUrl = gitlabService.getChangesUrl(merge);
+            this.issueInfo.lastRelatedMerge.changesUrl = gitlabService.getChangesUrl(
+                merge
+            );
         });
+
+        /*
+        this.$on("run_pipeline", function() {
+            console.log("run_pipeline in cardfooter");
+        });*/
     },
 };
 </script>

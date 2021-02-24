@@ -35,18 +35,22 @@ export function addIssueIdToCardHeader(document, qoollabCard, issueId) {
 
 export function restructCardBody(document, qoollabCard) {
     var assigneElement = qoollabCard.getElementsByClassName("avatar")[0]; // перемещаем assigne в один flex с лейблами и увеличиваем аватарку
-    assigneElement.style = "width: 40px; height: 40px; margin-right: 0; max-width: none";
-    //assigneElement.querySelector("img").style = "max-width: innerhit"
-    var cardBodyDiv = document.createElement("div");
-    cardBodyDiv.style =
-        "padding-left: 20px; margin-left: auto; margin-right: 0; margin-top: auto; margin-bottom: auto;";
-    cardBodyDiv.appendChild(assigneElement);
-    var labelsDiv = qoollabCard.getElementsByClassName("board-card-labels")[0];
-    var cardBody = document.createElement("div");
-    cardBody.style = "display: flex; align-items: center; margin-top: 5px";
-    var labelsDivParent = qoollabCard.querySelector("li > div");
-    labelsDivParent.appendChild(cardBody);
-    if (labelsDiv)
-        cardBody.appendChild(labelsDiv);
-    cardBody.appendChild(cardBodyDiv);
+    if (assigneElement) {
+        assigneElement.style =
+            "width: 40px; height: 40px; margin-right: 0; max-width: none";
+        //assigneElement.querySelector("img").style = "max-width: innerhit"
+        var cardBodyDiv = document.createElement("div");
+        cardBodyDiv.style =
+            "padding-left: 20px; margin-left: auto; margin-right: 0; margin-top: auto; margin-bottom: auto;";
+        cardBodyDiv.appendChild(assigneElement);
+        var labelsDiv = qoollabCard.getElementsByClassName(
+            "board-card-labels"
+        )[0];
+        var cardBody = document.createElement("div");
+        cardBody.style = "display: flex; align-items: center; margin-top: 5px";
+        var labelsDivParent = qoollabCard.querySelector("li > div");
+        labelsDivParent.appendChild(cardBody);
+        if (labelsDiv) cardBody.appendChild(labelsDiv);
+        cardBody.appendChild(cardBodyDiv);
+    }
 }

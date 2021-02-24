@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="milestone-container">
          <md-icon>watch_later</md-icon>
          {{ due_date }}
     </div>
@@ -16,4 +16,9 @@ export default {
     position: relative;
     bottom: 0.1rem;
 }
+
+.milestone-container {
+    width: 33%;
+}
+
 </style>

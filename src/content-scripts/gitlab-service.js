@@ -2,7 +2,7 @@ var $ = require("jquery");
 
 export function GitlabService(urlOrigin, projectName) {
     this.origin = urlOrigin;
-    console.log(this.origin);
+    //console.log(this.origin);
     this.projectName = projectName;
     this.projectId = projectName.replaceAll("/", "%2F"); //formated project name might be used as id
     this.apiURL = "/api/v4/projects/";
@@ -49,9 +49,14 @@ export function GitlabService(urlOrigin, projectName) {
             "/merge_requests/" +
             MergeId +
             "/approvals";
-        $.get(url, function(data) {
-            callback(data["approved_by"]);
-        });
+        if (MergeId > 0) {
+            $.get(url, function(data) {
+                callback(data["approved_by"]);
+            });
+        }
+        else {
+            callback([]);
+        }
     };
 
     this.getChangesUrl = function(MergeId) {
@@ -63,5 +68,37 @@ export function GitlabService(urlOrigin, projectName) {
             MergeId +
             "/diffs";
         return url;
+    };
+
+    this.runPipeline = function(pipelineId, callback) {
+        var url =
+            this.origin +
+            this.apiURL +
+            this.projectId +
+            "/pipelines/" +
+            pipelineId +
+            "/retry";
+        console.log(url);
+        $.post(url, function(data) {
+            callback(data);
+        });
+    };
+
+    this.mergeRequest = function(mergeId, callback) {
+        var url =
+            this.origin +
+            this.apiURL +
+            this.projectId +
+            "/merge_requests/" +
+            mergeId +
+            "/merge";
+        console.log(url);
+        $.ajax({
+            url: url,
+            type: "PUT",
+            success: function(response) {
+                callback(response);
+            },
+        });
     };
 }

@@ -2,7 +2,7 @@
     <div class="hidden-part-container">
         <div class="help-text ">actions</div>
         <a :href="this.changesUrl"> Show changes </a>
-        <a v-on:click="runPipeline()"> Run pipeline </a>
+        <a v-on:click.stop.prevent="runPipeline($event)"> Run pipeline </a>
         <a v-on:click="merge()"> Merge </a>
         <a v-on:click="apporove()"> Approve </a>
         <a v-on:click="markAsReady()"> Mark as ready </a>
@@ -15,11 +15,17 @@ export default {
     props: ["changesUrl"],
     mounted() {},
     methods: {
-        runPipeline() {
-            console.log("runPipeline clicked()");
+        runPipeline: function(event) {
+            console.log("runPipeline click!");
+            //console.log(event);
+            //console.log(event.cancelBubble);
+            event.stopImmediatePropagation();
+            //console.log(event.cancelBubble);
+            this.$emit('signalRunPipeline');
         },
         merge() {
-            console.log("merge clicked()");
+            //console.log("merge clicked()");  
+            this.$emit('signalMerge');
         },
         approve() {
             console.log("approve clicked()");

@@ -38,7 +38,6 @@ setTimeout(() => {
         //milestoneElement.setAttribute("id", "app");
         //cardFooter.appendChild(milestoneElement);
 
-        
         Vue.use(VueMaterial);
         Vue.component("milestone-component", Milestone);
         Vue.component("merge-request", MergeRequest);
@@ -48,7 +47,5 @@ setTimeout(() => {
             el: "#card-footer" + issueId,
             render: (h) => h(CardFooterComponent),
         });
-
-        
     }
-}, 5000);
+}, 2000);
