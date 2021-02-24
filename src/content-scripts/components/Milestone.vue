@@ -18,7 +18,7 @@ export default {
 }
 
 .milestone-container {
-    width: 33%;
+    width: 35%;
 }
 
 </style>

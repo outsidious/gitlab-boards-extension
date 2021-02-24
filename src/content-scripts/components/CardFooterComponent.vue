@@ -87,14 +87,18 @@ export default {
         },
         getMilestoneCallback(issueInfo) {
             var milestoneInfo = issueInfo["milestone"];
+            //console.log(milestoneInfo);
             var strDueDate = "-";
             if (milestoneInfo) {
-                var dueDate = Date(milestoneInfo["due_date"]).toString();
+                //console.log(milestoneInfo.due_date);
+                var dueDate = new Date(milestoneInfo.due_date).toString();
+                //console.log(dueDate);
                 var dueDateArr = dueDate.split(" ");
                 strDueDate = dueDateArr[1] + " " + dueDateArr[2];
                 //var dueDate = Date.parse(strDueDate);
                 //console.log(dueDate);
             }
+            console.log(strDueDate);
             this.issueInfo.due_date = strDueDate;
         },
         getQuaMergesCallback(issueInfo) {
