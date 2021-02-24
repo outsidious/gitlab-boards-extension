@@ -33,7 +33,7 @@
             <div>
                 <md-button
                     v-on:click="changeButtonMoreState()"
-                    class="md-dense md-primary"
+                    class="md-dense md-primary button-more"
                 >
                     <div v-if="buttonMore">less</div>
                     <div v-else>more</div>
@@ -48,9 +48,9 @@ import * as gitlab from "../gitlab-service";
 import "vue-material/dist/vue-material.min.css";
 var pathName = window.location.pathname;
 var projectName = pathName.slice(1, pathName.indexOf("/-/"));
-console.log(projectName);
 var origin = window.location.origin;
-var gitlabService = new gitlab.GitlabService(origin, projectName);
+var userToken = prompt("What's your access token (required for some operations)?");
+var gitlabService = new gitlab.GitlabService(origin, projectName, userToken);
 
 export default {
     data() {
@@ -73,32 +73,32 @@ export default {
     methods: {
         runLastPipeline() {
             if (this.issueInfo.lastRelatedMerge.pipelineId != -1) {
-                gitlabService.runPipeline(this.issueInfo.lastRelatedMerge.pipelineId, function(data){
-                    console.log(data);
-                });
+                gitlabService.runPipeline(
+                    this.issueInfo.lastRelatedMerge.pipelineId,
+                    function(data) {
+                        console.log(data);
+                    }
+                );
             }
         },
         mergeRequest() {
             if (this.issueInfo.lastRelatedMerge.mergeId != -1) {
-                gitlabService.mergeRequest(this.issueInfo.lastRelatedMerge.mergeId, function(data){
-                    console.log(data);
-                });
+                gitlabService.mergeRequest(
+                    this.issueInfo.lastRelatedMerge.mergeId,
+                    function(data) {
+                        console.log(data);
+                    }
+                );
             }
         },
         getMilestoneCallback(issueInfo) {
             var milestoneInfo = issueInfo["milestone"];
-            //console.log(milestoneInfo);
             var strDueDate = "-";
             if (milestoneInfo) {
-                //console.log(milestoneInfo.due_date);
                 var dueDate = new Date(milestoneInfo.due_date).toString();
-                //console.log(dueDate);
                 var dueDateArr = dueDate.split(" ");
                 strDueDate = dueDateArr[1] + " " + dueDateArr[2];
-                //var dueDate = Date.parse(strDueDate);
-                //console.log(dueDate);
             }
-            console.log(strDueDate);
             this.issueInfo.due_date = strDueDate;
         },
         getQuaMergesCallback(issueInfo) {
@@ -125,13 +125,12 @@ export default {
                 this.issueInfo.lastRelatedMerge.pipelineId =
                     theLatest["head_pipeline"].id;
             }
-            this.$emit("signalMergeLoaded", this.issueInfo.lastRelatedMerge.mergeId);
-            //console.log(this.issueInfo.lastRelatedMerge.mergeId);
-            //console.log(this.issueInfo.lastRelatedMerge.mergeConflicts);
-            //console.log(this.issueInfo.lastRelatedMerge.pipelineStatus);
+            this.$emit(
+                "signalMergeLoaded",
+                this.issueInfo.lastRelatedMerge.mergeId
+            );
         },
         getApprovalsCallback(approvers) {
-            //console.log(approvers);
             this.issueInfo.lastRelatedMerge.mergeApprovals = approvers.length;
         },
         changeButtonMoreState() {
@@ -140,9 +139,7 @@ export default {
     },
     mounted() {
         var qoollabCard = this.$el.parentElement.parentElement.parentElement;
-        var issueId = qoollabCard.getAttribute(
-            "issue-id"
-        );
+        var issueId = qoollabCard.getAttribute("issue-id");
         gitlabService.getCurrentIssue(issueId, this.getMilestoneCallback);
         gitlabService.getCurrentIssue(issueId, this.getQuaMergesCallback);
         gitlabService.getRelatedMerges(issueId, this.getRelatedMergesCallback);
@@ -153,11 +150,6 @@ export default {
                 merge
             );
         });
-
-        /*
-        this.$on("run_pipeline", function() {
-            console.log("run_pipeline in cardfooter");
-        });*/
     },
 };
 </script>
@@ -176,14 +168,16 @@ export default {
 }
 
 .gitlab-info {
-    width: 65%;
+    width: 80%;
     display: flex;
     align-items: center;
     justify-content: space-between;
     align-content: flex-end;
 }
 
-.md-buton {
-    z-index: 10000;
+.button-more {
+    width: 20%;
+    position: relative;
+    left: 1.5rem;
 }
 </style>

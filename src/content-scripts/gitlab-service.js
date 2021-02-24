@@ -1,17 +1,17 @@
 var $ = require("jquery");
 
-export function GitlabService(urlOrigin, projectName) {
+export function GitlabService(urlOrigin, projectName, userToken = "") {
     this.origin = urlOrigin;
-    //console.log(this.origin);
     this.projectName = projectName;
-    this.projectId = projectName.replaceAll("/", "%2F"); //formated project name might be used as id
+    this.userToken = "";
+    if (userToken) this.userToken = userToken;
+    this.projectId = projectName.replaceAll("/", "%2F"); //formated project name might be used as project id
     this.apiURL = "/api/v4/projects/";
 
     this.getAllIssues = function() {
         var url =
             this.origin + this.apiURL + this.projectId + "/issues/?scope=all";
         $.get(url, function(data) {
-            //console.log(data)
             data.toString;
         });
     };
@@ -53,8 +53,7 @@ export function GitlabService(urlOrigin, projectName) {
             $.get(url, function(data) {
                 callback(data["approved_by"]);
             });
-        }
-        else {
+        } else {
             callback([]);
         }
     };
@@ -78,9 +77,16 @@ export function GitlabService(urlOrigin, projectName) {
             "/pipelines/" +
             pipelineId +
             "/retry";
-        console.log(url);
-        $.post(url, function(data) {
-            callback(data);
+
+        $.ajax({
+            url: url,
+            headers: {
+                "PRIVATE-TOKEN": this.userToken,
+            },
+            method: "POST",
+            success: function(data) {
+                console.log("succes: " + data);
+            },
         });
     };
 
