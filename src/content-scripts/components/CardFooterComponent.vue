@@ -46,12 +46,12 @@
 <script>
 import * as gitlab from "../gitlab-service";
 import "vue-material/dist/vue-material.min.css";
+var userToken = "";
+var promt = prompt("What's your access token (required for some operations)?");
+if (promt) userToken = promt;
 var pathName = window.location.pathname;
 var projectName = pathName.slice(1, pathName.indexOf("/-/"));
 var origin = window.location.origin;
-var userToken = prompt(
-    "What's your access token (required for some operations)?"
-);
 var gitlabService = new gitlab.GitlabService(origin, projectName, userToken);
 
 export default {
@@ -108,12 +108,9 @@ export default {
             this.issueInfo.mergesQua = mergesQua;
         },
         getRelatedMergesCallback(mergesInfo) {
-            console.log(mergesInfo);
             if (mergesInfo.length != 0) {
                 var theLatest = mergesInfo[0];
                 for (var i = 1; i < mergesInfo.length; ++i) {
-                    console.log(new Date(mergesInfo[i]["created_at"]));
-                    console.log(new Date(theLatest["created_at"]));
                     if (
                         new Date(mergesInfo[i]["created_at"]) >
                         new Date(theLatest["created_at"])

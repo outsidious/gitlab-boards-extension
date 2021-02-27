@@ -70,50 +70,46 @@ export function GitlabService(urlOrigin, projectName, userToken = "") {
     };
 
     this.runPipeline = function(pipelineId, callback) {
-        var url =
-            this.origin +
-            this.apiURL +
-            this.projectId +
-            "/pipelines/" +
-            pipelineId +
-            "/retry";
-        $.ajax({
-            url: url,
-            headers: {
-                "PRIVATE-TOKEN": this.userToken,
-            },
-            method: "POST",
-            success: function(data) {
-                console.log("succes: " + data);
-                callback(data);
-            },
-        });
+        if (this.userToken != "") {
+            var url =
+                this.origin +
+                this.apiURL +
+                this.projectId +
+                "/pipelines/" +
+                pipelineId +
+                "/retry";
+            $.ajax({
+                url: url,
+                headers: {
+                    "PRIVATE-TOKEN": this.userToken,
+                },
+                method: "POST",
+                success: function(data) {
+                    callback(data);
+                },
+            });
+        }
     };
 
     this.mergeRequest = function(mergeId, callback) {
-        console.log(mergeId);
-        var url =
-            this.origin +
-            this.apiURL +
-            this.projectId +
-            "/merge_requests/" +
-            mergeId +
-            "/merge";
-        console.log(url);
-        $.ajax({
-            url: url,
-            headers: {
-                "PRIVATE-TOKEN": this.userToken,
-            },
-            method: "PUT",
-            success: function(data) {
-                console.log("succes: " + data);
-                callback(data);
-            },
-            fail: function(data) {
-                console.log("fail: " + data);
-                callback(data);
-            },
-        });
+        if (this.userToken != "") {
+            var url =
+                this.origin +
+                this.apiURL +
+                this.projectId +
+                "/merge_requests/" +
+                mergeId +
+                "/merge";
+            $.ajax({
+                url: url,
+                headers: {
+                    "PRIVATE-TOKEN": this.userToken,
+                },
+                method: "PUT",
+                success: function(data) {
+                    callback(data);
+                },
+            });
+        }
     };
 }

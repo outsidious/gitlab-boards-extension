@@ -1,7 +1,8 @@
-/*browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  console.log('Hello from the background')
-
-  browser.tabs.executeScript({
-    file: 'content-script.js',
-  });
-})*/
+/*chrome.runtime.onInstalled.addListener(function() {
+    var promt = prompt(
+        "What's your access token (required for some operations)?"
+    );
+    userToken = promt;
+    console.log(userToken);
+});
+*/
