@@ -77,7 +77,6 @@ export function GitlabService(urlOrigin, projectName, userToken = "") {
             "/pipelines/" +
             pipelineId +
             "/retry";
-
         $.ajax({
             url: url,
             headers: {
@@ -86,11 +85,13 @@ export function GitlabService(urlOrigin, projectName, userToken = "") {
             method: "POST",
             success: function(data) {
                 console.log("succes: " + data);
+                callback(data);
             },
         });
     };
 
     this.mergeRequest = function(mergeId, callback) {
+        console.log(mergeId);
         var url =
             this.origin +
             this.apiURL +
@@ -101,9 +102,17 @@ export function GitlabService(urlOrigin, projectName, userToken = "") {
         console.log(url);
         $.ajax({
             url: url,
-            type: "PUT",
-            success: function(response) {
-                callback(response);
+            headers: {
+                "PRIVATE-TOKEN": this.userToken,
+            },
+            method: "PUT",
+            success: function(data) {
+                console.log("succes: " + data);
+                callback(data);
+            },
+            fail: function(data) {
+                console.log("fail: " + data);
+                callback(data);
             },
         });
     };

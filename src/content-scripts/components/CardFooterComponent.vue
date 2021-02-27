@@ -49,7 +49,9 @@ import "vue-material/dist/vue-material.min.css";
 var pathName = window.location.pathname;
 var projectName = pathName.slice(1, pathName.indexOf("/-/"));
 var origin = window.location.origin;
-var userToken = prompt("What's your access token (required for some operations)?");
+var userToken = prompt(
+    "What's your access token (required for some operations)?"
+);
 var gitlabService = new gitlab.GitlabService(origin, projectName, userToken);
 
 export default {
@@ -106,12 +108,15 @@ export default {
             this.issueInfo.mergesQua = mergesQua;
         },
         getRelatedMergesCallback(mergesInfo) {
+            console.log(mergesInfo);
             if (mergesInfo.length != 0) {
                 var theLatest = mergesInfo[0];
-                for (var i = 0; i < mergesInfo.length; ++i) {
+                for (var i = 1; i < mergesInfo.length; ++i) {
+                    console.log(new Date(mergesInfo[i]["created_at"]));
+                    console.log(new Date(theLatest["created_at"]));
                     if (
-                        Date(mergesInfo[i]["created_at"]) >
-                        Date(theLatest["created_at"])
+                        new Date(mergesInfo[i]["created_at"]) >
+                        new Date(theLatest["created_at"])
                     )
                         theLatest = mergesInfo[i];
                 }
@@ -119,11 +124,12 @@ export default {
                 if (theLatest["has_conflicts"])
                     this.issueInfo.lastRelatedMerge.mergeConflicts =
                         theLatest["has_conflicts"];
-                if (theLatest["head_pipeline"])
+                if (theLatest["head_pipeline"]) {
                     this.issueInfo.lastRelatedMerge.pipelineStatus =
                         theLatest["head_pipeline"].status;
-                this.issueInfo.lastRelatedMerge.pipelineId =
-                    theLatest["head_pipeline"].id;
+                    this.issueInfo.lastRelatedMerge.pipelineId =
+                        theLatest["head_pipeline"].id;
+                }
             }
             this.$emit(
                 "signalMergeLoaded",
