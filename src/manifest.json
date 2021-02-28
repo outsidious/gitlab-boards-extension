@@ -5,7 +5,7 @@
     "description": "Useful GitLab -/issues/boards page",
     "default_locale": "en",
     "options_page": "options.html",
-    "permissions": ["activeTab", "<all_urls>", "*://*/*"],
+    "permissions": [],
     "icons": {
         "16": "icons/16.png",
         "48": "icons/48.png",
@@ -27,7 +27,8 @@
         {
             "matches": [
                 "*://gitlab.loc/*/boards*",
-                "*://git.iu7.bmstu.ru/*/boards*"
+                "*://git.iu7.bmstu.ru/*/boards*",
+                "*://gitlab.com/*/boards*"
             ],
             "run_at": "document_idle",
             "js": ["js/gitlab-script.js", "js/restruct-card.js"]
