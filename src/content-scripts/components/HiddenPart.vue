@@ -1,13 +1,28 @@
 <template>
     <div class="hidden-part-container">
         <div class="help-text">actions</div>
-        <a :href="this.mergeInfo.changesUrl"> Show changes </a>
-        <a v-on:click.stop.prevent="runPipeline()"> Run pipeline </a>
+        <a
+            :href="this.mergeInfo.changesUrl"
+            v-bind:class="{
+                disabled: this.mergeInfo.mergeId === -1,
+            }"
+        >
+            Show changes
+        </a>
+        <a
+            v-on:click.stop.prevent="runPipeline()"
+            v-bind:class="{
+                disabled: this.mergeInfo.pipelineId === -1,
+            }"
+        >
+            Run pipeline
+        </a>
         <!---stopPropagation doesn't work-->
         <a
             v-on:click="merge()"
             v-bind:class="{
                 disabled:
+                    this.mergeInfo.mergeId === -1 ||
                     this.mergeInfo.mergeStatus != 'can_be_merged' ||
                     this.mergeInfo.state != 'opened' ||
                     this.mergeInfo.has_conflicts,
@@ -15,7 +30,14 @@
         >
             Merge
         </a>
-        <a v-on:click="approve()"> Approve </a>
+        <a
+            v-on:click="approve()"
+            v-bind:class="{
+                disabled: this.mergeInfo.mergeId === -1,
+            }"
+        >
+            Approve
+        </a>
         <!---<a v-on:click="markAsReady()"> Mark as ready </a>-->
     </div>
 </template>
