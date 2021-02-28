@@ -112,4 +112,49 @@ export function GitlabService(urlOrigin, projectName, userToken = "") {
             });
         }
     };
+
+    this.approveMerge = function(mergeId, callback) {
+        if (this.userToken != "") {
+            var url =
+                this.origin +
+                this.apiURL +
+                this.projectId +
+                "/merge_requests/" +
+                mergeId +
+                "/approve";
+            $.ajax({
+                url: url,
+                headers: {
+                    "PRIVATE-TOKEN": this.userToken,
+                },
+                method: "POST",
+                success: function(data) {
+                    callback(data);
+                },
+            });
+        }
+    };
+
+    /*this.markAsReady = function(mergeId, callback) {
+        if (this.userToken != "") {
+            var url =
+                this.origin +
+                "/" +
+                this.projectName +
+                "/-/merge_requests/" +
+                mergeId +
+                "?merge_request%5Bwip_event%5D=wip&format=json";
+            console.log(url);
+            $.ajax({
+                url: url,
+                headers: {
+                    "PRIVATE-TOKEN": this.userToken,
+                },
+                method: "PUT",
+                success: function(data) {
+                    callback(data);
+                },
+            });
+        }
+    };*/
 }

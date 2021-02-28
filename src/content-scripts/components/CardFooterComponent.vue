@@ -6,9 +6,10 @@
         />
         <div v-if="buttonMore">
             <hidden-part
-                v-bind:changesUrl="issueInfo.lastRelatedMerge.changesUrl"
+                v-bind:mergeInfo="issueInfo.lastRelatedMerge"
                 v-on:signalRunPipeline="runLastPipeline"
                 v-on:signalMerge="mergeRequest"
+                v-on:signalApprove="approveRequest"
             >
             </hidden-part>
         </div>
@@ -61,6 +62,8 @@ export default {
                 due_date: "",
                 mergesQua: "",
                 lastRelatedMerge: {
+                    mergeStatus: "",
+                    state: "",
                     mergeId: -1,
                     mergeConflicts: false,
                     pipelineId: -1,
@@ -93,6 +96,27 @@ export default {
                 );
             }
         },
+        approveRequest() {
+            if (this.issueInfo.lastRelatedMerge.mergeId != -1) {
+                gitlabService.approveMerge(
+                    this.issueInfo.lastRelatedMerge.mergeId,
+                    function(data) {
+                        console.log(data);
+                    }
+                );
+            }
+        },
+        /*
+        markAsReady() {
+            if (this.issueInfo.lastRelatedMerge.mergeId != -1) {
+                gitlabService.markAsReady(
+                    this.issueInfo.lastRelatedMerge.mergeId,
+                    function(data) {
+                        console.log(data);
+                    }
+                );
+            }
+        },*/
         getMilestoneCallback(issueInfo) {
             var milestoneInfo = issueInfo["milestone"];
             var strDueDate = "-";
@@ -117,7 +141,10 @@ export default {
                     )
                         theLatest = mergesInfo[i];
                 }
+                console.log(theLatest);
                 this.issueInfo.lastRelatedMerge.mergeId = theLatest["iid"];
+                this.issueInfo.lastRelatedMerge.mergeStatus = theLatest["merge_status"];
+                this.issueInfo.lastRelatedMerge.state = theLatest["state"];
                 if (theLatest["has_conflicts"])
                     this.issueInfo.lastRelatedMerge.mergeConflicts =
                         theLatest["has_conflicts"];
