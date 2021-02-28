@@ -1,4 +1,3 @@
-import * as gitlab from "./gitlab-service.js";
 import * as restruct from "./restruct-card";
 import Vue from "vue";
 import "vue-material-design-icons/styles.css";
@@ -7,36 +6,24 @@ import Milestone from "./components/Milestone";
 import MergeRequest from "./components/MergeRequest";
 import Approve from "./components/Approve";
 import HiddenPart from "./components/HiddenPart";
-import VueMaterial from 'vue-material'
-
-var pathName = window.location.pathname;
-var projectName = pathName.slice(1, pathName.indexOf("/-/"));
-//console.log(projectName);
-var origin = window.location.origin;
-var gitlabService = new gitlab.GitlabService(origin, projectName);
-//console.log(gitlabService);
-gitlabService.getAllIssues();
+import VueMaterial from "vue-material";
 
 setTimeout(() => {
-    var elements = document.getElementsByClassName("board-card");
-    for (var i = 0; i < elements.length; ++i) {
-        var qoollabCard = restruct.addQoollabParentTag(document, elements[i]);
-        var issueId = restruct.setIssueIdAttribute(qoollabCard, elements[i]);
+    let elements = document.getElementsByClassName("board-card");
+    for (let i = 0; i < elements.length; ++i) {
+        let qoollabCard = restruct.addQoollabParentTag(document, elements[i]);
+        let issueId = restruct.setIssueIdAttribute(qoollabCard, elements[i]);
         restruct.addIssueIdToCardHeader(document, qoollabCard, issueId);
         restruct.restructCardBody(document, qoollabCard);
 
-        var cardFooter = qoollabCard.getElementsByClassName(
+        let cardFooter = qoollabCard.getElementsByClassName(
             "board-card-footer"
-        )[0]; // board-card-footer уплыл вверх из-за append-child
+        )[0];
         cardFooter.setAttribute("id", "card-footer" + issueId);
         cardFooter.parentElement.appendChild(cardFooter);
         while (cardFooter.firstChild) {
             cardFooter.removeChild(cardFooter.firstChild);
         }
-
-        //var milestoneElement = document.createElement("div");
-        //milestoneElement.setAttribute("id", "app");
-        //cardFooter.appendChild(milestoneElement);
 
         Vue.use(VueMaterial);
         Vue.component("milestone-component", Milestone);
@@ -48,4 +35,4 @@ setTimeout(() => {
             render: (h) => h(CardFooterComponent),
         });
     }
-}, 2000);
+}, 1000);

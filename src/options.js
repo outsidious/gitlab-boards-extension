@@ -1,9 +1,9 @@
 /*
 function save_options() {
-    var token = document.getElementById("input_token").value;
+    let token = document.getElementById("input_token").value;
     localStorage["qoollab_user_token"] = token;
 
-    var status = document.getElementById("status");
+    let status = document.getElementById("status");
     status.innerHTML = "Options Saved.";
     setTimeout(function() {
         status.innerHTML = "";
@@ -12,11 +12,11 @@ function save_options() {
 }
 
 function restore_options() {
-    var token = localStorage["qoollab_user_token"];
+    let token = localStorage["qoollab_user_token"];
     if (!token) {
         return;
     }
-    var input = document.getElementById("input_token");
+    let input = document.getElementById("input_token");
     input.value = token;
 }
 document.addEventListener("DOMContentLoaded", restore_options);

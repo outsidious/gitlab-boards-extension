@@ -1,4 +1,4 @@
-var $ = require("jquery");
+let $ = require("jquery");
 
 export function GitlabService(urlOrigin, projectName, userToken = "") {
     this.origin = urlOrigin;
@@ -8,16 +8,8 @@ export function GitlabService(urlOrigin, projectName, userToken = "") {
     this.projectId = projectName.replaceAll("/", "%2F"); //formated project name might be used as project id
     this.apiURL = "/api/v4/projects/";
 
-    this.getAllIssues = function() {
-        var url =
-            this.origin + this.apiURL + this.projectId + "/issues/?scope=all";
-        $.get(url, function(data) {
-            data.toString;
-        });
-    };
-
     this.getRelatedMerges = function(issueId, callback) {
-        var url =
+        let url =
             this.origin +
             this.apiURL +
             this.projectId +
@@ -30,7 +22,7 @@ export function GitlabService(urlOrigin, projectName, userToken = "") {
     };
 
     this.getCurrentIssue = function(issueId, callback) {
-        var url =
+        let url =
             this.origin +
             this.apiURL +
             this.projectId +
@@ -42,7 +34,7 @@ export function GitlabService(urlOrigin, projectName, userToken = "") {
     };
 
     this.getMergeApprovals = function(MergeId, callback) {
-        var url =
+        let url =
             this.origin +
             this.apiURL +
             this.projectId +
@@ -59,7 +51,7 @@ export function GitlabService(urlOrigin, projectName, userToken = "") {
     };
 
     this.getChangesUrl = function(MergeId) {
-        var url =
+        let url =
             this.origin +
             "/" +
             this.projectName +
@@ -69,9 +61,9 @@ export function GitlabService(urlOrigin, projectName, userToken = "") {
         return url;
     };
 
-    this.runPipeline = function(pipelineId, callback) {
+    this.runPipeline = function(pipelineId) {
         if (this.userToken != "") {
-            var url =
+            let url =
                 this.origin +
                 this.apiURL +
                 this.projectId +
@@ -84,16 +76,16 @@ export function GitlabService(urlOrigin, projectName, userToken = "") {
                     "PRIVATE-TOKEN": this.userToken,
                 },
                 method: "POST",
-                success: function(data) {
-                    callback(data);
+                success: function() {
+                    return true;
                 },
             });
         }
     };
 
-    this.mergeRequest = function(mergeId, callback) {
+    this.mergeRequest = function(mergeId) {
         if (this.userToken != "") {
-            var url =
+            let url =
                 this.origin +
                 this.apiURL +
                 this.projectId +
@@ -106,16 +98,16 @@ export function GitlabService(urlOrigin, projectName, userToken = "") {
                     "PRIVATE-TOKEN": this.userToken,
                 },
                 method: "PUT",
-                success: function(data) {
-                    callback(data);
+                success: function() {
+                    return true;
                 },
             });
         }
     };
 
-    this.approveMerge = function(mergeId, callback) {
+    this.approveMerge = function(mergeId) {
         if (this.userToken != "") {
-            var url =
+            let url =
                 this.origin +
                 this.apiURL +
                 this.projectId +
@@ -128,8 +120,8 @@ export function GitlabService(urlOrigin, projectName, userToken = "") {
                     "PRIVATE-TOKEN": this.userToken,
                 },
                 method: "POST",
-                success: function(data) {
-                    callback(data);
+                success: function() {
+                    return true;
                 },
             });
         }
@@ -137,7 +129,7 @@ export function GitlabService(urlOrigin, projectName, userToken = "") {
 
     /*this.markAsReady = function(mergeId, callback) {
         if (this.userToken != "") {
-            var url =
+            let url =
                 this.origin +
                 "/" +
                 this.projectName +

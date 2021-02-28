@@ -2,7 +2,8 @@
     <div class="hidden-part-container">
         <div class="help-text">actions</div>
         <a :href="this.mergeInfo.changesUrl"> Show changes </a>
-        <a v-on:click.stop.prevent="runPipeline($event)"> Run pipeline </a>
+        <a v-on:click.stop.prevent="runPipeline()"> Run pipeline </a>
+        <!---stopPropagation doesn't work-->
         <a
             v-on:click="merge()"
             v-bind:class="{
@@ -23,26 +24,18 @@
 import "vue-material-design-icons/styles.css";
 export default {
     props: ["mergeInfo"],
-    mounted() {},
     methods: {
-        runPipeline: function(event) {
-            //console.log("runPipeline click!");
-            //console.log(event);
-            //console.log(event.cancelBubble);
-            event.stopImmediatePropagation();
-            //console.log(event.cancelBubble);
+        runPipeline() {
+            //event.stopImmediatePropagation();
             this.$emit("signalRunPipeline");
         },
         merge() {
-            //console.log("merge clicked()");
             this.$emit("signalMerge");
         },
         approve() {
-            console.log("approve clicked()");
             this.$emit("signalApprove");
         },
         markAsReady() {
-            console.log("markAsReady clicked()");
             this.$emit("signalMarkAsReady");
         },
     },

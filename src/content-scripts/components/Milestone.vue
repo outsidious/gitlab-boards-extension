@@ -1,13 +1,13 @@
 <template>
     <div class="milestone-container">
-         <md-icon>watch_later</md-icon>
-         {{ due_date }}
+        <md-icon>watch_later</md-icon>
+        {{ due_date }}
     </div>
 </template>
 
 <script>
 export default {
-    props: ['due_date'],
+    props: ["due_date"],
 };
 </script>
 
@@ -20,5 +20,4 @@ export default {
 .milestone-container {
     width: 35%;
 }
-
 </style>

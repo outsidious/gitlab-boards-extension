@@ -47,13 +47,13 @@
 <script>
 import * as gitlab from "../gitlab-service";
 import "vue-material/dist/vue-material.min.css";
-var userToken = "";
-var promt = prompt("What's your access token (required for some operations)?");
+let userToken = "";
+let promt = prompt("What's your access token (required for some operations)?");
 if (promt) userToken = promt;
-var pathName = window.location.pathname;
-var projectName = pathName.slice(1, pathName.indexOf("/-/"));
-var origin = window.location.origin;
-var gitlabService = new gitlab.GitlabService(origin, projectName, userToken);
+let pathName = window.location.pathname;
+let projectName = pathName.slice(1, pathName.indexOf("/-/"));
+let origin = window.location.origin;
+let gitlabService = new gitlab.GitlabService(origin, projectName, userToken);
 
 export default {
     data() {
@@ -79,30 +79,21 @@ export default {
         runLastPipeline() {
             if (this.issueInfo.lastRelatedMerge.pipelineId != -1) {
                 gitlabService.runPipeline(
-                    this.issueInfo.lastRelatedMerge.pipelineId,
-                    function(data) {
-                        console.log(data);
-                    }
+                    this.issueInfo.lastRelatedMerge.pipelineId
                 );
             }
         },
         mergeRequest() {
             if (this.issueInfo.lastRelatedMerge.mergeId != -1) {
                 gitlabService.mergeRequest(
-                    this.issueInfo.lastRelatedMerge.mergeId,
-                    function(data) {
-                        console.log(data);
-                    }
+                    this.issueInfo.lastRelatedMerge.mergeId
                 );
             }
         },
         approveRequest() {
             if (this.issueInfo.lastRelatedMerge.mergeId != -1) {
                 gitlabService.approveMerge(
-                    this.issueInfo.lastRelatedMerge.mergeId,
-                    function(data) {
-                        console.log(data);
-                    }
+                    this.issueInfo.lastRelatedMerge.mergeId
                 );
             }
         },
@@ -118,32 +109,32 @@ export default {
             }
         },*/
         getMilestoneCallback(issueInfo) {
-            var milestoneInfo = issueInfo["milestone"];
-            var strDueDate = "-";
+            let milestoneInfo = issueInfo["milestone"];
+            let strDueDate = "-";
             if (milestoneInfo) {
-                var dueDate = new Date(milestoneInfo.due_date).toString();
-                var dueDateArr = dueDate.split(" ");
+                let dueDate = new Date(milestoneInfo.due_date).toString();
+                let dueDateArr = dueDate.split(" ");
                 strDueDate = dueDateArr[1] + " " + dueDateArr[2];
             }
             this.issueInfo.due_date = strDueDate;
         },
         getQuaMergesCallback(issueInfo) {
-            var mergesQua = issueInfo["merge_requests_count"];
+            let mergesQua = issueInfo["merge_requests_count"];
             this.issueInfo.mergesQua = mergesQua;
         },
         getRelatedMergesCallback(mergesInfo) {
             if (mergesInfo.length != 0) {
-                var theLatest = mergesInfo[0];
-                for (var i = 1; i < mergesInfo.length; ++i) {
+                let theLatest = mergesInfo[0];
+                for (let i = 1; i < mergesInfo.length; ++i) {
                     if (
                         new Date(mergesInfo[i]["created_at"]) >
                         new Date(theLatest["created_at"])
                     )
                         theLatest = mergesInfo[i];
                 }
-                console.log(theLatest);
                 this.issueInfo.lastRelatedMerge.mergeId = theLatest["iid"];
-                this.issueInfo.lastRelatedMerge.mergeStatus = theLatest["merge_status"];
+                this.issueInfo.lastRelatedMerge.mergeStatus =
+                    theLatest["merge_status"];
                 this.issueInfo.lastRelatedMerge.state = theLatest["state"];
                 if (theLatest["has_conflicts"])
                     this.issueInfo.lastRelatedMerge.mergeConflicts =
@@ -168,8 +159,8 @@ export default {
         },
     },
     mounted() {
-        var qoollabCard = this.$el.parentElement.parentElement.parentElement;
-        var issueId = qoollabCard.getAttribute("issue-id");
+        let qoollabCard = this.$el.parentElement.parentElement.parentElement;
+        let issueId = qoollabCard.getAttribute("issue-id");
         gitlabService.getCurrentIssue(issueId, this.getMilestoneCallback);
         gitlabService.getCurrentIssue(issueId, this.getQuaMergesCallback);
         gitlabService.getRelatedMerges(issueId, this.getRelatedMergesCallback);
