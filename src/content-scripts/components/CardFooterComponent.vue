@@ -56,9 +56,9 @@ function restoreToken() {
     return token
 }
 
-let userToken = "";
 let promt = prompt("What's your access token (required for some operations)?", restoreToken());
 localStorage["qoollab_user_token"] = promt;
+let userToken = localStorage["qoollab_user_token"];
 
 let pathName = window.location.pathname;
 let projectName = pathName.slice(1, pathName.indexOf("/-/"));
