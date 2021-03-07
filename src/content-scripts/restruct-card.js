@@ -5,8 +5,8 @@ export function addQoollabParentTag(document, element) {
     return qoollabCard;
 }
 
-export function setIssueIdAttribute(qoollabCard, element) {
-    let oldIssueIdElement = element.getElementsByClassName(
+export function setIssueIdAttribute(qoollabCard) {
+    let oldIssueIdElement = qoollabCard.getElementsByClassName(
         "board-card-number"
     )[0];
     let strIssueId = oldIssueIdElement.innerHTML

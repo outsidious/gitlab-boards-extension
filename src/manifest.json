@@ -5,7 +5,13 @@
     "description": "Useful GitLab -/issues/boards page",
     "default_locale": "en",
     "options_page": "options.html",
-    "permissions": [],
+    "permissions": [
+        "webRequest",
+        "*://gitlab.loc/*/boards*",
+        "*://git.iu7.bmstu.ru/*/boards*",
+        "*://gitlab.com/*/boards*",
+        "tabs"
+    ],
     "icons": {
         "16": "icons/16.png",
         "48": "icons/48.png",
@@ -13,7 +19,7 @@
     },
     "background": {
         "scripts": ["js/background.js"],
-        "persistent": false
+        "persistent": true
     },
     "browser_action": {
         "default_popup": "popup.html",
