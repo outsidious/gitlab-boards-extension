@@ -63,7 +63,7 @@ localStorage["qoollab_user_token"] = promt;
 let pathName = window.location.pathname;
 let projectName = pathName.slice(1, pathName.indexOf("/-/"));
 let origin = window.location.origin;
-let gitlabService = new gitlab.GitlabService(origin, projectName, userToken);
+let gitlabService = new gitlab.GitlabService(origin, projectName, userToken); 
 
 export default {
     data() {
@@ -169,7 +169,8 @@ export default {
         },
     },
     mounted() {
-        let qoollabCard = this.$el.parentElement.parentElement.parentElement;
+        //let qoollabCard = this.$el.parentElement.parentElement.parentElement;
+        let qoollabCard = this.$el.parentElement.parentElement
         let issueId = qoollabCard.getAttribute("issue-id");
         gitlabService.getCurrentIssue(issueId, this.getMilestoneCallback);
         gitlabService.getCurrentIssue(issueId, this.getQuaMergesCallback);

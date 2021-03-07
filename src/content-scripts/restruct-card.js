@@ -19,7 +19,8 @@ export function setIssueIdAttribute(qoollabCard, element) {
 }
 
 export function addIssueIdToCardHeader(document, qoollabCard, issueId) {
-    let cardHeader = qoollabCard.querySelector("li > div > div:nth-child(1)");
+    //let cardHeader = qoollabCard.querySelector("li > div > div:nth-child(1)");
+    let cardHeader = qoollabCard.querySelector("div > div:nth-child(1)");
     let issueIdElement = document.createElement("div");
     issueIdElement.textContent = "#" + issueId;
     issueIdElement.style =
@@ -33,7 +34,6 @@ export function restructCardBody(document, qoollabCard) {
     if (assigneElement) {
         assigneElement.style =
             "width: 40px; height: 40px; margin-right: 0; max-width: none";
-        //assigneElement.querySelector("img").style = "max-width: innerhit"
         let cardBodyDiv = document.createElement("div");
         cardBodyDiv.style =
             "padding-left: 20px; margin-left: auto; margin-right: 0; margin-top: auto; margin-bottom: auto;";
@@ -43,7 +43,8 @@ export function restructCardBody(document, qoollabCard) {
         )[0];
         let cardBody = document.createElement("div");
         cardBody.style = "display: flex; align-items: center; margin-top: 5px";
-        let labelsDivParent = qoollabCard.querySelector("li > div");
+        //let labelsDivParent = qoollabCard.querySelector("li > div");
+        let labelsDivParent = qoollabCard.querySelector("div");
         labelsDivParent.appendChild(cardBody);
         if (labelsDiv) cardBody.appendChild(labelsDiv);
         cardBody.appendChild(cardBodyDiv);

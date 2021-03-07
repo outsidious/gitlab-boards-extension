@@ -11,7 +11,8 @@ import VueMaterial from "vue-material";
 setTimeout(() => {
     let elements = document.getElementsByClassName("board-card");
     for (let i = 0; i < elements.length; ++i) {
-        let qoollabCard = restruct.addQoollabParentTag(document, elements[i]);
+        /*let qoollabCard = restruct.addQoollabParentTag(document, elements[i]);*/
+        let qoollabCard = elements[i];
         let issueId = restruct.setIssueIdAttribute(qoollabCard, elements[i]);
         restruct.addIssueIdToCardHeader(document, qoollabCard, issueId);
         restruct.restructCardBody(document, qoollabCard);
