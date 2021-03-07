@@ -6,7 +6,6 @@
     console.log(userToken);
 });
 */
-console.log("background message");
 
 chrome.webRequest.onCompleted.addListener(
     function(details) {

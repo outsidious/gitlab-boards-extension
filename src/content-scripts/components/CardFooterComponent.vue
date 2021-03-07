@@ -53,17 +53,20 @@ function restoreToken() {
     if (!token) {
         return "";
     }
-    return token
+    return token;
 }
 
-let promt = prompt("What's your access token (required for some operations)?", restoreToken());
+let promt = prompt(
+    "What's your access token (required for some operations)?",
+    restoreToken()
+);
 localStorage["qoollab_user_token"] = promt;
 let userToken = localStorage["qoollab_user_token"];
 
 let pathName = window.location.pathname;
 let projectName = pathName.slice(1, pathName.indexOf("/-/"));
 let origin = window.location.origin;
-let gitlabService = new gitlab.GitlabService(origin, projectName, userToken); 
+let gitlabService = new gitlab.GitlabService(origin, projectName, userToken);
 
 export default {
     data() {
@@ -83,29 +86,25 @@ export default {
                 },
             },
             buttonMore: false,
+            timerId: null,
         };
+    },
+    beforeDestroy() {
+        if (this.timerId) {
+            clearInterval(this.timerId);
+        }
     },
     methods: {
         runLastPipeline() {
-            if (this.issueInfo.lastRelatedMerge.pipelineId != -1) {
-                gitlabService.runPipeline(
-                    this.issueInfo.lastRelatedMerge.pipelineId
-                );
-            }
+            gitlabService.runPipeline(
+                this.issueInfo.lastRelatedMerge.pipelineId
+            );
         },
         mergeRequest() {
-            if (this.issueInfo.lastRelatedMerge.mergeId != -1) {
-                gitlabService.mergeRequest(
-                    this.issueInfo.lastRelatedMerge.mergeId
-                );
-            }
+            gitlabService.mergeRequest(this.issueInfo.lastRelatedMerge.mergeId);
         },
         approveRequest() {
-            if (this.issueInfo.lastRelatedMerge.mergeId != -1) {
-                gitlabService.approveMerge(
-                    this.issueInfo.lastRelatedMerge.mergeId
-                );
-            }
+            gitlabService.approveMerge(this.issueInfo.lastRelatedMerge.mergeId);
         },
         /*
         markAsReady() {
@@ -167,14 +166,23 @@ export default {
         changeButtonMoreState() {
             this.buttonMore = !this.buttonMore;
         },
+        sendRequestsToGitlabService(issueId) {
+            gitlabService.getCurrentIssue(issueId, this.getMilestoneCallback);
+            gitlabService.getCurrentIssue(issueId, this.getQuaMergesCallback);
+            gitlabService.getRelatedMerges(
+                issueId,
+                this.getRelatedMergesCallback
+            );
+        },
     },
     mounted() {
         //let qoollabCard = this.$el.parentElement.parentElement.parentElement;
-        let qoollabCard = this.$el.parentElement.parentElement
+        let qoollabCard = this.$el.parentElement.parentElement;
         let issueId = qoollabCard.getAttribute("issue-id");
-        gitlabService.getCurrentIssue(issueId, this.getMilestoneCallback);
-        gitlabService.getCurrentIssue(issueId, this.getQuaMergesCallback);
-        gitlabService.getRelatedMerges(issueId, this.getRelatedMergesCallback);
+        this.sendRequestsToGitlabService(issueId);
+        this.timerId = setInterval(() => {
+            this.sendRequestsToGitlabService(issueId);
+        }, 15000);
 
         this.$on("signalMergeLoaded", function(merge) {
             gitlabService.getMergeApprovals(merge, this.getApprovalsCallback);
