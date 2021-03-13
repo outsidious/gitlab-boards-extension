@@ -1,4 +1,3 @@
-/*
 function save_options() {
     let token = document.getElementById("input_token").value;
     localStorage["qoollab_user_token"] = token;
@@ -21,4 +20,3 @@ function restore_options() {
 }
 document.addEventListener("DOMContentLoaded", restore_options);
 document.querySelector("#save").addEventListener("click", save_options);
-*/

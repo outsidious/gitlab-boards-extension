@@ -48,20 +48,14 @@
 import * as gitlab from "../gitlab-service";
 import "vue-material/dist/vue-material.min.css";
 
-function restoreToken() {
-    let token = localStorage["qoollab_user_token"];
-    if (!token) {
-        return "";
-    }
-    return token;
+let userToken = "";
+if (localStorage["qoollab_user_token"]) {
+    let promt = prompt(
+        "What's your access token (required for some operations)?"
+    );
+    localStorage["qoollab_user_token"] = promt;
+    userToken = localStorage["qoollab_user_token"];
 }
-
-let promt = prompt(
-    "What's your access token (required for some operations)?",
-    restoreToken()
-);
-localStorage["qoollab_user_token"] = promt;
-let userToken = localStorage["qoollab_user_token"];
 
 let pathName = window.location.pathname;
 let projectName = pathName.slice(1, pathName.indexOf("/-/"));
