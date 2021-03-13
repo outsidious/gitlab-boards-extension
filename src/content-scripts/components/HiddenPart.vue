@@ -1,6 +1,5 @@
 <template>
     <div class="hidden-part-container">
-        <img src="/assets/logo.png" />
         <div class="help-text">actions</div>
         <a
             :href="this.mergeInfo.changesUrl"
@@ -10,6 +9,7 @@
         >
             Show changes
         </a>
+        <!---
         <a
             v-on:click.stop.prevent="runPipeline()"
             v-bind:class="{
@@ -18,7 +18,6 @@
         >
             Run pipeline
         </a>
-        <!---stopPropagation doesn't work-->
         <a
             v-on:click="merge()"
             v-bind:class="{
@@ -39,7 +38,8 @@
         >
             Approve
         </a>
-        <!---<a v-on:click="markAsReady()"> Mark as ready </a>-->
+        <a v-on:click="markAsReady()"> Mark as ready </a>
+        --->
     </div>
 </template>
 
