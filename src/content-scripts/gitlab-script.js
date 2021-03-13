@@ -25,15 +25,15 @@ chrome.extension.onMessage.addListener(function(msg) {
 });
 
 function processCard(qoollabCard) {
-    let issueId = restruct.setIssueIdAttribute(qoollabCard);
+    const issueId = restruct.setIssueIdAttribute(qoollabCard);
     restruct.addIssueIdToCardHeader(document, qoollabCard, issueId);
     restruct.restructCardBody(document, qoollabCard);
 
-    let cardFooter = qoollabCard.getElementsByClassName("board-card-footer")[0];
+    const cardFooter = qoollabCard.querySelector(".board-card-footer");
     cardFooter.setAttribute("id", "card-footer" + issueId);
     cardFooter.parentElement.appendChild(cardFooter);
-    while (cardFooter.firstChild) {
-        cardFooter.removeChild(cardFooter.firstChild);
+    for (let child of cardFooter.children) {
+        child.remove();
     }
     new Vue({
         el: "#card-footer" + issueId,
@@ -42,10 +42,9 @@ function processCard(qoollabCard) {
 }
 
 setTimeout(() => {
-    let elements = document.getElementsByClassName("board-card");
-    for (let i = 0; i < elements.length; ++i) {
+    let cards = document.getElementsByClassName("board-card");
+    for (let card of cards) {
         /*let qoollabCard = restruct.addQoollabParentTag(document, elements[i]);*/
-        let qoollabCard = elements[i];
-        processCard(qoollabCard);
+        processCard(card);
     }
 }, 1000);

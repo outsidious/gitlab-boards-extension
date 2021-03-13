@@ -1,5 +1,6 @@
 <template>
     <div class="hidden-part-container">
+        <img src="/assets/logo.png" />
         <div class="help-text">actions</div>
         <a
             :href="this.mergeInfo.changesUrl"

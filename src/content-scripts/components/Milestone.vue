@@ -1,6 +1,6 @@
 <template>
     <div class="milestone-container">
-        <md-icon>watch_later</md-icon>
+        <img src="../../assets/sprite_icons/clock.svg" alt="clock">
         {{ due_date }}
     </div>
 </template>

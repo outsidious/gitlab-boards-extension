@@ -38,9 +38,9 @@ export function restructCardBody(document, qoollabCard) {
         cardBodyDiv.style =
             "padding-left: 20px; margin-left: auto; margin-right: 0; margin-top: auto; margin-bottom: auto;";
         cardBodyDiv.appendChild(assigneElement);
-        let labelsDiv = qoollabCard.getElementsByClassName(
-            "board-card-labels"
-        )[0];
+        let labelsDiv = qoollabCard.querySelector(
+            ".board-card-labels"
+        );
         let cardBody = document.createElement("div");
         cardBody.style = "display: flex; align-items: center; margin-top: 5px";
         //let labelsDivParent = qoollabCard.querySelector("li > div");
