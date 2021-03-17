@@ -49,12 +49,12 @@ import * as gitlab from "../gitlab-service";
 import "vue-material/dist/vue-material.min.css";
 
 let userToken = "";
-if (localStorage["qoollab_user_token"]) {
+if (window.localStorage["qoollab_user_token"] == null) {
     let promt = prompt(
         "What's your access token (required for some operations)?"
     );
-    localStorage["qoollab_user_token"] = promt;
-    userToken = localStorage["qoollab_user_token"];
+    window.localStorage["qoollab_user_token"] = promt;
+    userToken = window.localStorage["qoollab_user_token"];
 }
 
 let pathName = window.location.pathname;

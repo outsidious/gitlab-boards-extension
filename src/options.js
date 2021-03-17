@@ -1,17 +1,25 @@
 function save_options() {
     let token = document.getElementById("input_token").value;
-    localStorage["qoollab_user_token"] = token;
+    window.localStorage["qoollab_user_token"] = token;
+    chrome.tabs.query({ url: "https://git.iu7.bmstu.ru/*" }, function(tabs) {
+    for (var i = 0; i < tabs.length; i++) {
+        console.log(token);
+        chrome.tabs.executeScript(tabs[i].id, {
+            code: 'window.localStorage["qoollab_user_token"] = '+ JSON.stringify(token) + ';',
+        });
+    }
+});
 
     let status = document.getElementById("status");
     status.innerHTML = "Options Saved.";
     setTimeout(function() {
         status.innerHTML = "";
     }, 1500);
-    console.log(localStorage);
+    //console.log(chrome.tabs);
 }
 
 function restore_options() {
-    let token = localStorage["qoollab_user_token"];
+    let token = window.localStorage["qoollab_user_token"];
     if (!token) {
         return;
     }
