@@ -19,7 +19,7 @@ export default {
 .popup-elem {
     color: black;
     font-weight: 600;
-	font-size: 25pt;
+	font-size: 18pt;
 }
 
 .popup-container {
