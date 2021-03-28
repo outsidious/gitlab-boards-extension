@@ -1,31 +1,51 @@
 <template>
     <div class="merge-flex-container">
-        <source-branch />
+        <img alt="branch-icon" class="img-icon" :src="branchIconUrl" />
         {{ mergesQua }}
-        <md-icon v-if="mergeStatus === 'passed'" style="color: green"
-            >check_circle_outline</md-icon
-        >
-        <md-icon v-else-if="mergeStatus === 'failed'" style="color: red"
-            >cancel</md-icon
-        >
-        <md-icon v-else style="color: yellow">help_outline</md-icon>
+        <img
+            v-if="mergeStatus === 'passed'"
+            class="img-icon"
+            :src="checkIconUrl"
+        />
+        <img
+            v-else-if="mergeStatus === 'failed'"
+            class="img-icon"
+            :src="clear"
+        />
+        <img v-else class="img-icon" :src="notfoundIconUrl" />
     </div>
 </template>
 
 <script>
-import SourceBranch from "vue-material-design-icons/SourceBranch";
-import "vue-material-design-icons/styles.css";
 export default {
     props: ["mergesQua", "mergeStatus"],
-    components: {
-        SourceBranch,
+    data() {
+        return {
+            branchIconUrl: "",
+            checkIconUrl: "",
+            successIconUrl: "",
+            notfoundIconUrl: "",
+        };
     },
-    mounted() {},
+    mounted() {
+        this.branchIconUrl = chrome.extension.getURL(
+            require(`../../assets/sprite_icons/branch.svg`)
+        );
+        this.checkIconUrl = chrome.extension.getURL(
+            require(`../../assets/sprite_icons/check-circle.svg`)
+        );
+        this.clearIconUrl = chrome.extension.getURL(
+            require(`../../assets/sprite_icons/clear.svg`)
+        );
+        this.notfoundIconUrl = chrome.extension.getURL(
+            require(`../../assets/sprite_icons/question.svg`)
+        );
+    },
 };
 </script>
 
 <style scoped>
-.md-icon {
+.img-icon {
     position: relative;
     bottom: 0.1rem;
 }
