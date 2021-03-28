@@ -39,5 +39,6 @@
             "run_at": "document_idle",
             "js": ["js/gitlab-script.js", "js/restruct-card.js"]
         }
-    ]
+    ],
+    "web_accessible_resources": ["img/*"]
 }
