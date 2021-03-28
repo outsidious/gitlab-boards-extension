@@ -10,7 +10,7 @@
         <img
             v-else-if="mergeStatus === 'failed'"
             class="img-icon"
-            :src="clear"
+            :src="clearIconUrl"
         />
         <img v-else class="img-icon" :src="notfoundIconUrl" />
     </div>
