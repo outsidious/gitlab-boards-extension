@@ -33,7 +33,10 @@
             </div>
             <div>
                 <md-button
-                    v-on:click="changeButtonMoreState()"
+                    @click.stop="changeButtonMoreState()"
+                    @focusin.stop="null"
+                    @mousedown.stop="null"
+                    @mouseup.stop="null"
                     class="md-dense md-primary button-more"
                 >
                     <div v-if="buttonMore">less</div>

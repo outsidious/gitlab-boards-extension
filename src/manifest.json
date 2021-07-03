@@ -32,7 +32,7 @@
     "content_scripts": [
         {
             "matches": [
-                "*://gitlab.loc/*/boards*",
+                "*://git.qoollo.com/*/boards*",
                 "*://git.iu7.bmstu.ru/*/boards*",
                 "*://gitlab.com/*/boards*"
             ],

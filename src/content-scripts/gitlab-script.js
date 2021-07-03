@@ -39,6 +39,7 @@ function processCard(qoollabCard) {
         el: "#card-footer" + issueId,
         render: (h) => h(CardFooterComponent),
     });
+    qoollabCard.addEventListener("click", function() {console.log("card click")}, false);
 }
 
 setTimeout(() => {
