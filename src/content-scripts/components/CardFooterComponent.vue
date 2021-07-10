@@ -30,18 +30,15 @@
                     "
                 >
                 </approve>
-            </div>
-            <div>
-                <md-button
+                <div
+                    class="button-more"
                     @click.stop="changeButtonMoreState()"
-                    @focusin.stop="null"
-                    @mousedown.stop="null"
-                    @mouseup.stop="null"
-                    class="md-dense md-primary button-more"
+                    @focusin.stop
+                    @mousedown.stop
                 >
-                    <div v-if="buttonMore">less</div>
-                    <div v-else>more</div>
-                </md-button>
+                    <button-more v-bind:buttonMoreState="buttonMore">
+                    </button-more>
+                </div>
             </div>
         </div>
     </div>
@@ -194,7 +191,7 @@ export default {
 <style scoped>
 .qoollo-card-footer {
     position: relative;
-    top: 20px;
+    top: 10px;
 }
 
 .tail-flex-container {
@@ -205,7 +202,7 @@ export default {
 }
 
 .gitlab-info {
-    width: 80%;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -213,8 +210,17 @@ export default {
 }
 
 .button-more {
-    width: 20%;
+    display: flex;
+    cursor: pointer;
+    height: 1.5rem;
+    width: 5rem;
+    justify-content: center;
+    align-items: center;
     position: relative;
-    left: 1.5rem;
+    left: 1rem;
+}
+
+.button-more:hover {
+    background-color: lavender;
 }
 </style>
