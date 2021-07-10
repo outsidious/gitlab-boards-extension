@@ -35,7 +35,7 @@ export default {
             require(`../../assets/sprite_icons/check-circle.svg`)
         );
         this.clearIconUrl = chrome.extension.getURL(
-            require(`../../assets/sprite_icons/clear.svg`)
+            require(`../../assets/sprite_icons/status_failed.svg`)
         );
         this.notfoundIconUrl = chrome.extension.getURL(
             require(`../../assets/sprite_icons/question.svg`)
