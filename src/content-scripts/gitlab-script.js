@@ -7,6 +7,7 @@ import MergeRequest from "./components/MergeRequest";
 import Approve from "./components/Approve";
 import HiddenPart from "./components/HiddenPart";
 import ButtonMore from "./components/ButtonMore"
+import Actions from "./components/Actions"
 import VueMaterial from "vue-material";
 import 'vue-material/dist/vue-material.min.css'
 
@@ -16,6 +17,7 @@ Vue.component("merge-request", MergeRequest);
 Vue.component("approve", Approve);
 Vue.component("hidden-part", HiddenPart);
 Vue.component("button-more", ButtonMore);
+Vue.component("actions", Actions)
 
 chrome.extension.onMessage.addListener(function(msg) {
     if (msg.action == "move-card") {

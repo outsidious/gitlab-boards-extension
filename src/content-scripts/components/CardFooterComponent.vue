@@ -7,7 +7,7 @@
         <div v-if="buttonMore">
             <hidden-part
                 v-bind:mergeInfo="issueInfo.lastRelatedMerge"
-                v-on:signalRunPipeline="runLastPipeline"
+                v-on:signalMarkAsReady="markAsReady"
                 v-on:signalMerge="mergeRequest"
                 v-on:signalApprove="approveRequest"
             >
@@ -49,7 +49,7 @@ import * as gitlab from "../gitlab-service";
 import "vue-material/dist/vue-material.min.css";
 
 let userToken = "";
-if (window.localStorage["qoollab_user_token"] == null) {
+if (!window.localStorage["qoollab_user_token"]) {
     let promt = prompt(
         "What's your access token (required for some operations)?"
     );
@@ -89,19 +89,23 @@ export default {
         }
     },
     methods: {
+        /*
         runLastPipeline() {
             gitlabService.runPipeline(
                 this.issueInfo.lastRelatedMerge.pipelineId
             );
-        },
+        },*/
         mergeRequest() {
-            gitlabService.mergeRequest(this.issueInfo.lastRelatedMerge.mergeId);
+            console.log("merge catch!");
+            //gitlabService.mergeRequest(this.issueInfo.lastRelatedMerge.mergeId);
         },
         approveRequest() {
-            gitlabService.approveMerge(this.issueInfo.lastRelatedMerge.mergeId);
+            console.log("approve catch!");
+            //gitlabService.approveMerge(this.issueInfo.lastRelatedMerge.mergeId);
         },
-        /*
         markAsReady() {
+            console.log("mark as ready catch")
+            /*
             if (this.issueInfo.lastRelatedMerge.mergeId != -1) {
                 gitlabService.markAsReady(
                     this.issueInfo.lastRelatedMerge.mergeId,
@@ -109,8 +113,8 @@ export default {
                         console.log(data);
                     }
                 );
-            }
-        },*/
+            }*/
+        },
         getMilestoneCallback(issueInfo) {
             let milestoneInfo = issueInfo["milestone"];
             let strDueDate = "-";

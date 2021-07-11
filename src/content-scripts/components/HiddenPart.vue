@@ -1,42 +1,21 @@
 <template>
     <div class="hidden-part-container">
-        <div class="help-text">actions</div>
         <a
             :href="this.mergeInfo.changesUrl"
             v-bind:class="{
                 disabled_link: this.mergeInfo.mergeId === -1,
             }"
         >
-            Show changes
+            show changes
         </a>
 
-        <md-button
-            v-on:click="merge()"
-            @focusin.stop
-            @mousedown.stop
-            style="text-transform: capitalize;"
-            class="merge-button action-button"
-            v-bind="{
-                disabled:
-                    this.mergeInfo.mergeId === -1 ||
-                    this.mergeInfo.mergeStatus != 'can_be_merged' ||
-                    this.mergeInfo.state != 'opened' ||
-                    this.mergeInfo.has_conflicts,
-            }"
-            >Merge</md-button
+        <actions
+            v-on:signalApprove="approve"
+            v-on:signalMerge="merge"
+            v-on:signalMarkAsReady="markAsReady"
+            v-bind:mergeInfo="mergeInfo"
         >
-
-        <md-button
-            v-on:click="approve()"
-            @focusin.stop
-            @mousedown.stop
-            style="text-transform: capitalize;"
-            class="approve-button action-button"
-            v-bind="{
-                disabled: this.mergeInfo.mergeId === -1,
-            }"
-            >Approve</md-button
-        >
+        </actions>
 
         <!---
         <a
@@ -47,15 +26,6 @@
         >
             Run pipeline
         </a>
-        <a
-            v-on:click="approve()"
-            v-bind:class="{
-                disabled: this.mergeInfo.mergeId === -1,
-            }"
-        >
-            Approve
-        </a>
-        <a v-on:click="markAsReady()"> Mark as ready </a>
         --->
     </div>
 </template>
@@ -65,17 +35,16 @@ import "vue-material-design-icons/styles.css";
 export default {
     props: ["mergeInfo"],
     methods: {
+        /*
         runPipeline() {
-            //event.stopImmediatePropagation();
+            event.stopImmediatePropagation();
             this.$emit("signalRunPipeline");
-        },
+        },*/
         merge() {
-            console.log("merge clicked");
-            //this.$emit("signalMerge");
+            this.$emit("signalMerge");
         },
         approve() {
-            console.log("approve clicked");
-            //this.$emit("signalApprove");
+            this.$emit("signalApprove");
         },
         markAsReady() {
             this.$emit("signalMarkAsReady");
@@ -101,37 +70,8 @@ a {
     padding: 0;
 }
 
-.help-text {
-    font-size: 0.7rem;
-    color: grey;
-    opacity: 0.7;
-}
-
 .disabled_link {
     pointer-events: none;
     color: grey;
-}
-
-.action-button {
-    border-radius: 5px;
-    width: 60px;
-}
-
-.merge-button {
-    background-color: #108548;
-    color: #FFFFFF;
-}
-
-.merge-button:disabled {
-    background-color: rgb(24, 192, 105);
-}
-
-.approve-button {
-    background-color:#1F75CB;
-    color: #FFFFFF;
-}
-
-.approve-button:disabled {
-    background-color:#58a8f8;
 }
 </style>
