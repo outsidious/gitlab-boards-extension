@@ -8,6 +8,7 @@ import Approve from "./components/Approve";
 import HiddenPart from "./components/HiddenPart";
 import ButtonMore from "./components/ButtonMore"
 import VueMaterial from "vue-material";
+import 'vue-material/dist/vue-material.min.css'
 
 Vue.use(VueMaterial);
 Vue.component("milestone-component", Milestone);
