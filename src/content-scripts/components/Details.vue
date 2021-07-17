@@ -2,11 +2,18 @@
     <div class="component-container">
         <div class="help-text">details</div>
         <div class="space"> </div>
-        <div class="milestone">
+        <div v-if="milestoneInfo.milestoneTitle!='-'" class="elem-container">
             <div class="help-title">Milestone:</div>
-            <a :href="this.milestoneInfo.web_url">
+            <a :href="this.milestoneInfo.web_url" class="text-title">
                 {{ milestoneInfo.milestoneTitle }}
             </a>
+        </div>
+        <div class="space"> </div>
+        <div v-if="mergeInfo.mergeTitle!==''" class="elem-container">
+            <div class="help-title">Merge:</div>
+            <div class="text-title">
+                {{ mergeInfo.mergeTitle }}
+            </div>
         </div>
         <div class="space"> </div>
     </div>
@@ -15,7 +22,7 @@
 <script>
 import "vue-material-design-icons/styles.css";
 export default {
-    props: ["milestoneInfo"],
+    props: ["milestoneInfo", "mergeInfo"],
     methods: {},
 };
 </script>
@@ -35,10 +42,13 @@ export default {
 a {
     color: black;
     font-weight: 400;
-    margin-left: 5px;
 }
 
-.milestone {
+.text-title {
+    margin-left: 10px;
+}
+
+.elem-container {
     display: flex;
 }
 

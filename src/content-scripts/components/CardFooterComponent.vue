@@ -76,6 +76,7 @@ export default {
                 mergesQua: "",
                 lastRelatedMerge: {
                     mergeStatus: "",
+                    mergeTitle: "",
                     state: "",
                     mergeId: -1,
                     mergeConflicts: false,
@@ -150,6 +151,8 @@ export default {
                         theLatest = mergesInfo[i];
                 }
                 this.issueInfo.lastRelatedMerge.mergeId = theLatest["iid"];
+                this.issueInfo.lastRelatedMerge.mergeTitle =
+                    theLatest["description"];
                 this.issueInfo.lastRelatedMerge.mergeStatus =
                     theLatest["merge_status"];
                 this.issueInfo.lastRelatedMerge.state = theLatest["state"];

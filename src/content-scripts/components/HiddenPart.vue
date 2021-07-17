@@ -17,7 +17,10 @@
         >
         </actions>
         <br />
-        <details-comp v-bind:milestoneInfo="issueInfo.milestoneInfo">
+        <details-comp
+            v-bind:milestoneInfo="issueInfo.milestoneInfo"
+            v-bind:mergeInfo="issueInfo.lastRelatedMerge"
+        >
         </details-comp>
 
         <!---
