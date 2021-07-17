@@ -1,9 +1,9 @@
 <template>
     <div class="hidden-part-container">
         <a
-            :href="this.mergeInfo.changesUrl"
+            :href="this.issueInfo.lastRelatedMerge.changesUrl"
             v-bind:class="{
-                disabled_link: this.mergeInfo.mergeId === -1,
+                disabled_link: this.issueInfo.lastRelatedMerge.mergeId === -1,
             }"
         >
             show changes
@@ -13,9 +13,12 @@
             v-on:signalApprove="approve"
             v-on:signalMerge="merge"
             v-on:signalMarkAsReady="markAsReady"
-            v-bind:mergeInfo="mergeInfo"
+            v-bind:mergeInfo="issueInfo.lastRelatedMerge"
         >
         </actions>
+        <br />
+        <details-comp v-bind:milestoneInfo="issueInfo.milestoneInfo">
+        </details-comp>
 
         <!---
         <a
@@ -33,7 +36,7 @@
 <script>
 import "vue-material-design-icons/styles.css";
 export default {
-    props: ["mergeInfo"],
+    props: ["issueInfo"],
     methods: {
         /*
         runPipeline() {

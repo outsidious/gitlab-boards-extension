@@ -7,9 +7,10 @@ import MergeRequest from "./components/MergeRequest";
 import Approve from "./components/Approve";
 import HiddenPart from "./components/HiddenPart";
 import ButtonMore from "./components/ButtonMore"
-import Actions from "./components/Actions"
+import Actions from "./components/Actions";
+import Details from "./components/Details";
 import VueMaterial from "vue-material";
-import 'vue-material/dist/vue-material.min.css'
+import 'vue-material/dist/vue-material.min.css';
 
 Vue.use(VueMaterial);
 Vue.component("milestone-component", Milestone);
@@ -17,7 +18,8 @@ Vue.component("merge-request", MergeRequest);
 Vue.component("approve", Approve);
 Vue.component("hidden-part", HiddenPart);
 Vue.component("button-more", ButtonMore);
-Vue.component("actions", Actions)
+Vue.component("actions", Actions);
+Vue.component("details-comp", Details);
 
 chrome.extension.onMessage.addListener(function(msg) {
     if (msg.action == "move-card") {
@@ -52,4 +54,4 @@ setTimeout(() => {
         /*let qoollabCard = restruct.addQoollabParentTag(document, elements[i]);*/
         processCard(card);
     }
-}, 10000);
+}, 4000);

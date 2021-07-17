@@ -92,7 +92,7 @@ export default {
 }
 
 .help-text {
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     color: grey;
     opacity: 0.7;
 }

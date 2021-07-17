@@ -6,7 +6,7 @@
         />
         <div v-if="buttonMore">
             <hidden-part
-                v-bind:mergeInfo="issueInfo.lastRelatedMerge"
+                v-bind:issueInfo="issueInfo"
                 v-on:signalMarkAsReady="markAsReady"
                 v-on:signalMerge="mergeRequest"
                 v-on:signalApprove="approveRequest"
@@ -15,7 +15,9 @@
         </div>
         <div class="tail-flex-container">
             <div class="gitlab-info">
-                <milestone-component v-bind:due_date="issueInfo.due_date">
+                <milestone-component
+                    v-bind:due_date="issueInfo.milestoneInfo.due_date"
+                >
                 </milestone-component>
                 <merge-request
                     v-bind:mergesQua="issueInfo.mergesQua"
@@ -66,7 +68,11 @@ export default {
     data() {
         return {
             issueInfo: {
-                due_date: "",
+                milestoneInfo: {
+                    milestoneTitle: "",
+                    web_url: "",
+                    due_date: "",
+                },
                 mergesQua: "",
                 lastRelatedMerge: {
                     mergeStatus: "",
@@ -104,7 +110,7 @@ export default {
             //gitlabService.approveMerge(this.issueInfo.lastRelatedMerge.mergeId);
         },
         markAsReady() {
-            console.log("mark as ready catch")
+            console.log("mark as ready catch");
             /*
             if (this.issueInfo.lastRelatedMerge.mergeId != -1) {
                 gitlabService.markAsReady(
@@ -116,14 +122,18 @@ export default {
             }*/
         },
         getMilestoneCallback(issueInfo) {
-            let milestoneInfo = issueInfo["milestone"];
+            const milestoneInfo = issueInfo["milestone"];
             let strDueDate = "-";
+            let strTitle = "-";
             if (milestoneInfo) {
-                let dueDate = new Date(milestoneInfo.due_date).toString();
-                let dueDateArr = dueDate.split(" ");
+                const dueDate = new Date(milestoneInfo.due_date).toString();
+                const dueDateArr = dueDate.split(" ");
                 strDueDate = dueDateArr[1] + " " + dueDateArr[2];
+                strTitle = milestoneInfo.title;
+                this.issueInfo.milestoneInfo.web_url = milestoneInfo.web_url;
             }
-            this.issueInfo.due_date = strDueDate;
+            this.issueInfo.milestoneInfo.due_date = strDueDate;
+            this.issueInfo.milestoneInfo.milestoneTitle = strTitle;
         },
         getQuaMergesCallback(issueInfo) {
             let mergesQua = issueInfo["merge_requests_count"];
