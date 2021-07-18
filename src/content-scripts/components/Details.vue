@@ -35,8 +35,10 @@
                 v-for="item in mergeInfo.approvers"
                 :key="item.user.id"
             >
+                <div class="img-space"></div>
                 <img v-bind:src="item.user.avatar_url + '&size=24'" alt="" />
                 <div class="img-space"></div>
+                <img v-bind:src="item.user.avatar_url + '&size=24'" alt="" />
             </div>
         </div>
         <div class="space"></div>
@@ -81,8 +83,12 @@ a {
     display: flex;
 }
 
+img {
+    border-radius: 50%;
+}
+
 .img-space {
-    width: 6px;
+    width: 8px;
 }
 
 div.space {
