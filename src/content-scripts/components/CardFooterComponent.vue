@@ -27,9 +27,7 @@
                 >
                 </merge-request>
                 <approve
-                    v-bind:approvalsQua="
-                        issueInfo.lastRelatedMerge.mergeApprovals
-                    "
+                    v-bind:approvers="issueInfo.lastRelatedMerge.approvers"
                 >
                 </approve>
                 <div
@@ -82,7 +80,7 @@ export default {
                     mergeConflicts: false,
                     pipelineId: -1,
                     pipelineStatus: "undefined",
-                    mergeApprovals: -1,
+                    approvers: [],
                     changesUrl: "",
                 },
             },
@@ -137,8 +135,7 @@ export default {
             this.issueInfo.milestoneInfo.milestoneTitle = strTitle;
         },
         getQuaMergesCallback(issueInfo) {
-            let mergesQua = issueInfo["merge_requests_count"];
-            this.issueInfo.mergesQua = mergesQua;
+            this.issueInfo.mergesQua = issueInfo["merge_requests_count"];
         },
         getRelatedMergesCallback(mergesInfo) {
             if (mergesInfo.length != 0) {
@@ -172,14 +169,17 @@ export default {
             );
         },
         getApprovalsCallback(approvers) {
-            this.issueInfo.lastRelatedMerge.mergeApprovals = approvers.length;
+            this.issueInfo.lastRelatedMerge.approvers = approvers;
+        },
+        getIssueCallback(issueInfo) {
+            this.getMilestoneCallback(issueInfo);
+            this.getQuaMergesCallback(issueInfo);
         },
         changeButtonMoreState() {
             this.buttonMore = !this.buttonMore;
         },
         sendRequestsToGitlabService(issueId) {
-            gitlabService.getCurrentIssue(issueId, this.getMilestoneCallback);
-            gitlabService.getCurrentIssue(issueId, this.getQuaMergesCallback);
+            gitlabService.getCurrentIssue(issueId, this.getIssueCallback);
             gitlabService.getRelatedMerges(
                 issueId,
                 this.getRelatedMergesCallback

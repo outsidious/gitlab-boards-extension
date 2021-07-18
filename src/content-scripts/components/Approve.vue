@@ -1,13 +1,13 @@
 <template>
     <div>
         <img alt="approve-icon" class="img-icon" :src="approveIconUrl" />
-        {{ approvalsQua }}
+        {{ approvers.length }}
     </div>
 </template>
 
 <script>
 export default {
-    props: ["approvalsQua"],
+    props: ["approvers"],
     data() {
         return {
             approveIconUrl: "",

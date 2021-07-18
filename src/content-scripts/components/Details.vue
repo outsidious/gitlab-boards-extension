@@ -1,21 +1,45 @@
 <template>
     <div class="component-container">
         <div class="help-text">details</div>
-        <div class="space"> </div>
-        <div v-if="milestoneInfo.milestoneTitle!='-'" class="elem-container">
+        <div class="space"></div>
+        <div v-if="milestoneInfo.milestoneTitle != '-'" class="elem-container">
             <div class="help-title">Milestone:</div>
-            <a :href="this.milestoneInfo.web_url" class="text-title">
+            <a
+                :href="this.milestoneInfo.web_url"
+                class="text-title"
+                @click.stop
+                @focusin.stop
+                @mousedown.stop
+            >
                 {{ milestoneInfo.milestoneTitle }}
             </a>
         </div>
-        <div class="space"> </div>
-        <div v-if="mergeInfo.mergeTitle!==''" class="elem-container">
+        <div class="space"></div>
+        <div v-if="mergeInfo.mergeTitle !== ''" class="elem-container">
             <div class="help-title">Merge:</div>
-            <div class="text-title">
-                {{ mergeInfo.mergeTitle }}
+            <a
+                :href="this.mergeInfo.changesUrl"
+                class="text-title"
+                @click.stop
+                @focusin.stop
+                @mousedown.stop
+            >
+                "{{ mergeInfo.mergeTitle }}"
+            </a>
+        </div>
+        <div class="space"></div>
+        <div v-if="1" class="elem-container">
+            <div class="help-title">Approvers:</div>
+            <div
+                class="avatar-container"
+                v-for="item in mergeInfo.approvers"
+                :key="item.user.id"
+            >
+                <img v-bind:src="item.user.avatar_url + '&size=24'" alt="" />
+                <div class="img-space"></div>
             </div>
         </div>
-        <div class="space"> </div>
+        <div class="space"></div>
     </div>
 </template>
 
@@ -50,10 +74,19 @@ a {
 
 .elem-container {
     display: flex;
+    align-items: center;
+}
+
+.avatar-container {
+    display: flex;
+}
+
+.img-space {
+    width: 6px;
 }
 
 div.space {
     width: 100%;
-    height: 7px;
+    height: 8px;
 }
 </style>
