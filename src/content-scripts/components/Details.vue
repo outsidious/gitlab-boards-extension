@@ -36,9 +36,12 @@
                 :key="item.user.id"
             >
                 <div class="img-space"></div>
-                <img v-bind:src="item.user.avatar_url + '&size=24'" alt="" />
-                <div class="img-space"></div>
-                <img v-bind:src="item.user.avatar_url + '&size=24'" alt="" />
+                <div class="img-container">
+                    <img
+                        v-bind:src="item.user.avatar_url + '&size=24'"
+                        alt=""
+                    />
+                </div>
             </div>
         </div>
         <div class="space"></div>
@@ -85,13 +88,21 @@ a {
 
 img {
     border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+}
+
+.img-container {
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
 }
 
 .img-space {
     width: 8px;
 }
 
-div.space {
+.space {
     width: 100%;
     height: 8px;
 }
