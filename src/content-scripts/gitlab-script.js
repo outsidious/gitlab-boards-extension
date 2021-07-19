@@ -10,9 +10,10 @@ import ButtonMore from "./components/ButtonMore"
 import Actions from "./components/Actions";
 import Details from "./components/Details";
 import VueMaterial from "vue-material";
+import VueCustomTooltip from '@adamdehaven/vue-custom-tooltip'
 import 'vue-material/dist/vue-material.min.css';
 
-Vue.use(VueMaterial);
+Vue.use(VueMaterial, VueCustomTooltip);
 Vue.component("milestone-component", Milestone);
 Vue.component("merge-request", MergeRequest);
 Vue.component("approve", Approve);

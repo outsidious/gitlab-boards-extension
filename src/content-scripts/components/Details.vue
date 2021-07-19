@@ -36,12 +36,20 @@
                 :key="item.user.id"
             >
                 <div class="img-space"></div>
-                <div class="img-container">
-                    <img
-                        v-bind:src="item.user.avatar_url + '&size=24'"
-                        alt=""
-                    />
-                </div>
+                <VueCustomTooltip label="long loong long text">
+                    <a
+                        @click.stop
+                        @focusin.stop
+                        @mousedown.stop
+                        class="img-container"
+                        v-bind:href="item.user.web_url"
+                    >
+                        <img
+                            v-bind:src="item.user.avatar_url + '&size=24'"
+                            alt=""
+                        />
+                    </a>
+                </VueCustomTooltip>
             </div>
         </div>
         <div class="space"></div>
