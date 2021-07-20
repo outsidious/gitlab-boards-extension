@@ -28,7 +28,7 @@
             </a>
         </div>
         <div class="space"></div>
-        <div v-if="1" class="elem-container">
+        <div v-if="mergeInfo.approvers.length != 0" class="elem-container">
             <div class="help-title">Approvers:</div>
             <div
                 class="avatar-container"
@@ -36,7 +36,7 @@
                 :key="item.user.id"
             >
                 <div class="img-space"></div>
-                <VueCustomTooltip label="long loong long text">
+                <md-avatar class="md-small">
                     <a
                         @click.stop
                         @focusin.stop
@@ -46,10 +46,13 @@
                     >
                         <img
                             v-bind:src="item.user.avatar_url + '&size=24'"
-                            alt=""
+                            alt="Avatar"
                         />
+                        <md-tooltip md-direction="right">
+                            Approved by: {{ item.user.name }}
+                        </md-tooltip>
                     </a>
-                </VueCustomTooltip>
+                </md-avatar>
             </div>
         </div>
         <div class="space"></div>
@@ -92,6 +95,9 @@ a {
 
 .avatar-container {
     display: flex;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
 }
 
 img {
@@ -100,14 +106,18 @@ img {
     -moz-border-radius: 50%;
 }
 
-.img-container {
-    border-radius: 50%;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-}
-
 .img-space {
     width: 8px;
+}
+
+.md-tooltip {
+    font-weight: 400;
+    font-size: 13px;
+    color: aliceblue;
+    background-color: rgb(22, 21, 21);
+    opacity: 0.8;
+    border-radius: 5px;
+    z-index: 1000;
 }
 
 .space {

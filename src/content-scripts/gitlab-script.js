@@ -6,14 +6,13 @@ import Milestone from "./components/Milestone";
 import MergeRequest from "./components/MergeRequest";
 import Approve from "./components/Approve";
 import HiddenPart from "./components/HiddenPart";
-import ButtonMore from "./components/ButtonMore"
+import ButtonMore from "./components/ButtonMore";
 import Actions from "./components/Actions";
 import Details from "./components/Details";
 import VueMaterial from "vue-material";
-import VueCustomTooltip from '@adamdehaven/vue-custom-tooltip'
-import 'vue-material/dist/vue-material.min.css';
+import "vue-material/dist/vue-material.min.css";
 
-Vue.use(VueMaterial, VueCustomTooltip);
+Vue.use(VueMaterial);
 Vue.component("milestone-component", Milestone);
 Vue.component("merge-request", MergeRequest);
 Vue.component("approve", Approve);
