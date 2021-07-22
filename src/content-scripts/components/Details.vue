@@ -28,7 +28,10 @@
             </a>
         </div>
         <div class="space"></div>
-        <div v-if="mergeInfo.approvers.length != 0" class="elem-container">
+        <div
+            v-if="mergeInfo.approvers.length != 0"
+            class="elem-container approvers-container"
+        >
             <div class="help-title">Approvers:</div>
             <div
                 class="avatar-container"
@@ -77,6 +80,7 @@ export default {
 .help-title {
     color: grey;
     opacity: 0.7;
+    width: 76px;
 }
 
 a {
@@ -90,6 +94,9 @@ a {
 
 .elem-container {
     display: flex;
+}
+
+.approvers-container {
     align-items: center;
 }
 

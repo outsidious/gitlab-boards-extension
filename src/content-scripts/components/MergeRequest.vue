@@ -48,5 +48,6 @@ export default {
 .img-icon {
     position: relative;
     bottom: 0.1rem;
+    padding-right: 1px;
 }
 </style>

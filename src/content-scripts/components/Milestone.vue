@@ -27,7 +27,8 @@ export default {
     bottom: 0.1rem;
 }
 
+/*
 .milestone-container {
     width: 35%;
-}
+}*/
 </style>

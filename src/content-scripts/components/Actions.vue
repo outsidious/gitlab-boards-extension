@@ -72,6 +72,7 @@ export default {
 .merge-button {
     background-color: #108548;
     color: #ffffff;
+    margin-left: 0;
 }
 
 .merge-button:disabled {
