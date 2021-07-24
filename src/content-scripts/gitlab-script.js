@@ -54,4 +54,4 @@ setTimeout(() => {
         /*let qoollabCard = restruct.addQoollabParentTag(document, elements[i]);*/
         processCard(card);
     }
-}, 4000);
+}, 10000);

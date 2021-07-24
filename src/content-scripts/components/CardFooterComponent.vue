@@ -34,6 +34,7 @@
                     class="button-more"
                     @click.stop="changeButtonMoreState()"
                     @focusin.stop
+                    @focusout.stop
                     @mousedown.stop
                 >
                     <button-more v-bind:buttonMoreState="buttonMore">
@@ -69,9 +70,9 @@ export default {
                 milestoneInfo: {
                     milestoneTitle: "",
                     web_url: "",
-                    due_date: "",
+                    due_date: "-",
                 },
-                mergesQua: "",
+                mergesQua: "0",
                 lastRelatedMerge: {
                     mergeStatus: "",
                     mergeTitle: "",

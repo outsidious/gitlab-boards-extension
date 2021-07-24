@@ -11,6 +11,7 @@ export function setIssueIdAttribute(qoollabCard) {
     )[0];
     let strIssueId = oldIssueIdElement.innerHTML
         .toString()
+        .split("#")[1]
         .replace(/[^\d]/g, ""); // удаляем из innerHTML всё кроме цифр
     let issueId = Number.parseInt(strIssueId);
     qoollabCard.setAttribute("issue-id", issueId); // сохранили id isuue как аттрибут <qoollab-card>
@@ -38,9 +39,7 @@ export function restructCardBody(document, qoollabCard) {
         cardBodyDiv.style =
             "padding-left: 20px; margin-left: auto; margin-right: 0; margin-top: auto; margin-bottom: auto;";
         cardBodyDiv.appendChild(assigneElement);
-        let labelsDiv = qoollabCard.querySelector(
-            ".board-card-labels"
-        );
+        let labelsDiv = qoollabCard.querySelector(".board-card-labels");
         let cardBody = document.createElement("div");
         cardBody.style = "display: flex; align-items: center; margin-top: 5px";
         //let labelsDivParent = qoollabCard.querySelector("li > div");
