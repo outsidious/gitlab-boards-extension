@@ -48,7 +48,7 @@ function processCard(qoollabCard) {
     });
 }
 
-setTimeout(() => {
+setInterval(() => {
     let cards = document.getElementsByClassName("board-card");
     for (let card of cards) {
         /*let qoollabCard = restruct.addQoollabParentTag(document, elements[i]);*/

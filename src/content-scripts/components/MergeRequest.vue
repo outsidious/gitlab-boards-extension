@@ -3,7 +3,7 @@
         <img alt="branch-icon" class="img-icon" :src="branchIconUrl" />
         {{ mergesQua }}
         <img
-            v-if="mergeStatus === 'passed'"
+            v-if="mergeStatus === 'passed' || mergeStatus === 'success'"
             class="img-icon"
             :src="checkIconUrl"
         />

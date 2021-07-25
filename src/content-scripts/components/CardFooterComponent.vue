@@ -72,7 +72,7 @@ export default {
                     web_url: "",
                     due_date: "-",
                 },
-                mergesQua: "0",
+                mergesQua: "-",
                 lastRelatedMerge: {
                     mergeStatus: "",
                     mergeTitle: "",

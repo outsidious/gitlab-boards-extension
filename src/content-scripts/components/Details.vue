@@ -90,6 +90,7 @@ a {
 
 .text-title {
     margin-left: 10px;
+    width: 240px;
 }
 
 .elem-container {
