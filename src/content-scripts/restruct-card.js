@@ -9,14 +9,17 @@ export function setIssueIdAttribute(qoollabCard) {
     let oldIssueIdElement = qoollabCard.getElementsByClassName(
         "board-card-number"
     )[0];
-    let strIssueId = oldIssueIdElement.innerHTML
-        .toString()
-        .split("#")[1]
-        .replace(/[^\d]/g, ""); // удаляем из innerHTML всё кроме цифр
-    let issueId = Number.parseInt(strIssueId);
-    qoollabCard.setAttribute("issue-id", issueId); // сохранили id isuue как аттрибут <qoollab-card>
-    oldIssueIdElement.parentElement.removeChild(oldIssueIdElement); // удалили id isuue
-    return issueId;
+    if (oldIssueIdElement && qoollabCard) {
+        let strIssueId = oldIssueIdElement.innerHTML
+            .toString()
+            .split("#")[1]
+            .replace(/[^\d]/g, ""); // удаляем из innerHTML всё кроме цифр
+        let issueId = Number.parseInt(strIssueId);
+        qoollabCard.setAttribute("issue-id", issueId); // сохранили id isuue как аттрибут <qoollab-card>
+        oldIssueIdElement.parentElement.removeChild(oldIssueIdElement); // удалили id isuue
+        return issueId;
+    }
+    return -1;
 }
 
 export function addIssueIdToCardHeader(document, qoollabCard, issueId) {

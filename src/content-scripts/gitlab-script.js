@@ -33,19 +33,21 @@ chrome.extension.onMessage.addListener(function(msg) {
 
 function processCard(qoollabCard) {
     const issueId = restruct.setIssueIdAttribute(qoollabCard);
-    restruct.addIssueIdToCardHeader(document, qoollabCard, issueId);
-    restruct.restructCardBody(document, qoollabCard);
+    if (issueId != -1) {
+        restruct.addIssueIdToCardHeader(document, qoollabCard, issueId);
+        restruct.restructCardBody(document, qoollabCard);
 
-    const cardFooter = qoollabCard.querySelector(".board-card-footer");
-    cardFooter.setAttribute("id", "card-footer" + issueId);
-    cardFooter.parentElement.appendChild(cardFooter);
-    for (let child of cardFooter.children) {
-        child.remove();
+        const cardFooter = qoollabCard.querySelector(".board-card-footer");
+        cardFooter.setAttribute("id", "card-footer" + issueId);
+        cardFooter.parentElement.appendChild(cardFooter);
+        for (let child of cardFooter.children) {
+            child.remove();
+        }
+        new Vue({
+            el: "#card-footer" + issueId,
+            render: (h) => h(CardFooterComponent),
+        });
     }
-    new Vue({
-        el: "#card-footer" + issueId,
-        render: (h) => h(CardFooterComponent),
-    });
 }
 
 setInterval(() => {

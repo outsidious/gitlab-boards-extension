@@ -48,15 +48,12 @@ export default {
     props: ["mergeInfo"],
     methods: {
         merge() {
-            console.log("merge clicked");
             this.$emit("signalMerge");
         },
         approve() {
-            console.log("approve clicked");
             this.$emit("signalApprove");
         },
         markAsReady() {
-            console.log("mark as ready clicked");
             this.$emit("signalMarkAsReady");
         },
     },

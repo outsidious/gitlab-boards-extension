@@ -110,8 +110,6 @@ export default {
             //gitlabService.approveMerge(this.issueInfo.lastRelatedMerge.mergeId);
         },
         markAsReady() {
-            console.log("mark as ready catch");
-            /*
             if (this.issueInfo.lastRelatedMerge.mergeId != -1) {
                 gitlabService.markAsReady(
                     this.issueInfo.lastRelatedMerge.mergeId,
@@ -119,7 +117,7 @@ export default {
                         console.log(data);
                     }
                 );
-            }*/
+            }
         },
         getMilestoneCallback(issueInfo) {
             const milestoneInfo = issueInfo["milestone"];

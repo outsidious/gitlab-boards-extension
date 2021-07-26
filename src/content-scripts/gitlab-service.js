@@ -1,12 +1,18 @@
 let $ = require("jquery");
 
-export function GitlabService(urlOrigin, projectName, userToken = "") {
+export function GitlabService(urlOrigin, projectName, userToken) {
     this.origin = urlOrigin;
     this.projectName = projectName;
     this.userToken = "";
     if (userToken) this.userToken = userToken;
     this.projectId = projectName.replaceAll("/", "%2F"); //formated project name might be used as project id
     this.apiURL = "/api/v4/projects/";
+
+    this.updateUserToken = function() {
+        const newToken = window.localStorage["qoollab_user_token"];
+        if (newToken && newToken != "")
+            this.userToken = newToken;
+    }
 
     this.getRelatedMerges = function(issueId, callback) {
         let url =
@@ -127,8 +133,9 @@ export function GitlabService(urlOrigin, projectName, userToken = "") {
         }
     };
 
-    /*this.markAsReady = function(mergeId, callback) {
-        if (this.userToken != "") {
+    this.markAsReady = function(mergeId, callback) {
+        this.updateUserToken();
+        if (this.userToken) {
             let url =
                 this.origin +
                 "/" +
@@ -148,5 +155,5 @@ export function GitlabService(urlOrigin, projectName, userToken = "") {
                 },
             });
         }
-    };*/
+    };
 }
