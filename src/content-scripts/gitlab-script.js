@@ -56,4 +56,4 @@ setInterval(() => {
         /*let qoollabCard = restruct.addQoollabParentTag(document, elements[i]);*/
         processCard(card);
     }
-}, 10000);
+}, 2000);

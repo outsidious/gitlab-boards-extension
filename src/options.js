@@ -1,5 +1,6 @@
 function save_options() {
-    let token = document.getElementById("input_token").value;
+    const inputField = document.getElementById("input_token");
+    let token = inputField.value;
     /*
     Надо сделать все необходимые url-паттерны
     */
@@ -18,7 +19,8 @@ function save_options() {
     status.innerHTML = "New token saved.";
     setTimeout(function() {
         status.innerHTML = "";
-    }, 1500);
+        inputField.value = "";
+    }, 2000);
 }
 
 document.querySelector("#save").addEventListener("click", save_options);

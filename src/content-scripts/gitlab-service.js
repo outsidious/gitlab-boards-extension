@@ -4,14 +4,43 @@ export function GitlabService(urlOrigin, projectName, userToken) {
     this.origin = urlOrigin;
     this.projectName = projectName;
     this.userToken = "";
+    this.userId = -1;
     if (userToken) this.userToken = userToken;
     this.projectId = projectName.replaceAll("/", "%2F"); //formated project name might be used as project id
     this.apiURL = "/api/v4/projects/";
 
     this.updateUserToken = function() {
         const newToken = window.localStorage["qoollab_user_token"];
-        if (newToken && newToken != "")
+        if (newToken && newToken != "") {
             this.userToken = newToken;
+        }
+    };
+
+    this.updateUserId = function() {
+        let url =
+                this.origin +
+                "/api/v4/" +
+                "personal_access_tokens"
+            $.ajax({
+                url: url,
+                headers: {
+                    "PRIVATE-TOKEN": this.userToken,
+                },
+                method: "GET",
+                success: function(data) {
+                    if (data.length >= 1) {
+                        this.userId = data[0]["user_id"]
+                    }
+                    return true;
+                },
+            });
+    };
+
+    this.updateUserInfo = function() {
+        this.updateUserToken();
+        if (this.userToken && this.userToken != "") {
+            this.updateUserId();
+        }
     }
 
     this.getRelatedMerges = function(issueId, callback) {
@@ -112,6 +141,7 @@ export function GitlabService(urlOrigin, projectName, userToken) {
     };
 
     this.approveMerge = function(mergeId) {
+        this.updateUserInfo();
         if (this.userToken != "") {
             let url =
                 this.origin +
