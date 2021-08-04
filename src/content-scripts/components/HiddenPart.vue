@@ -11,9 +11,11 @@
 
         <actions
             v-on:signalApprove="approve"
+            v-on:signalUnapprove="unapprove"
             v-on:signalMerge="merge"
             v-on:signalMarkAsReady="markAsReady"
             v-bind:mergeInfo="issueInfo.lastRelatedMerge"
+            v-bind:userInfo="userInfo"
         >
         </actions>
         <br />
@@ -39,7 +41,7 @@
 <script>
 import "vue-material-design-icons/styles.css";
 export default {
-    props: ["issueInfo"],
+    props: ["issueInfo", "userInfo"],
     methods: {
         /*
         runPipeline() {
@@ -51,6 +53,9 @@ export default {
         },
         approve() {
             this.$emit("signalApprove");
+        },
+        unapprove() {
+            this.$emit("signalUnapprove");
         },
         markAsReady() {
             this.$emit("signalMarkAsReady");

@@ -7,9 +7,11 @@
         <div v-if="buttonMore">
             <hidden-part
                 v-bind:issueInfo="issueInfo"
+                v-bind:userInfo="userInfo"
                 v-on:signalMarkAsReady="markAsReady"
                 v-on:signalMerge="mergeRequest"
                 v-on:signalApprove="approveRequest"
+                v-on:signalUnapprove="unapproveRequest"
             >
             </hidden-part>
         </div>
@@ -85,8 +87,12 @@ export default {
                     changesUrl: "",
                 },
             },
+            userInfo: {
+                id: -1,
+            },
             buttonMore: false,
             timerId: null,
+            issueId: -1,
         };
     },
     beforeDestroy() {
@@ -106,9 +112,20 @@ export default {
             //gitlabService.mergeRequest(this.issueInfo.lastRelatedMerge.mergeId);
         },
         approveRequest() {
-            console.log("approve catch!");
+            gitlabService.updateUserInfo(this.updateUserInfoCallback);
             if (this.issueInfo.lastRelatedMerge.mergeId != -1)
-                gitlabService.approveMerge(this.issueInfo.lastRelatedMerge.mergeId);
+                gitlabService.approveMerge(
+                    this.issueInfo.lastRelatedMerge.mergeId
+                );
+            this.sendRequestsToGitlabService(this.issueId);
+        },
+        unapproveRequest() {
+            gitlabService.updateUserInfo(this.updateUserInfoCallback);
+            if (this.issueInfo.lastRelatedMerge.mergeId != -1)
+                gitlabService.unapproveMerge(
+                    this.issueInfo.lastRelatedMerge.mergeId
+                );
+            this.sendRequestsToGitlabService(this.issueId);
         },
         markAsReady() {
             console.log("mark as ready catch!");
@@ -177,6 +194,9 @@ export default {
             this.getMilestoneCallback(issueInfo);
             this.getQuaMergesCallback(issueInfo);
         },
+        updateUserInfoCallback(userId) {
+            this.userInfo.id = userId;
+        },
         changeButtonMoreState() {
             this.buttonMore = !this.buttonMore;
         },
@@ -186,16 +206,17 @@ export default {
                 issueId,
                 this.getRelatedMergesCallback
             );
+            gitlabService.updateUserInfo(this.updateUserInfoCallback);
         },
     },
     mounted() {
         //let qoollabCard = this.$el.parentElement.parentElement.parentElement;
         let qoollabCard = this.$el.parentElement.parentElement;
-        let issueId = qoollabCard.getAttribute("issue-id");
-        this.sendRequestsToGitlabService(issueId);
+        this.issueId = qoollabCard.getAttribute("issue-id");
+        this.sendRequestsToGitlabService(this.issueId);
         this.timerId = setInterval(() => {
-            this.sendRequestsToGitlabService(issueId);
-        }, 15000);
+            this.sendRequestsToGitlabService(this.issueId);
+        }, 10000);
 
         this.$on("signalMergeLoaded", function(merge) {
             gitlabService.getMergeApprovals(merge, this.getApprovalsCallback);

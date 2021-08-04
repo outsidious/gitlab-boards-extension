@@ -19,6 +19,7 @@
             >
 
             <md-button
+                v-if="checkWasntApproved()"
                 v-on:click="approve()"
                 @focusin.stop
                 @mousedown.stop
@@ -27,8 +28,19 @@
                 v-bind="{
                     disabled: this.mergeInfo.mergeId === -1,
                 }"
-                >Approve</md-button
             >
+                Approve
+            </md-button>
+            <md-button
+                v-else
+                v-on:click="unapprove()"
+                @focusin.stop
+                @mousedown.stop
+                style="text-transform: capitalize;"
+                class="approve-button action-button"
+            >
+                Disapprove
+            </md-button>
 
             <md-button
                 v-on:click="markAsReady()"
@@ -45,7 +57,7 @@
 <script>
 import "vue-material-design-icons/styles.css";
 export default {
-    props: ["mergeInfo"],
+    props: ["mergeInfo", "userInfo"],
     methods: {
         merge() {
             this.$emit("signalMerge");
@@ -53,8 +65,19 @@ export default {
         approve() {
             this.$emit("signalApprove");
         },
+        unapprove() {
+            this.$emit("signalUnapprove");
+        },
         markAsReady() {
             this.$emit("signalMarkAsReady");
+        },
+        checkWasntApproved() {
+            for (let i = 0; i < this.mergeInfo.approvers.length; ++i) {
+                if (this.mergeInfo.approvers[i].user.id === this.userInfo.id) {
+                    return false;
+                }
+            }
+            return true;
         },
     },
 };

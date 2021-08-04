@@ -9,39 +9,36 @@ export function GitlabService(urlOrigin, projectName, userToken) {
     this.projectId = projectName.replaceAll("/", "%2F"); //formated project name might be used as project id
     this.apiURL = "/api/v4/projects/";
 
-    this.updateUserToken = function() {
+    this.updateUserInfo = function(callback) {
         const newToken = window.localStorage["qoollab_user_token"];
         if (newToken && newToken != "") {
             this.userToken = newToken;
+            this.getUserId(callback);
         }
     };
 
-    this.updateUserId = function() {
-        let url =
-                this.origin +
-                "/api/v4/" +
-                "personal_access_tokens"
-            $.ajax({
-                url: url,
-                headers: {
-                    "PRIVATE-TOKEN": this.userToken,
-                },
-                method: "GET",
-                success: function(data) {
-                    if (data.length >= 1) {
-                        this.userId = data[0]["user_id"]
-                    }
-                    return true;
-                },
-            });
+    this.getUserId = function(callback) {
+        let url = this.origin + "/api/v4/" + "personal_access_tokens";
+        $.ajax({
+            url: url,
+            headers: {
+                "PRIVATE-TOKEN": this.userToken,
+            },
+            method: "GET",
+            success: function(data) {
+                if (data.length >= 1) {
+                    this.userId = data[0]["user_id"];
+                } else {
+                    this.userId = -1;
+                }
+                callback(this.userId);
+            },
+            error: function() {
+                this.userId = -1;
+                callback(-1);
+            },
+        });
     };
-
-    this.updateUserInfo = function() {
-        this.updateUserToken();
-        if (this.userToken && this.userToken != "") {
-            this.updateUserId();
-        }
-    }
 
     this.getRelatedMerges = function(issueId, callback) {
         let url =
@@ -141,7 +138,6 @@ export function GitlabService(urlOrigin, projectName, userToken) {
     };
 
     this.approveMerge = function(mergeId) {
-        this.updateUserInfo();
         if (this.userToken != "") {
             let url =
                 this.origin +
@@ -150,6 +146,28 @@ export function GitlabService(urlOrigin, projectName, userToken) {
                 "/merge_requests/" +
                 mergeId +
                 "/approve";
+            $.ajax({
+                url: url,
+                headers: {
+                    "PRIVATE-TOKEN": this.userToken,
+                },
+                method: "POST",
+                success: function() {
+                    return true;
+                },
+            });
+        }
+    };
+
+    this.unapproveMerge = function(mergeId) {
+        if (this.userToken != "") {
+            let url =
+                this.origin +
+                this.apiURL +
+                this.projectId +
+                "/merge_requests/" +
+                mergeId +
+                "/unapprove";
             $.ajax({
                 url: url,
                 headers: {
