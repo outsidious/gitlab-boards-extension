@@ -18,7 +18,7 @@
         <div v-if="mergeInfo.mergeTitle !== ''" class="elem-container">
             <div class="help-title">Merge:</div>
             <a
-                :href="this.mergeInfo.changesUrl"
+                :href="this.mergeInfo.changesUrl.slice(0, -6)"
                 class="text-title"
                 @click.stop
                 @focusin.stop

@@ -108,8 +108,9 @@ export default {
             );
         },*/
         mergeRequest() {
-            console.log("merge catch!");
-            //gitlabService.mergeRequest(this.issueInfo.lastRelatedMerge.mergeId);
+            gitlabService.updateUserInfo(this.updateUserInfoCallback);
+            gitlabService.mergeRequest(this.issueInfo.lastRelatedMerge.mergeId);
+            this.sendRequestsToGitlabService(this.issueId);
         },
         approveRequest() {
             gitlabService.updateUserInfo(this.updateUserInfoCallback);
@@ -129,7 +130,6 @@ export default {
         },
         markAsReady() {
             console.log("mark as ready catch!");
-            /*
             if (this.issueInfo.lastRelatedMerge.mergeId != -1) {
                 gitlabService.markAsReady(
                     this.issueInfo.lastRelatedMerge.mergeId,
@@ -137,7 +137,7 @@ export default {
                         console.log(data);
                     }
                 );
-            }*/
+            }
         },
         getMilestoneCallback(issueInfo) {
             const milestoneInfo = issueInfo["milestone"];

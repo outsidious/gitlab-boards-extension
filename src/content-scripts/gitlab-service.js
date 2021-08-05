@@ -116,7 +116,7 @@ export function GitlabService(urlOrigin, projectName, userToken) {
     };
 
     this.mergeRequest = function(mergeId) {
-        if (this.userToken != "") {
+        if (this.userToken && this.userToken != "") {
             let url =
                 this.origin +
                 this.apiURL +
@@ -138,7 +138,7 @@ export function GitlabService(urlOrigin, projectName, userToken) {
     };
 
     this.approveMerge = function(mergeId) {
-        if (this.userToken != "") {
+        if (this.userToken && this.userToken != "") {
             let url =
                 this.origin +
                 this.apiURL +
@@ -160,7 +160,7 @@ export function GitlabService(urlOrigin, projectName, userToken) {
     };
 
     this.unapproveMerge = function(mergeId) {
-        if (this.userToken != "") {
+        if (this.userToken && this.userToken != "") {
             let url =
                 this.origin +
                 this.apiURL +
@@ -182,15 +182,14 @@ export function GitlabService(urlOrigin, projectName, userToken) {
     };
 
     this.markAsReady = function(mergeId, callback) {
-        this.updateUserToken();
-        if (this.userToken) {
+        if (this.userToken && this.userToken != "") {
             let url =
                 this.origin +
                 "/" +
                 this.projectName +
                 "/-/merge_requests/" +
                 mergeId +
-                "?merge_request%5Bwip_event%5D=wip&format=json";
+                "?merge_request%5Bwip_event%5D=unwip&format=json";
             console.log(url);
             $.ajax({
                 url: url,
