@@ -4,7 +4,7 @@ function save_options() {
     /*
     Надо сделать все необходимые url-паттерны
     */
-    chrome.tabs.query({ url: "https://gitlab.com/*" }, function(tabs) {
+    chrome.tabs.query({ url: "https://git.qoollo.com/*" }, function(tabs) {
         for (var i = 0; i < tabs.length; i++) {
             chrome.tabs.executeScript(tabs[i].id, {
                 code:
