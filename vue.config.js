@@ -1,5 +1,8 @@
 module.exports = {
   runtimeCompiler: true,
+  css: {
+    extract: false
+  },
   pages: {
     popup: {
       template: 'public/browser-extension.html',
