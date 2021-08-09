@@ -1,32 +1,57 @@
 <template>
     <div class="popup-container">
-        <a class="popup-elem" v-on:click="openOptions()"> Options page </a>
+        <div class="img-con">
+            <img :src="icon" alt="lol" />
+        </div>
+        <div class="menu">
+            <a v-on:click="openOptions()"> Настройки </a>
+        </div>
     </div>
 </template>
 
 <script>
 export default {
-    name: "HelloWorld",
+    data() {
+        return {
+            icon: "",
+        };
+    },
     methods: {
         openOptions() {
-			chrome.tabs.create({'url': "/options.html" } )
+            chrome.tabs.create({ url: "/options.html" });
         },
+    },
+    mounted() {
+        this.icon = chrome.extension.getURL(require(`../assets/logo.png`));
     },
 };
 </script>
 
 <style scoped>
-.popup-elem {
-    color: black;
-    font-weight: 600;
-	font-size: 18pt;
+img {
+    width: 200px;
+    height: 200px;
+}
+
+a {
+    font-weight: 400;
+    font-size: 16px;
+    cursor: pointer;
+    color: blue;
+}
+
+.menu {
+    padding-right: 15px;
+}
+
+a:hover {
+    text-decoration: underline;
 }
 
 .popup-container {
-	width: inherit;
-	height: inherit;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+    width: inherit;
+    height: inherit;
+    display: flex;
+    justify-content: space-around;
 }
 </style>
