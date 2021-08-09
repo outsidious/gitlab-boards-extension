@@ -5,38 +5,29 @@
 
     <body>
         <div class="parent">
+            <b>Your user token:</b>
+            <br />
             <div class="block">
-                <p>
-                    <b>Your user token:</b><br />
-                    <input type="text" size="40" id="input_token" />
-                </p>
-
-                <br />
-                <div id="status"></div>
-                <button id="save">Save</button>
+                <div>
+                    <input type="text" size="30" id="input_token" />
+                </div>
+                <div>
+                    <button id="save">Save</button>
+                </div>
             </div>
+            <div id="status"></div>
         </div>
     </body>
 
     <script src="options.js"></script>
 
     <style>
-        .parent {
-            width: 100%;
-            height: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            display: flex;
-            align-items: center;
-            align-content: center;
-            justify-content: center;
-            overflow: auto;
+        button {
+            margin-left: 10px;
         }
 
         .block {
-            display: block;
-            border: none;
+            display: flex;
         }
     </style>
 </html>
