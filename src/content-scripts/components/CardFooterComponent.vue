@@ -90,14 +90,19 @@ export default {
             userInfo: {
                 id: -1,
             },
+            updateTime: 60,
             buttonMore: false,
             timerId: null,
+            updateTimerId: null,
             issueId: -1,
         };
     },
     beforeDestroy() {
         if (this.timerId) {
             clearInterval(this.timerId);
+        }
+        if (this.updateTimerId) {
+            clearInterval(this.updateTimerId);
         }
     },
     methods: {
@@ -208,15 +213,39 @@ export default {
             );
             gitlabService.updateUserInfo(this.updateUserInfoCallback);
         },
+        updateUpdateTime() {
+            if (window.localStorage["qoollab_update_time"]) {
+                return window.localStorage["qoollab_update_time"];
+            }
+            return this.updateTime;
+        },
+        createUpdateInterval() {
+            this.sendRequestsToGitlabService(this.issueId);
+            if (this.timerId) {
+                clearInterval(this.timerId);
+            }
+            let time = this.updateTime + (Math.floor(Math.random() * 21) - 10);
+            if (time <= 0) {
+                time = Math.floor(Math.random() * 7) + 3;
+            }
+            this.timerId = setInterval(() => {
+                this.sendRequestsToGitlabService(this.issueId);
+            }, time * 1000);
+            console.log(time);
+        },
     },
     mounted() {
         //let qoollabCard = this.$el.parentElement.parentElement.parentElement;
         let qoollabCard = this.$el.parentElement.parentElement;
         this.issueId = qoollabCard.getAttribute("issue-id");
-        this.sendRequestsToGitlabService(this.issueId);
-        this.timerId = setInterval(() => {
-            this.sendRequestsToGitlabService(this.issueId);
-        }, 10000);
+        this.createUpdateInterval();
+        this.updateTimerId = setInterval(() => {
+            const newTime = Number(this.updateUpdateTime());
+            if (newTime != this.updateTime) {
+                this.updateTime = newTime;
+                this.createUpdateInterval();
+            }
+        }, 40000);
 
         this.$on("signalMergeLoaded", function(merge) {
             gitlabService.getMergeApprovals(merge, this.getApprovalsCallback);

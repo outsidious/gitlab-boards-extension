@@ -14,9 +14,10 @@ document.addEventListener("DOMContentLoaded", function() {
     ) {
         inputTokenField.value = window.localStorage["qoollab_user_token"].slice(1, -1);
     }
-    if (window.localStorage["qoollab_update_time"]) {
-        inputTimeField.value = window.localStorage["qoollab_update_time"];
+    if (!window.localStorage["qoollab_update_time"]) {
+        window.localStorage["qoollab_update_time"] = 60;
     }
+    inputTimeField.value = window.localStorage["qoollab_update_time"];
 
     function save_options() {
         const inputTokenField = document.getElementById("input_token");

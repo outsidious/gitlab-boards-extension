@@ -34,6 +34,7 @@ chrome.extension.onMessage.addListener(function(msg) {
 function processCard(qoollabCard) {
     const issueId = restruct.setIssueIdAttribute(qoollabCard);
     if (issueId != -1) {
+        restruct.addUpdateIconToCardHeader(document, qoollabCard);
         restruct.addIssueIdToCardHeader(document, qoollabCard, issueId);
         restruct.restructCardBody(document, qoollabCard);
 

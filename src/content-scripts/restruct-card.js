@@ -33,6 +33,22 @@ export function addIssueIdToCardHeader(document, qoollabCard, issueId) {
     cardHeader.setAttribute("style", "justify-content: space-between");
 }
 
+export function addUpdateIconToCardHeader(document, qoollabCard) {
+    const icon = chrome.extension.getURL(require(`../assets/sprite_icons/retry.svg`));
+    let cardHeader = qoollabCard.querySelector("div > div:nth-child(1)");
+    let issueLink = cardHeader.querySelector(".board-card-title");
+    issueLink.style.fontSize = "15px";
+    issueLink.parentElement.removeChild(issueLink);
+    let elemIcon =  document.createElement("img");
+    elemIcon.src = icon;
+    elemIcon.style = "position: relative; top: 1px; margin-left: 8px; width: 14px; height: 14px; cursor: pointer"
+    let divIconLink = document.createElement("div");
+    divIconLink.style = "display: flex; align-items: center";
+    divIconLink.appendChild(issueLink);
+    divIconLink.appendChild(elemIcon)
+    cardHeader.appendChild(divIconLink);
+}
+
 export function restructCardBody(document, qoollabCard) {
     let assigneElement = qoollabCard.getElementsByClassName("avatar")[0]; // перемещаем assigne в один flex с лейблами и увеличиваем аватарку
     if (assigneElement) {
