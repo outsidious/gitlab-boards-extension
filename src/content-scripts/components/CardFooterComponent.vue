@@ -231,11 +231,9 @@ export default {
             this.timerId = setInterval(() => {
                 this.sendRequestsToGitlabService(this.issueId);
             }, time * 1000);
-            console.log(time);
         },
     },
     mounted() {
-        //let qoollabCard = this.$el.parentElement.parentElement.parentElement;
         let qoollabCard = this.$el.parentElement.parentElement;
         this.issueId = qoollabCard.getAttribute("issue-id");
         this.createUpdateInterval();
@@ -252,6 +250,17 @@ export default {
             this.issueInfo.lastRelatedMerge.changesUrl = gitlabService.getChangesUrl(
                 merge
             );
+        });
+
+        const retry = qoollabCard.getElementsByClassName("retry-icon")[0];
+        retry.addEventListener("mousedown", (event) => {
+            event.stopImmediatePropagation();
+            event.stopPropagation();
+            retry.style.backgroundColor = "lavender";
+            setInterval(() => {
+                retry.style.backgroundColor = "inherit";
+                this.sendRequestsToGitlabService(this.issueId);
+            }, 150);
         });
     },
 };

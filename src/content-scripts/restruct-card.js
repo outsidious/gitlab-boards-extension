@@ -41,11 +41,15 @@ export function addUpdateIconToCardHeader(document, qoollabCard) {
     issueLink.parentElement.removeChild(issueLink);
     let elemIcon =  document.createElement("img");
     elemIcon.src = icon;
-    elemIcon.style = "position: relative; top: 1px; margin-left: 8px; width: 14px; height: 14px; cursor: pointer"
+    elemIcon.style = "width: 14px; height: 14px"
+    let divIcon = document.createElement("div");
+    divIcon.classList.add("retry-icon");
+    divIcon.style = "margin-left: 8px;"
+    divIcon.appendChild(elemIcon)
     let divIconLink = document.createElement("div");
-    divIconLink.style = "display: flex; align-items: center";
+    divIconLink.style = "display: flex; align-items: center; cursor: pointer";
     divIconLink.appendChild(issueLink);
-    divIconLink.appendChild(elemIcon)
+    divIconLink.appendChild(divIcon);
     cardHeader.appendChild(divIconLink);
 }
 
