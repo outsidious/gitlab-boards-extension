@@ -6,34 +6,44 @@ document.addEventListener("DOMContentLoaded", function() {
     body.style.backgroundAttachment = "fixed";
     body.style.backgroundSize = "100% 100%";
 
-    let input = document.getElementById("input_token");
+    let inputTokenField = document.getElementById("input_token");
+    let inputTimeField = document.getElementById("input_time");
     if (
         window.localStorage["qoollab_user_token"] &&
         window.localStorage["qoollab_user_token"] != ""
     ) {
-        input.value = window.localStorage["qoollab_user_token"].slice(1, -1);
+        inputTokenField.value = window.localStorage["qoollab_user_token"].slice(1, -1);
+    }
+    if (window.localStorage["qoollab_update_time"]) {
+        inputTimeField.value = window.localStorage["qoollab_update_time"];
     }
 
     function save_options() {
-        const inputField = document.getElementById("input_token");
-        let token = inputField.value;
+        const inputTokenField = document.getElementById("input_token");
+        const inputTimeField = document.getElementById("input_time");
+        const token = inputTokenField.value;
+        const time = Number(inputTimeField.value);
         window.localStorage["qoollab_user_token"] = JSON.stringify(token);
+        window.localStorage["qoollab_update_time"] = time;
         /*
-    Надо сделать все необходимые url-паттерны
-    */
+        Надо сделать все необходимые url-паттерны
+        */
         chrome.tabs.query({ url: "https://git.iu7.bmstu.ru/*" }, function(tabs) {
             for (var i = 0; i < tabs.length; i++) {
                 chrome.tabs.executeScript(tabs[i].id, {
                     code:
                         'window.localStorage["qoollab_user_token"] = ' +
                         JSON.stringify(token) +
+                        ";"
+                        + 'window.localStorage["qoollab_update_time"] = ' +
+                        time +
                         ";",
                 });
             }
         });
 
         let status = document.getElementById("status");
-        status.innerHTML = "New token saved.";
+        status.innerHTML = "Info was updated.";
         setTimeout(function() {
             status.innerHTML = "";
         }, 2000);
