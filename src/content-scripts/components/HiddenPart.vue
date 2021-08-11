@@ -14,6 +14,7 @@
             v-on:signalUnapprove="unapprove"
             v-on:signalMerge="merge"
             v-on:signalMarkAsReady="markAsReady"
+            v-on:signalMarkAsDraft="markAsDraft"
             v-bind:mergeInfo="issueInfo.lastRelatedMerge"
             v-bind:userInfo="userInfo"
         >
@@ -59,6 +60,9 @@ export default {
         },
         markAsReady() {
             this.$emit("signalMarkAsReady");
+        },
+        markAsDraft() {
+            this.$emit("signalMarkAsDraft");
         },
     },
 };

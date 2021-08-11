@@ -13,7 +13,8 @@
                         this.mergeInfo.mergeId === -1 ||
                         this.mergeInfo.mergeStatus != 'can_be_merged' ||
                         this.mergeInfo.state != 'opened' ||
-                        this.mergeInfo.has_conflicts,
+                        this.mergeInfo.has_conflicts ||
+                        this.mergeInfo.draft,
                 }"
                 >Merge</md-button
             >
@@ -43,12 +44,22 @@
             </md-button>
 
             <md-button
+                v-if="mergeInfo.draft"
                 v-on:click="markAsReady()"
                 @focusin.stop
                 @mousedown.stop
                 style="text-transform: capitalize;"
                 class="mark-as-ready-button action-button"
                 >Mark as ready</md-button
+            >
+            <md-button
+                v-else
+                v-on:click="markAsDraft()"
+                @focusin.stop
+                @mousedown.stop
+                style="text-transform: capitalize;"
+                class="mark-as-ready-button action-button"
+                >Mark as draft</md-button
             >
         </div>
     </div>
@@ -70,6 +81,9 @@ export default {
         },
         markAsReady() {
             this.$emit("signalMarkAsReady");
+        },
+        markAsDraft() {
+            this.$emit("signalMarkAsDraft");
         },
         checkWasntApproved() {
             for (let i = 0; i < this.mergeInfo.approvers.length; ++i) {

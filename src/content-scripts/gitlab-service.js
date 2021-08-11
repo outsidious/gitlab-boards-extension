@@ -181,24 +181,44 @@ export function GitlabService(urlOrigin, projectName, userToken) {
         }
     };
 
-    this.markAsReady = function(mergeId, callback) {
+    this.markAsReady = function(mergeId, mergeTitle, callback) {
         if (this.userToken && this.userToken != "") {
+            mergeTitle = mergeTitle.replace("Draft: ", "");
             let url =
                 this.origin +
-                "/" +
-                this.projectName +
-                "/-/merge_requests/" +
-                mergeId +
-                "?merge_request%5Bwip_event%5D=unwip&format=json";
-            console.log(url);
+                this.apiURL +
+                this.projectId +
+                "/merge_requests/" +
+                mergeId + "?title=" + mergeTitle;
             $.ajax({
                 url: url,
                 headers: {
                     "PRIVATE-TOKEN": this.userToken,
                 },
                 method: "PUT",
-                success: function(data) {
-                    callback(data);
+                success: function() {
+                    callback();
+                },
+            });
+        }
+    };
+
+    this.markAsDraft = function(mergeId, mergeTitle, callback) {
+        if (this.userToken && this.userToken != "") {
+            let url =
+                this.origin +
+                this.apiURL +
+                this.projectId +
+                "/merge_requests/" +
+                mergeId + "?title=Draft: " + mergeTitle;
+            $.ajax({
+                url: url,
+                headers: {
+                    "PRIVATE-TOKEN": this.userToken,
+                },
+                method: "PUT",
+                success: function() {
+                    callback();
                 },
             });
         }

@@ -9,6 +9,7 @@
                 v-bind:issueInfo="issueInfo"
                 v-bind:userInfo="userInfo"
                 v-on:signalMarkAsReady="markAsReady"
+                v-on:signalMarkAsDraft="markAsDraft"
                 v-on:signalMerge="mergeRequest"
                 v-on:signalApprove="approveRequest"
                 v-on:signalUnapprove="unapproveRequest"
@@ -85,6 +86,7 @@ export default {
                     pipelineStatus: "undefined",
                     approvers: [],
                     changesUrl: "",
+                    draft: false,
                 },
             },
             userInfo: {
@@ -95,6 +97,7 @@ export default {
             timerId: null,
             updateTimerId: null,
             issueId: -1,
+            issueTitleElement: null,
         };
     },
     beforeDestroy() {
@@ -112,6 +115,20 @@ export default {
                 this.issueInfo.lastRelatedMerge.pipelineId
             );
         },*/
+        setTitleStatus(str) {
+            if (
+                str === "draft" &&
+                !this.issueTitleElement.innerHTML.includes("Draft: ")
+            ) {
+                this.issueTitleElement.innerHTML =
+                    "Draft: " + this.issueTitleElement.innerHTML;
+            } else if (str === "ready") {
+                this.issueTitleElement.innerHTML = this.issueTitleElement.innerHTML.replace(
+                    "Draft: ",
+                    ""
+                );
+            }
+        },
         mergeRequest() {
             gitlabService.updateUserInfo(this.updateUserInfoCallback);
             gitlabService.mergeRequest(this.issueInfo.lastRelatedMerge.mergeId);
@@ -134,15 +151,28 @@ export default {
             this.sendRequestsToGitlabService(this.issueId);
         },
         markAsReady() {
-            console.log("mark as ready catch!");
             if (this.issueInfo.lastRelatedMerge.mergeId != -1) {
                 gitlabService.markAsReady(
                     this.issueInfo.lastRelatedMerge.mergeId,
-                    function(data) {
-                        console.log(data);
-                    }
+                    this.issueInfo.lastRelatedMerge.mergeTitle,
+                    this.markAsReadyCallback
                 );
             }
+        },
+        markAsDraft() {
+            if (this.issueInfo.lastRelatedMerge.mergeId != -1) {
+                gitlabService.markAsDraft(
+                    this.issueInfo.lastRelatedMerge.mergeId,
+                    this.issueInfo.lastRelatedMerge.mergeTitle,
+                    this.markAsDraftCallback
+                );
+            }
+        },
+        markAsReadyCallback() {
+            this.sendRequestsToGitlabService(this.issueId);
+        },
+        markAsDraftCallback() {
+            this.sendRequestsToGitlabService(this.issueId);
         },
         getMilestoneCallback(issueInfo) {
             const milestoneInfo = issueInfo["milestone"];
@@ -177,6 +207,12 @@ export default {
                 this.issueInfo.lastRelatedMerge.mergeStatus =
                     theLatest["merge_status"];
                 this.issueInfo.lastRelatedMerge.state = theLatest["state"];
+                this.issueInfo.lastRelatedMerge.draft = theLatest[
+                    "title"
+                ].includes("Draft: ");
+                if (this.issueInfo.lastRelatedMerge.draft)
+                    this.setTitleStatus("draft");
+                else this.setTitleStatus("ready");
                 if (theLatest["has_conflicts"])
                     this.issueInfo.lastRelatedMerge.mergeConflicts =
                         theLatest["has_conflicts"];
@@ -235,6 +271,9 @@ export default {
     },
     mounted() {
         let qoollabCard = this.$el.parentElement.parentElement;
+        this.issueTitleElement = qoollabCard.querySelector(
+            "div > div > div > h4 > a"
+        );
         this.issueId = qoollabCard.getAttribute("issue-id");
         this.createUpdateInterval();
         this.updateTimerId = setInterval(() => {
