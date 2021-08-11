@@ -51,10 +51,30 @@ function processCard(qoollabCard) {
     }
 }
 
-setInterval(() => {
+function processCards() {
     let cards = document.getElementsByClassName("board-card");
     for (let card of cards) {
-        /*let qoollabCard = restruct.addQoollabParentTag(document, elements[i]);*/
         processCard(card);
     }
-}, 2000);
+}
+
+function createCheckCardsCycle() {
+    processCards();
+    /*setInterval(() => {
+        processCards();
+    }, 5000);*/
+}
+
+let timerId = setInterval(() => {
+    let cards = document.getElementsByClassName("board-card");
+    let flag = true;
+    cards.forEach((card) => {
+        if (card.querySelectorAll("span[aria-label='Loading']").length != 0) {
+            flag = false;
+        }
+    });
+    if (flag) {
+        createCheckCardsCycle();
+        clearInterval(timerId);
+    }
+}, 500);

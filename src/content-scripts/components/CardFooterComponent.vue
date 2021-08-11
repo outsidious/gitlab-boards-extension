@@ -257,7 +257,7 @@ export default {
             event.stopImmediatePropagation();
             event.stopPropagation();
             retry.style.backgroundColor = "lavender";
-            setInterval(() => {
+            setTimeout(() => {
                 retry.style.backgroundColor = "inherit";
                 this.sendRequestsToGitlabService(this.issueId);
             }, 150);
