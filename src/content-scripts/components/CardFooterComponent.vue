@@ -87,6 +87,7 @@ export default {
                     approvers: [],
                     changesUrl: "",
                     draft: false,
+                    sourceBranch: "",
                 },
             },
             userInfo: {
@@ -98,6 +99,8 @@ export default {
             updateTimerId: null,
             issueId: -1,
             issueTitleElement: null,
+            issueLinkPreviewElement: null,
+            backendUrl: "http://10.5.5.56:8081",
         };
     },
     beforeDestroy() {
@@ -128,6 +131,11 @@ export default {
                     ""
                 );
             }
+        },
+        setPreviewerLink(str) {
+            this.issueLinkPreviewElement.href = str;
+            this.issueLinkPreviewElement.style =
+                "pointer-events: auto; cursor: pointer;";
         },
         mergeRequest() {
             gitlabService.updateUserInfo(this.updateUserInfoCallback);
@@ -202,6 +210,8 @@ export default {
                         theLatest = mergesInfo[i];
                 }
                 this.issueInfo.lastRelatedMerge.mergeId = theLatest["iid"];
+                this.issueInfo.lastRelatedMerge.sourceBranch =
+                    theLatest["source_branch"];
                 this.issueInfo.lastRelatedMerge.mergeTitle =
                     theLatest["description"];
                 this.issueInfo.lastRelatedMerge.mergeStatus =
@@ -222,6 +232,11 @@ export default {
                     this.issueInfo.lastRelatedMerge.pipelineId =
                         theLatest["head_pipeline"].id;
                 }
+                this.setPreviewerLink(
+                    this.backendUrl +
+                        "/" +
+                        this.issueInfo.lastRelatedMerge.sourceBranch
+                );
             }
             this.$emit(
                 "signalMergeLoaded",
@@ -273,6 +288,9 @@ export default {
         let qoollabCard = this.$el.parentElement.parentElement;
         this.issueTitleElement = qoollabCard.querySelector(
             "div > div > div > h4 > a"
+        );
+        this.issueLinkPreviewElement = qoollabCard.querySelector(
+            ".preview-link"
         );
         this.issueId = qoollabCard.getAttribute("issue-id");
         this.createUpdateInterval();

@@ -28,9 +28,35 @@ export function addIssueIdToCardHeader(document, qoollabCard, issueId) {
     let issueIdElement = document.createElement("div");
     issueIdElement.textContent = "#" + issueId;
     issueIdElement.style =
-        "color: rgba(146, 146, 146, 1); font-size: small; padding-left: 10px";
+        "color: rgba(146, 146, 146, 1); font-size: small; padding-left: 10px;";
+    issueIdElement.classList.add("board-card-number");
     cardHeader.appendChild(issueIdElement);
     cardHeader.setAttribute("style", "justify-content: space-between");
+}
+
+export function addLinkPreviewToCard(card) {
+    const issueId =  card.querySelector('.board-card-number')
+    const issueIdCon = issueId.parentElement;
+    const newIdAndLinkCon = document.createElement("div");
+    issueIdCon.removeChild(issueId);
+    newIdAndLinkCon.appendChild(issueId);
+    newIdAndLinkCon.style = "display: flex; align-items: start";
+    const link = document.createElement('a');
+    link.style.pointerEvents = "none";
+    link.style.cursor = "default";
+    link.style.display = 'inline-flex';
+    link.target = '_blank';
+    link.classList.add("preview-link");
+    //link.addEventListener('click', e => e.stopImmediatePropagation())
+    const img = document.createElement('img');
+    img.style.height = '12px'
+    img.style.width = '12px'
+    img.style.marginLeft = '7px';
+    img.style.opacity= '0.5';
+    img.src = 'https://static.thenounproject.com/png/3629744-200.png';
+    link.append(img);
+    newIdAndLinkCon.appendChild(link);
+    issueIdCon.appendChild(newIdAndLinkCon);
 }
 
 export function addUpdateIconToCardHeader(document, qoollabCard) {
@@ -47,7 +73,7 @@ export function addUpdateIconToCardHeader(document, qoollabCard) {
     divIcon.style = "margin-left: 8px;"
     divIcon.appendChild(elemIcon)
     let divIconLink = document.createElement("div");
-    divIconLink.style = "display: flex; align-items: center; cursor: pointer";
+    divIconLink.style = "display: flex; align-items: start; cursor: pointer";
     divIconLink.appendChild(issueLink);
     divIconLink.appendChild(divIcon);
     cardHeader.appendChild(divIconLink);

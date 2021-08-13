@@ -36,6 +36,7 @@ function processCard(qoollabCard) {
     if (issueId != -1) {
         restruct.addUpdateIconToCardHeader(document, qoollabCard);
         restruct.addIssueIdToCardHeader(document, qoollabCard, issueId);
+        restruct.addLinkPreviewToCard(qoollabCard);
         restruct.restructCardBody(document, qoollabCard);
 
         const cardFooter = qoollabCard.querySelector(".board-card-footer");
@@ -58,13 +59,6 @@ function processCards() {
     }
 }
 
-function createCheckCardsCycle() {
-    processCards();
-    /*setInterval(() => {
-        processCards();
-    }, 5000);*/
-}
-
 let timerId = setInterval(() => {
     let cards = document.getElementsByClassName("board-card");
     let flag = true;
@@ -74,7 +68,9 @@ let timerId = setInterval(() => {
         }
     });
     if (flag) {
-        createCheckCardsCycle();
         clearInterval(timerId);
+        setTimeout(() => {
+            processCards();
+        }, 200);
     }
 }, 500);
