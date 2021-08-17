@@ -25,15 +25,37 @@
             </div>
         </div>
 
+        <div class="parent">
+            <b> Preview (Gitlab CD):</b>
+            <br />
+            <div class="block">
+                <table id="preview-table">
+                    <tr class="first-tr">
+                        <td>URL to 'git.../[PROJECT NAME]/-/boards' page</td>
+                        <td>URL to backend</td>
+                        <td class="table-button"> 
+                            <button class="add-button"> 
+                                <img id="add-image">
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
         <div>
             <div id="status"></div>
-            <button id="save">Save changes  </button>
+            <button id="save">Save changes</button>
         </div>
     </body>
 
     <script src="options.js"></script>
 
     <style>
+        body {
+            background-color: F38D5B;
+        }
+
         button {
             margin-left: 10px;
         }
@@ -41,6 +63,83 @@
         .block {
             display: flex;
             padding-bottom: 15px;
+        }
+
+        table {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        th {
+            border: 1px solid black;
+        }
+
+        td {
+            border: 1px solid black;
+            padding: 5px 15px 5px 15px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .first-tr {
+            font-weight: 600;
+            border: 2px solid black;
+        }
+
+        .table-button {
+            width: 27px;
+            height: 27px;
+        }
+
+        .remove-button {
+            border-radius: 4px;
+            padding: 2px;
+            margin: 0;
+            border: none;
+            background-color: B94331;
+            cursor: pointer;
+        }
+
+        .remove-button:hover {
+            background-color: 8D2F29;
+        }
+
+        .remove-button:active {
+            box-shadow: 0 3px 683D3D;
+            transform: translateY(1px);
+        }
+
+        .add-button {
+            border-radius: 4px;
+            padding: 2px;
+            margin: 0;
+            border: none;
+            background-color: 56812B;
+            cursor: pointer;
+        }
+
+        .add-button:hover {
+            background-color: 3A662F;
+        }
+
+        .add-button:active {
+            box-shadow: 0 3px 683D3D;
+            transform: translateY(1px);
+        }
+
+        img {
+            width: 22px;
+            height: 22px;
+        }
+
+        input {
+            background-color: FFD8CA;
+            font-size: 16px;
+        }
+
+        .table-input {
+            width: 100%;
+            height: 100%;
         }
     </style>
 </html>
