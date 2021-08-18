@@ -100,7 +100,7 @@ export default {
             issueId: -1,
             issueTitleElement: null,
             issueLinkPreviewElement: null,
-            backendUrl: "http://10.5.5.56:8081",
+            backendUrl: "",
         };
     },
     beforeDestroy() {
@@ -133,9 +133,14 @@ export default {
             }
         },
         setPreviewerLink(str) {
-            this.issueLinkPreviewElement.href = str;
-            this.issueLinkPreviewElement.style =
-                "pointer-events: auto; cursor: pointer;";
+            if (str && str != "") {
+                this.issueLinkPreviewElement.href = str;
+                this.issueLinkPreviewElement.style.pointerEvents = "auto";
+                this.issueLinkPreviewElement.style.cursor = "pointer";
+            } else {
+                this.issueLinkPreviewElement.style.pointerEvents = "none";
+                this.issueLinkPreviewElement.style.cursor = "default";
+            }
         },
         mergeRequest() {
             gitlabService.updateUserInfo(this.updateUserInfoCallback);
@@ -232,11 +237,7 @@ export default {
                     this.issueInfo.lastRelatedMerge.pipelineId =
                         theLatest["head_pipeline"].id;
                 }
-                this.setPreviewerLink(
-                    this.backendUrl +
-                        "/" +
-                        this.issueInfo.lastRelatedMerge.sourceBranch
-                );
+                this.updateBackendUrl();
             }
             this.$emit(
                 "signalMergeLoaded",
@@ -270,6 +271,29 @@ export default {
             }
             return this.updateTime;
         },
+        updateBackendUrl() {
+            const previewArr = JSON.parse(
+                window.localStorage["qoollab_preview_arr"]
+            );
+            this.backendUrl = "";
+            previewArr.forEach((elem) => {
+                if (elem.boardsPageURL === document.URL) {
+                    this.backendUrl = elem.backendURL;
+                }
+            });
+            if (
+                this.backendUrl != "" &&
+                this.issueInfo.lastRelatedMerge.sourceBranch != ""
+            ) {
+                this.setPreviewerLink(
+                    this.backendUrl +
+                        "/" +
+                        this.issueInfo.lastRelatedMerge.sourceBranch
+                );
+            } else {
+                this.setPreviewerLink("");
+            }
+        },
         createUpdateInterval() {
             this.sendRequestsToGitlabService(this.issueId);
             if (this.timerId) {
@@ -295,12 +319,13 @@ export default {
         this.issueId = qoollabCard.getAttribute("issue-id");
         this.createUpdateInterval();
         this.updateTimerId = setInterval(() => {
+            this.updateBackendUrl();
             const newTime = Number(this.updateUpdateTime());
             if (newTime != this.updateTime) {
                 this.updateTime = newTime;
                 this.createUpdateInterval();
             }
-        }, 40000);
+        }, 30000);
 
         this.$on("signalMergeLoaded", function(merge) {
             gitlabService.getMergeApprovals(merge, this.getApprovalsCallback);

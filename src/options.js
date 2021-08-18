@@ -107,8 +107,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 table.deleteRow(i);
             }
             previewArr.push({
-                boardsPageURL:
-                    row.cells[0].innerHTML,
+                boardsPageURL: row.cells[0].innerHTML,
                 backendURL: row.cells[1].innerHTML,
             });
         }
@@ -130,9 +129,7 @@ document.addEventListener("DOMContentLoaded", function() {
         /*
         Надо сделать все необходимые url-паттерны
         */
-        chrome.tabs.query({ url: "https://git.iu7.bmstu.ru/*" }, function(
-            tabs
-        ) {
+        chrome.tabs.query({ url: "https://git.qoollo.com/*" }, function(tabs) {
             for (var i = 0; i < tabs.length; i++) {
                 chrome.tabs.executeScript(tabs[i].id, {
                     code:
@@ -141,6 +138,9 @@ document.addEventListener("DOMContentLoaded", function() {
                         ";" +
                         'window.localStorage["qoollab_update_time"] = ' +
                         time +
+                        ";" +
+                        'window.localStorage["qoollab_preview_arr"] = ' +
+                        JSON.stringify(window.localStorage["qoollab_preview_arr"]) +
                         ";",
                 });
             }

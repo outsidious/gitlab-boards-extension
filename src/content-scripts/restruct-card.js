@@ -40,21 +40,23 @@ export function addLinkPreviewToCard(card) {
     const newIdAndLinkCon = document.createElement("div");
     issueIdCon.removeChild(issueId);
     newIdAndLinkCon.appendChild(issueId);
-    newIdAndLinkCon.style = "display: flex; align-items: start";
+    newIdAndLinkCon.style = "display: flex; align-items: center";
     const link = document.createElement('a');
     link.style.pointerEvents = "none";
     link.style.cursor = "default";
     link.style.display = 'inline-flex';
     link.target = '_blank';
     link.classList.add("preview-link");
-    //link.addEventListener('click', e => e.stopImmediatePropagation())
+    const imgDiv = document.createElement("div");
+    imgDiv.style = "display: flex; width: 100%; height: 100%; align-items: center";
+    link.appendChild(imgDiv)
     const img = document.createElement('img');
     img.style.height = '12px'
     img.style.width = '12px'
     img.style.marginLeft = '7px';
     img.style.opacity= '0.5';
     img.src = 'https://static.thenounproject.com/png/3629744-200.png';
-    link.append(img);
+    imgDiv.append(img);
     newIdAndLinkCon.appendChild(link);
     issueIdCon.appendChild(newIdAndLinkCon);
 }
@@ -73,7 +75,7 @@ export function addUpdateIconToCardHeader(document, qoollabCard) {
     divIcon.style = "margin-left: 8px;"
     divIcon.appendChild(elemIcon)
     let divIconLink = document.createElement("div");
-    divIconLink.style = "display: flex; align-items: start; cursor: pointer";
+    divIconLink.style = "display: flex; align-items: center; cursor: pointer";
     divIconLink.appendChild(issueLink);
     divIconLink.appendChild(divIcon);
     cardHeader.appendChild(divIconLink);
