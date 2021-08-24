@@ -135,14 +135,18 @@ document.addEventListener("DOMContentLoaded", function() {
         while (i < table.rows.length) {
             let row = table.rows[i];
             if (
-                row.cells[0].innerHTML === "" ||
+                !row.cells[0].innerHTML.includes("/boards") ||
                 row.cells[1].innerHTML === ""
             ) {
                 table.deleteRow(i);
                 i = i - 1;
             } else {
+                let pageUrl = row.cells[0].innerHTML;
+                const index = pageUrl.indexOf("/boards") + "/boards".length;
+                pageUrl = pageUrl.slice(0, index);
+                row.cells[0].innerHTML = pageUrl;
                 previewArr.push({
-                    boardsPageURL: row.cells[0].innerHTML,
+                    boardsPageURL: pageUrl,
                     backendURL: row.cells[1].innerHTML,
                 });
             }
@@ -203,7 +207,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         JSON.stringify(
                             window.localStorage["qoollab_domains_arr"]
                         ) +
-                        ";"
+                        ";",
                 });
             }
         });

@@ -273,7 +273,7 @@ export default {
             );
             this.backendUrl = "";
             previewArr.forEach((elem) => {
-                if (elem.boardsPageURL === document.URL) {
+                if (document.URL.includes(elem.boardsPageURL)) {
                     this.backendUrl = elem.backendURL;
                 }
             });
