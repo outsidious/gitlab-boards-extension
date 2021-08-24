@@ -7,10 +7,7 @@
     "options_page": "options.html",
     "permissions": [
         "webRequest",
-        "*://gitlab.loc/*/boards*",
-        "*://git.qoollo.com/*/boards*",
-        "*://git.iu7.bmstu.ru/*/boards*",
-        "*://gitlab.com/*/boards*",
+        "*://*/*/boards*",
         "tabs"
     ],
     "icons": {
@@ -33,10 +30,7 @@
     "content_scripts": [
         {
             "matches": [
-                "*://git.qoollo.com/*/boards*",
-                "*://git.iu7.bmstu.ru/*/boards*",
-                "*://gitlab.com/*/boards*",
-                "*://gitlab.loc/*/boards*"
+                "*://*/*/boards*"
             ],
             "run_at": "document_idle",
             "js": ["js/gitlab-script.js", "js/restruct-card.js"]

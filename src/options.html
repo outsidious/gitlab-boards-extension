@@ -35,7 +35,7 @@
                         <td>URL to backend</td>
                         <td class="table-button"> 
                             <button class="add-button"> 
-                                <img id="add-image">
+                                <img class="add-image">
                             </button>
                         </td>
                     </tr>
@@ -43,9 +43,26 @@
             </div>
         </div>
 
-        <div>
-            <div id="status"></div>
+        <div class="parent">
+            <b> Working domains:</b>
+            <br />
+            <div class="block">
+                <table id="domains-table">
+                    <tr class="first-tr">
+                        <td>Domain (for example: 'git.qoollo.com')</td>
+                        <td class="table-button"> 
+                            <button class="add-button"> 
+                                <img class="add-image">
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="parent">
             <button id="save">Save changes</button>
+            <div id="status"></div>
         </div>
     </body>
 
@@ -53,16 +70,34 @@
 
     <style>
         body {
-            background-color: F38D5B;
+            background-color: EC9548;
+        }
+
+        b {
+            font-size: 16px;
+        }
+
+        .parent {
+            margin-left: 5px;
         }
 
         button {
             margin-left: 10px;
         }
 
+        #save {
+            margin-left: 0;
+            background-color: FFC2AC;
+            border-radius: 8px;
+            font-size: 20px;
+            border-color:tan;
+            padding: 5px 10px;
+        }
+
         .block {
             display: flex;
-            padding-bottom: 15px;
+            padding-bottom: 20px;
+            padding-top: 5px;
         }
 
         table {
@@ -133,8 +168,10 @@
         }
 
         input {
-            background-color: FFD8CA;
-            font-size: 16px;
+            background-color: FFC2AC;
+            font-size: 17px;
+            border-color: tan;
+            border-radius: 3px;
         }
 
         .table-input {

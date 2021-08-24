@@ -21,16 +21,6 @@ Vue.component("button-more", ButtonMore);
 Vue.component("actions", Actions);
 Vue.component("details-comp", Details);
 
-chrome.extension.onMessage.addListener(function(msg) {
-    if (msg.action == "move-card") {
-        let elements = document.getElementsByClassName("board-card");
-        for (let i = 0; i < elements.length; ++i) {
-            if (elements[i].getAttribute("data-issue-id") === msg.issue)
-                processCard(elements[i]);
-        }
-    }
-});
-
 function processCard(qoollabCard) {
     const issueId = restruct.setIssueIdAttribute(qoollabCard);
     if (issueId != -1) {
@@ -59,18 +49,37 @@ function processCards() {
     }
 }
 
-let timerId = setInterval(() => {
-    let cards = document.getElementsByClassName("board-card");
-    let flag = true;
-    cards.forEach((card) => {
-        if (card.querySelectorAll("span[aria-label='Loading']").length != 0) {
-            flag = false;
+if (
+    window.localStorage["qoollab_domains_arr"] &&
+    JSON.parse(window.localStorage["qoollab_domains_arr"]).indexOf(
+        document.domain
+    ) >= 0
+) {
+    let timerId = setInterval(() => {
+        let cards = document.getElementsByClassName("board-card");
+        let flag = true;
+        cards.forEach((card) => {
+            if (
+                card.querySelectorAll("span[aria-label='Loading']").length != 0
+            ) {
+                flag = false;
+            }
+        });
+        if (flag) {
+            clearInterval(timerId);
+            setTimeout(() => {
+                processCards();
+            }, 300);
+        }
+    }, 1000);
+
+    chrome.extension.onMessage.addListener(function(msg) {
+        if (msg.action == "move-card") {
+            let elements = document.getElementsByClassName("board-card");
+            for (let i = 0; i < elements.length; ++i) {
+                if (elements[i].getAttribute("data-issue-id") === msg.issue)
+                    processCard(elements[i]);
+            }
         }
     });
-    if (flag) {
-        clearInterval(timerId);
-        setTimeout(() => {
-            processCards();
-        }, 200);
-    }
-}, 500);
+}

@@ -1,12 +1,3 @@
-/*chrome.runtime.onInstalled.addListener(function() {
-    let promt = prompt(
-        "What's your access token (required for some operations)?"
-    );
-    userToken = promt;
-    console.log(userToken);
-});
-*/
-
 chrome.webRequest.onCompleted.addListener(
     function(details) {
         let url = details.url;
@@ -23,9 +14,7 @@ chrome.webRequest.onCompleted.addListener(
     },
     {
         urls: [
-            "*://gitlab.loc/*/boards*/issues/*",
-            "https://git.iu7.bmstu.ru/-/boards*/issues/*",
-            "*://gitlab.com/*/boards*/issues/*",
+            "*://*/*/boards*",
         ],
     }
 );

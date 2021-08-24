@@ -5,7 +5,10 @@ let previewArr = [
         backendURL: "http://10.5.5.56:8081",
     },
 ];
+let domainsArr = ["git.qoollo.com", "gitlab.com"];
+
 window.localStorage["qoollab_preview_arr"] = JSON.stringify(previewArr);
+window.localStorage["qoollab_domains_arr"] = JSON.stringify(domainsArr);
 
 const deleteIcon = chrome.extension.getURL(require(`./assets/delete.svg`));
 const addIcon = chrome.extension.getURL(require(`./assets/add.svg`));
@@ -18,10 +21,11 @@ document.addEventListener("DOMContentLoaded", function() {
     body.style.backgroundAttachment = "fixed";
     body.style.backgroundSize = "100% 100%";
 
-    const addIconButton = document.getElementById("add-image");
-    addIconButton.src = addIcon;
-    addIconButton.parentElement.addEventListener("click", addButtonHandler);
-
+    const addIconButtons = document.getElementsByClassName("add-image");
+    addIconButtons.forEach((button) => {
+        button.src = addIcon;
+        button.parentElement.addEventListener("click", addButtonHandler);
+    });
     let inputTokenField = document.getElementById("input_token");
     let inputTimeField = document.getElementById("input_time");
     if (
@@ -38,10 +42,17 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     inputTimeField.value = window.localStorage["qoollab_update_time"];
     let previewTable = document.getElementById("preview-table");
+    let domainsTable = document.getElementById("domains-table");
     if (window.localStorage["qoollab_preview_arr"]) {
         processPreviewTable(
             previewTable,
             JSON.parse(window.localStorage["qoollab_preview_arr"])
+        );
+    }
+    if (window.localStorage["qoollab_domains_arr"]) {
+        processDomainsTable(
+            domainsTable,
+            JSON.parse(window.localStorage["qoollab_domains_arr"])
         );
     }
 
@@ -66,52 +77,95 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
+    function processDomainsTable(table, arr) {
+        arr.forEach((elem) => {
+            const tr = document.createElement("tr");
+            const td1 = document.createElement("td");
+            const td2 = document.createElement("td");
+            td2.classList.add("table-button");
+            td1.innerHTML = elem;
+            const removeButton = document.createElement("button");
+            removeButton.classList.add("remove-button");
+            removeButton.innerHTML = "<img src='" + deleteIcon + "'>";
+            td2.appendChild(removeButton);
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+            table.appendChild(tr);
+            removeButton.addEventListener("click", removeButtonHandler, false);
+        });
+    }
+
     function removeButtonHandler(e) {
-        const tr = e.path[3];
+        let tr = e.path[3];
+        if (e.path[0].tagName == "BUTTON") tr = e.path[2];
         const i = tr.rowIndex;
         tr.parentElement.deleteRow(i);
     }
 
-    function addButtonHandler() {
-        const table = document.getElementById("preview-table");
+    function addButtonHandler(e) {
+        const table = e.path[0].closest("table");
         const qua = table.rows.length;
+        const rawSize = table.rows[0].cells.length;
         const raw = table.insertRow(qua);
-        const cell1 = raw.insertCell(0);
-        const cell2 = raw.insertCell(1);
-        const cell3 = raw.insertCell(2);
-        cell3.classList.add("table-button");
-        const removeButton = document.createElement("button");
-        removeButton.classList.add("remove-button");
-        removeButton.innerHTML = "<img src='" + deleteIcon + "'>";
-        cell3.appendChild(removeButton);
-        removeButton.addEventListener("click", removeButtonHandler, false);
-
-        const inputUrlPage = document.createElement("input");
-        inputUrlPage.classList.add("table-input");
-        cell1.appendChild(inputUrlPage);
-        const inputUrlBackend = document.createElement("input");
-        inputUrlBackend.classList.add("table-input");
-        cell2.appendChild(inputUrlBackend);
+        for (let i = 0; i < rawSize; ++i) {
+            let cell = raw.insertCell(i);
+            if (i == rawSize - 1) {
+                cell.classList.add("table-button");
+                const removeButton = document.createElement("button");
+                removeButton.classList.add("remove-button");
+                removeButton.innerHTML = "<img src='" + deleteIcon + "'>";
+                cell.appendChild(removeButton);
+                removeButton.addEventListener(
+                    "click",
+                    removeButtonHandler,
+                    false
+                );
+            } else {
+                const inputUrlPage = document.createElement("input");
+                inputUrlPage.classList.add("table-input");
+                cell.appendChild(inputUrlPage);
+            }
+        }
     }
 
     function savePreviewTable() {
         const table = document.getElementById("preview-table");
         previewArr = [];
-        for (let i = 1; i < table.rows.length; ++i) {
+        let i = 1;
+        while (i < table.rows.length) {
             let row = table.rows[i];
             if (
                 row.cells[0].innerHTML === "" ||
                 row.cells[1].innerHTML === ""
             ) {
-                let i = row.rowIndex;
                 table.deleteRow(i);
+                i = i - 1;
+            } else {
+                previewArr.push({
+                    boardsPageURL: row.cells[0].innerHTML,
+                    backendURL: row.cells[1].innerHTML,
+                });
             }
-            previewArr.push({
-                boardsPageURL: row.cells[0].innerHTML,
-                backendURL: row.cells[1].innerHTML,
-            });
+            i += 1;
         }
         window.localStorage["qoollab_preview_arr"] = JSON.stringify(previewArr);
+    }
+
+    function saveDomainsTable() {
+        const table = document.getElementById("domains-table");
+        domainsArr = [];
+        let i = 1;
+        while (i < table.rows.length) {
+            let row = table.rows[i];
+            if (row.cells[0].innerHTML === "") {
+                table.deleteRow(i);
+                i = i - 1;
+            } else {
+                domainsArr.push(row.cells[0].innerHTML);
+            }
+            i += 1;
+        }
+        window.localStorage["qoollab_domains_arr"] = JSON.stringify(domainsArr);
     }
 
     function save_options() {
@@ -122,6 +176,7 @@ document.addEventListener("DOMContentLoaded", function() {
             input.parentElement.innerHTML = input.value;
         });
         savePreviewTable();
+        saveDomainsTable();
         const token = inputTokenField.value;
         const time = Number(inputTimeField.value);
         window.localStorage["qoollab_user_token"] = JSON.stringify(token);
@@ -129,7 +184,7 @@ document.addEventListener("DOMContentLoaded", function() {
         /*
         Надо сделать все необходимые url-паттерны
         */
-        chrome.tabs.query({ url: "https://git.qoollo.com/*" }, function(tabs) {
+        chrome.tabs.query({ url: "https://*/*/boards" }, function(tabs) {
             for (var i = 0; i < tabs.length; i++) {
                 chrome.tabs.executeScript(tabs[i].id, {
                     code:
@@ -140,8 +195,15 @@ document.addEventListener("DOMContentLoaded", function() {
                         time +
                         ";" +
                         'window.localStorage["qoollab_preview_arr"] = ' +
-                        JSON.stringify(window.localStorage["qoollab_preview_arr"]) +
-                        ";",
+                        JSON.stringify(
+                            window.localStorage["qoollab_preview_arr"]
+                        ) +
+                        ";" +
+                        'window.localStorage["qoollab_domains_arr"] = ' +
+                        JSON.stringify(
+                            window.localStorage["qoollab_domains_arr"]
+                        ) +
+                        ";"
                 });
             }
         });
