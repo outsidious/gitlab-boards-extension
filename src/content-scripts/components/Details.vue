@@ -47,10 +47,7 @@
                         class="img-container"
                         v-bind:href="item.user.web_url"
                     >
-                        <img
-                            v-bind:src="item.user.avatar_url + '&size=24'"
-                            alt="Avatar"
-                        />
+                        <img v-bind:src="item.user.avatar_url" alt="Avatar" />
                         <md-tooltip md-direction="right">
                             Approved by: {{ item.user.name }}
                         </md-tooltip>

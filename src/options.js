@@ -185,10 +185,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const time = Number(inputTimeField.value);
         window.localStorage["qoollab_user_token"] = JSON.stringify(token);
         window.localStorage["qoollab_update_time"] = time;
-        /*
-        Надо сделать все необходимые url-паттерны
-        */
-        chrome.tabs.query({ url: "https://*/*/boards" }, function(tabs) {
+        chrome.tabs.query({ url: "https://*/*/boards*" }, function(tabs) {
             for (var i = 0; i < tabs.length; i++) {
                 chrome.tabs.executeScript(tabs[i].id, {
                     code:

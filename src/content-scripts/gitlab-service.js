@@ -1,29 +1,40 @@
 let $ = require("jquery");
 
-export function GitlabService(urlOrigin, projectName, userToken) {
-    this.origin = urlOrigin;
-    this.projectName = projectName;
-    this.userToken = "";
-    this.userId = -1;
-    if (userToken) this.userToken = userToken;
-    this.projectId = projectName.replaceAll("/", "%2F"); //formated project name might be used as project id
-    this.apiURL = "/api/v4/projects/";
+export class GitlabService {
+    constructor(urlOrigin, projectName, userToken) {
+        this.origin = urlOrigin;
+        this.projectName = projectName;
+        this.apiURL = "/api/v4/projects/";
+        this.userToken = "";
+        this.userId = -1;
+        if (userToken) this.userToken = userToken;
+        this.projectId = projectName.replaceAll("/", "%2F"); //formated project name might be used as project id
+    }
 
-    this.updateUserInfo = function(callback) {
+    get projectApiUrl() {
+        return this.origin + this.apiURL + this.projectId;
+    }
+
+    get tokenHeader() {
+        return {
+            "PRIVATE-TOKEN": this.userToken,
+        };
+    }
+
+    updateUserInfo(callback) {
         const newToken = window.localStorage["qoollab_user_token"];
-        if (newToken && newToken != "") {
+        if (newToken) {
             this.userToken = newToken;
             this.getUserId(callback);
         }
-    };
+    }
 
-    this.getUserId = function(callback) {
-        let url = this.origin + "/api/v4/" + "personal_access_tokens";
+    getUserId(callback) {
+        const url = this.origin + "/api/v4/" + "personal_access_tokens";
+        const headers = this.tokenHeader;
         $.ajax({
-            url: url,
-            headers: {
-                "PRIVATE-TOKEN": this.userToken,
-            },
+            url,
+            headers,
             method: "GET",
             success: function(data) {
                 if (data.length >= 1) {
@@ -38,41 +49,29 @@ export function GitlabService(urlOrigin, projectName, userToken) {
                 callback(-1);
             },
         });
-    };
+    }
 
-    this.getRelatedMerges = function(issueId, callback) {
-        let url =
-            this.origin +
-            this.apiURL +
-            this.projectId +
+    getRelatedMerges(issueId, callback) {
+        const url =
+            this.projectApiUrl +
             "/issues/" +
             issueId +
             "/related_merge_requests";
         $.get(url, function(data) {
             callback(data);
         });
-    };
+    }
 
-    this.getCurrentIssue = function(issueId, callback) {
-        let url =
-            this.origin +
-            this.apiURL +
-            this.projectId +
-            "/issues/?iids[]=" +
-            issueId;
+    getCurrentIssue(issueId, callback) {
+        const url = this.projectApiUrl + "/issues/?iids[]=" + issueId;
         $.get(url, function(data) {
             callback(data[0]);
         });
-    };
+    }
 
-    this.getMergeApprovals = function(MergeId, callback) {
-        let url =
-            this.origin +
-            this.apiURL +
-            this.projectId +
-            "/merge_requests/" +
-            MergeId +
-            "/approvals";
+    getMergeApprovals(MergeId, callback) {
+        const url =
+            this.projectApiUrl + "/merge_requests/" + MergeId + "/approvals";
         if (MergeId > 0) {
             $.get(url, function(data) {
                 callback(data["approved_by"]);
@@ -80,10 +79,10 @@ export function GitlabService(urlOrigin, projectName, userToken) {
         } else {
             callback([]);
         }
-    };
+    }
 
-    this.getChangesUrl = function(MergeId) {
-        let url =
+    getChangesUrl(MergeId) {
+        const url =
             this.origin +
             "/" +
             this.projectName +
@@ -91,136 +90,113 @@ export function GitlabService(urlOrigin, projectName, userToken) {
             MergeId +
             "/diffs";
         return url;
-    };
+    }
 
-    this.runPipeline = function(pipelineId) {
-        if (this.userToken != "") {
-            let url =
-                this.origin +
-                this.apiURL +
-                this.projectId +
-                "/pipelines/" +
-                pipelineId +
-                "/retry";
+    runPipeline(pipelineId) {
+        if (this.userToken) {
+            const url =
+                this.projectApiUrl + "/pipelines/" + pipelineId + "/retry";
+            const headers = this.tokenHeader;
             $.ajax({
-                url: url,
-                headers: {
-                    "PRIVATE-TOKEN": this.userToken,
-                },
+                url,
+                headers,
                 method: "POST",
                 success: function() {
                     return true;
                 },
             });
         }
-    };
+    }
 
-    this.mergeRequest = function(mergeId) {
-        if (this.userToken && this.userToken != "") {
-            let url =
-                this.origin +
-                this.apiURL +
-                this.projectId +
-                "/merge_requests/" +
-                mergeId +
-                "/merge";
+    mergeRequest(mergeId) {
+        if (this.userToken) {
+            const url =
+                this.projectApiUrl + "/merge_requests/" + mergeId + "/merge";
+            const headers = this.tokenHeader;
             $.ajax({
-                url: url,
-                headers: {
-                    "PRIVATE-TOKEN": this.userToken,
-                },
+                url,
+                headers,
                 method: "PUT",
                 success: function() {
                     return true;
                 },
             });
         }
-    };
+    }
 
-    this.approveMerge = function(mergeId) {
-        if (this.userToken && this.userToken != "") {
-            let url =
-                this.origin +
-                this.apiURL +
-                this.projectId +
-                "/merge_requests/" +
-                mergeId +
-                "/approve";
+    approveMerge(mergeId) {
+        if (this.userToken) {
+            const url =
+                this.projectApiUrl + "/merge_requests/" + mergeId + "/approve";
+            const headers = this.tokenHeader;
             $.ajax({
-                url: url,
-                headers: {
-                    "PRIVATE-TOKEN": this.userToken,
-                },
+                url,
+                headers,
                 method: "POST",
                 success: function() {
                     return true;
                 },
             });
         }
-    };
+    }
 
-    this.unapproveMerge = function(mergeId) {
-        if (this.userToken && this.userToken != "") {
-            let url =
-                this.origin +
-                this.apiURL +
-                this.projectId +
+    unapproveMerge(mergeId) {
+        if (this.userToken) {
+            const url =
+                this.projectApiUrl +
                 "/merge_requests/" +
                 mergeId +
                 "/unapprove";
+            const headers = this.tokenHeader;
             $.ajax({
-                url: url,
-                headers: {
-                    "PRIVATE-TOKEN": this.userToken,
-                },
+                url,
+                headers,
                 method: "POST",
                 success: function() {
                     return true;
                 },
             });
         }
-    };
+    }
 
-    this.markAsReady = function(mergeId, mergeTitle, callback) {
-        if (this.userToken && this.userToken != "") {
+    markAsReady(mergeId, mergeTitle, callback) {
+        if (this.userToken) {
             mergeTitle = mergeTitle.replace("Draft: ", "");
-            let url =
-                this.origin +
-                this.apiURL +
-                this.projectId +
+            const url =
+                this.projectApiUrl +
                 "/merge_requests/" +
-                mergeId + "?title=" + mergeTitle;
+                mergeId +
+                "?title=" +
+                mergeTitle;
+            const headers = this.tokenHeader;
             $.ajax({
-                url: url,
-                headers: {
-                    "PRIVATE-TOKEN": this.userToken,
-                },
+                url,
+                headers,
                 method: "PUT",
                 success: function() {
                     callback();
                 },
             });
         }
-    };
+    }
 
-    this.markAsDraft = function(mergeId, mergeTitle, callback) {
-        if (this.userToken && this.userToken != "") {
-            let url =
-                this.origin +
-                this.apiURL +
-                this.projectId +
+    markAsDraft(mergeId, mergeTitle, callback) {
+        if (this.userToken) {
+            const url =
+                this.projectApiUrl +
                 "/merge_requests/" +
-                mergeId + "?title=Draft: " + mergeTitle;
+                mergeId +
+                "?title=Draft: " +
+                mergeTitle;
+            const headers = this.tokenHeader;
             $.ajax({
-                url: url,
-                headers: {
-                    "PRIVATE-TOKEN": this.userToken,
-                },
+                url,
+                headers,
                 method: "PUT",
                 success: function() {
                     callback();
                 },
             });
         }
-    };
+    }
 }

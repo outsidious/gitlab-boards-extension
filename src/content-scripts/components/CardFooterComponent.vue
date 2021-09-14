@@ -129,7 +129,7 @@ export default {
             }
         },
         setPreviewerLink(str) {
-            if (str && str != "") {
+            if (str && str !== "") {
                 this.issueLinkPreviewElement.href = str;
                 this.issueLinkPreviewElement.style.pointerEvents = "auto";
                 this.issueLinkPreviewElement.style.cursor = "pointer";
@@ -210,7 +210,10 @@ export default {
                     )
                         theLatest = mergesInfo[i];
                 }
-                this.issueInfo.lastRelatedMerge.mergeId = theLatest["iid"];
+                this.issueInfo.lastRelatedMerge = {
+                    ...this.issueInfo.lastRelatedMerge,
+                };
+                this.issueInfo.lastRelatedMerge.mergeId = theLatest["iid"]; // lastRelated in var
                 this.issueInfo.lastRelatedMerge.sourceBranch =
                     theLatest["source_branch"];
                 this.issueInfo.lastRelatedMerge.mergeTitle =
