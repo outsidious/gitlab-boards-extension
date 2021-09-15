@@ -1,5 +1,15 @@
 let $ = require("jquery");
 
+class AjaxParams {
+    constructor(url, headers = {}, method = "GET") {
+        this.url = url;
+        this.headers = headers;
+        this.method = method;
+        this.complete = () => {};
+        this.success = () => {};
+    }
+}
+
 export class GitlabService {
     constructor(urlOrigin, projectName, userToken) {
         this.origin = urlOrigin;
@@ -31,24 +41,17 @@ export class GitlabService {
 
     getUserId(callback) {
         const url = this.origin + "/api/v4/" + "personal_access_tokens";
-        const headers = this.tokenHeader;
-        $.ajax({
-            url,
-            headers,
-            method: "GET",
-            success: function(data) {
-                if (data.length >= 1) {
-                    this.userId = data[0]["user_id"];
-                } else {
-                    this.userId = -1;
-                }
-                callback(this.userId);
-            },
-            error: function() {
-                this.userId = -1;
-                callback(-1);
-            },
-        });
+        this.userId = -1;
+        const params = new AjaxParams(url, this.tokenHeader, "GET");
+        params.success = (data) => {
+            if (data.length) {
+                this.userId = data[0]["user_id"];
+            }
+        };
+        params.complete = () => {
+            callback(this.userId);
+        };
+        $.ajax(params);
     }
 
     getRelatedMerges(issueId, callback) {
@@ -57,54 +60,51 @@ export class GitlabService {
             "/issues/" +
             issueId +
             "/related_merge_requests";
-        $.get(url, function(data) {
+        $.get(url, (data) => {
             callback(data);
         });
     }
 
     getCurrentIssue(issueId, callback) {
         const url = this.projectApiUrl + "/issues/?iids[]=" + issueId;
-        $.get(url, function(data) {
-            callback(data[0]);
+        $.get(url, (data) => {
+            if (data.length) callback(data[0]);
         });
     }
 
-    getMergeApprovals(MergeId, callback) {
+    getMergeApprovals(mergeId, callback) {
         const url =
-            this.projectApiUrl + "/merge_requests/" + MergeId + "/approvals";
-        if (MergeId > 0) {
-            $.get(url, function(data) {
-                callback(data["approved_by"]);
-            });
-        } else {
-            callback([]);
+            this.projectApiUrl + "/merge_requests/" + mergeId + "/approvals";
+        let approvers = [];
+        if (mergeId > 0) {
+            const params = new AjaxParams(url, "GET");
+            params.success = (data) => {
+                approvers = data["approved_by"];
+            };
+            params.complete = () => {
+                callback(approvers);
+            };
+            $.ajax(params);
         }
     }
 
     getChangesUrl(MergeId) {
-        const url =
+        return (
             this.origin +
             "/" +
             this.projectName +
             "/-/merge_requests/" +
             MergeId +
-            "/diffs";
-        return url;
+            "/diffs"
+        );
     }
 
     runPipeline(pipelineId) {
         if (this.userToken) {
             const url =
                 this.projectApiUrl + "/pipelines/" + pipelineId + "/retry";
-            const headers = this.tokenHeader;
-            $.ajax({
-                url,
-                headers,
-                method: "POST",
-                success: function() {
-                    return true;
-                },
-            });
+            const params = new AjaxParams(url, this.tokenHeader, "POST");
+            $.ajax(params);
         }
     }
 
@@ -112,15 +112,8 @@ export class GitlabService {
         if (this.userToken) {
             const url =
                 this.projectApiUrl + "/merge_requests/" + mergeId + "/merge";
-            const headers = this.tokenHeader;
-            $.ajax({
-                url,
-                headers,
-                method: "PUT",
-                success: function() {
-                    return true;
-                },
-            });
+            const params = new AjaxParams(url, this.tokenHeader, "PUT");
+            $.ajax(params);
         }
     }
 
@@ -128,15 +121,8 @@ export class GitlabService {
         if (this.userToken) {
             const url =
                 this.projectApiUrl + "/merge_requests/" + mergeId + "/approve";
-            const headers = this.tokenHeader;
-            $.ajax({
-                url,
-                headers,
-                method: "POST",
-                success: function() {
-                    return true;
-                },
-            });
+            const params = new AjaxParams(url, this.tokenHeader, "POST");
+            $.ajax(params);
         }
     }
 
@@ -147,15 +133,8 @@ export class GitlabService {
                 "/merge_requests/" +
                 mergeId +
                 "/unapprove";
-            const headers = this.tokenHeader;
-            $.ajax({
-                url,
-                headers,
-                method: "POST",
-                success: function() {
-                    return true;
-                },
-            });
+            const params = new AjaxParams(url, this.tokenHeader, "POST");
+            $.ajax(params);
         }
     }
 
@@ -168,15 +147,11 @@ export class GitlabService {
                 mergeId +
                 "?title=" +
                 mergeTitle;
-            const headers = this.tokenHeader;
-            $.ajax({
-                url,
-                headers,
-                method: "PUT",
-                success: function() {
-                    callback();
-                },
-            });
+            const params = new AjaxParams(url, this.tokenHeader, "PUT");
+            params.success = () => {
+                callback();
+            };
+            $.ajax(params);
         }
     }
 
@@ -188,15 +163,11 @@ export class GitlabService {
                 mergeId +
                 "?title=Draft: " +
                 mergeTitle;
-            const headers = this.tokenHeader;
-            $.ajax({
-                url,
-                headers,
-                method: "PUT",
-                success: function() {
-                    callback();
-                },
-            });
+            const params = new AjaxParams(url, this.tokenHeader, "PUT");
+            params.success = () => {
+                callback();
+            };
+            $.ajax(params);
         }
     }
 }
