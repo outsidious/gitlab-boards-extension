@@ -110,6 +110,9 @@ button:disabled {
 
 button {
     text-transform: capitalize;
+    margin-left: 0;
+    margin-right: 7px !important;
+    padding: 8px 1px !important;
 }
 
 .help-text {
