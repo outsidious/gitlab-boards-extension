@@ -6,8 +6,7 @@
                 v-on:click="merge()"
                 @focusin.stop
                 @mousedown.stop
-                style="text-transform: capitalize;"
-                class="merge-button action-button"
+                class="merge-button btn btn-info mr-3 btn-md gl-button"
                 v-bind="{
                     disabled:
                         this.mergeInfo.mergeId === -1 ||
@@ -24,8 +23,7 @@
                 v-on:click="approve()"
                 @focusin.stop
                 @mousedown.stop
-                style="text-transform: capitalize;"
-                class="approve-button action-button"
+                class="btn mr-3 btn-info btn-md gl-button"
                 v-bind="{
                     disabled: this.mergeInfo.mergeId === -1,
                 }"
@@ -37,8 +35,7 @@
                 v-on:click="unapprove()"
                 @focusin.stop
                 @mousedown.stop
-                style="text-transform: capitalize;"
-                class="approve-button action-button"
+                class="btn mr-3 btn-warning btn-md gl-button btn-warning-secondary"
             >
                 Disapprove
             </md-button>
@@ -48,8 +45,7 @@
                 v-on:click="markAsReady()"
                 @focusin.stop
                 @mousedown.stop
-                style="text-transform: capitalize;"
-                class="mark-as-ready-button action-button"
+                class="btn btn-default btn-md gl-button"
                 >Mark as ready</md-button
             >
             <md-button
@@ -57,8 +53,7 @@
                 v-on:click="markAsDraft()"
                 @focusin.stop
                 @mousedown.stop
-                style="text-transform: capitalize;"
-                class="mark-as-ready-button action-button"
+                class="btn btn-default btn-md gl-button"
                 >Mark as draft</md-button
             >
         </div>
@@ -103,27 +98,18 @@ export default {
     width: max-content;
 }
 
+button:disabled {
+    background-color: #fafafa !important;
+    cursor: not-allowed !important;
+    pointer-events: all;
+}
+
 .merge-button {
-    background-color: #108548;
-    color: #ffffff;
-    margin-left: 0;
+    background-color: #108548 !important;
 }
 
-.merge-button:disabled {
-    background-color: rgb(24, 192, 105);
-}
-
-.approve-button {
-    background-color: #1f75cb;
-    color: #ffffff;
-}
-
-.approve-button:disabled {
-    background-color: #58a8f8;
-}
-
-.mark-as-ready-button {
-    border: 1px solid black;
+button {
+    text-transform: capitalize;
 }
 
 .help-text {
