@@ -43,9 +43,13 @@ function processCard(qoollabCard) {
 }
 
 function processCards() {
-    let cards = document.getElementsByClassName("board-card");
+    const cards = document.getElementsByClassName("board-card");
     for (let card of cards) {
-        processCard(card);
+        const board = card.parentElement.parentElement.parentElement;
+        const title = board.querySelector(
+            "header > h3 > div.board-title-text > span"
+        );
+        if (title.getAttribute("title") !== "Closed") processCard(card);
     }
 }
 

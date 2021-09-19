@@ -129,14 +129,10 @@ export default {
             }
         },
         setPreviewerLink(str) {
-            if (str && str !== "") {
-                this.issueLinkPreviewElement.href = str;
-                this.issueLinkPreviewElement.style.pointerEvents = "auto";
-                this.issueLinkPreviewElement.style.cursor = "pointer";
-            } else {
-                this.issueLinkPreviewElement.style.pointerEvents = "none";
-                this.issueLinkPreviewElement.style.cursor = "default";
-            }
+            this.issueLinkPreviewElement.href = str;
+            this.issueLinkPreviewElement.style.pointerEvents = "auto";
+            this.issueLinkPreviewElement.style.cursor = "pointer";
+            this.issueLinkPreviewElement.style.display = "";
         },
         mergeRequest() {
             gitlabService.updateUserInfo(this.updateUserInfoCallback);
@@ -289,8 +285,6 @@ export default {
                         "/" +
                         this.issueInfo.lastRelatedMerge.sourceBranch
                 );
-            } else {
-                this.setPreviewerLink("");
             }
         },
         createUpdateInterval() {
@@ -315,6 +309,7 @@ export default {
         this.issueLinkPreviewElement = qoollabCard.querySelector(
             ".preview-link"
         );
+        this.issueLinkPreviewElement.style.display = "none"
         this.issueId = qoollabCard.getAttribute("issue-id");
         this.createUpdateInterval();
         this.updateTimerId = setInterval(() => {
@@ -377,9 +372,10 @@ export default {
     align-items: center;
     position: relative;
     left: 1rem;
+    border-radius: 0.25rem;
 }
 
 .button-more:hover {
-    background-color: lavender;
+    background-color: rgba(41, 41, 97, 0.08);
 }
 </style>
