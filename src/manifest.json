@@ -5,11 +5,7 @@
     "description": "Useful GitLab -/issues/boards page",
     "default_locale": "en",
     "options_page": "options.html",
-    "permissions": [
-        "webRequest",
-        "*://*/*/boards*",
-        "tabs"
-    ],
+    "permissions": ["webRequest", "*://*/*/boards*", "tabs"],
     "icons": {
         "16": "icons/16.png",
         "48": "icons/48.png",
@@ -29,11 +25,9 @@
     },
     "content_scripts": [
         {
-            "matches": [
-                "*://*/*/boards*"
-            ],
+            "matches": ["*://*/*/boards*"],
             "run_at": "document_idle",
-            "js": ["js/gitlab-script.js", "js/restruct-card.js"]
+            "js": ["js/gitlab-script.js", "js/restruct-card.js", "js/main.js"]
         }
     ],
     "web_accessible_resources": ["img/*"]

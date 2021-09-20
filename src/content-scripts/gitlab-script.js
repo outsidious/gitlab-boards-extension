@@ -1,6 +1,8 @@
 import * as restruct from "./restruct-card";
-import Vue from "vue";
 import "vue-material-design-icons/styles.css";
+import "vue-material/dist/vue-material.min.css";
+import Vue from "vue";
+import VueMaterial from "vue-material";
 import CardFooterComponent from "./components/CardFooterComponent";
 import Milestone from "./components/Milestone";
 import MergeRequest from "./components/MergeRequest";
@@ -9,8 +11,6 @@ import HiddenPart from "./components/HiddenPart";
 import ButtonMore from "./components/ButtonMore";
 import Actions from "./components/Actions";
 import Details from "./components/Details";
-import VueMaterial from "vue-material";
-import "vue-material/dist/vue-material.min.css";
 
 Vue.use(VueMaterial);
 Vue.component("milestone-component", Milestone);
@@ -28,7 +28,6 @@ function processCard(qoollabCard) {
         restruct.addIssueIdToCardHeader(document, qoollabCard, issueId);
         restruct.addLinkPreviewToCard(qoollabCard);
         restruct.restructCardBody(document, qoollabCard);
-
         const cardFooter = qoollabCard.querySelector(".board-card-footer");
         cardFooter.setAttribute("id", `card-footer${issueId}`);
         cardFooter.parentElement.appendChild(cardFooter);
@@ -53,12 +52,7 @@ function processCards() {
     });
 }
 
-if (
-    window.localStorage["qoollab_domains_arr"] &&
-    JSON.parse(window.localStorage["qoollab_domains_arr"]).indexOf(
-        document.domain
-    ) >= 0
-) {
+export function startRendering() {
     const timerId = setInterval(() => {
         const cards = document.getElementsByClassName("board-card");
         let flag = true;
