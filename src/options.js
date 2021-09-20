@@ -175,7 +175,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function save_options() {
         const inputTokenField = document.getElementById("input_token");
         const inputTimeField = document.getElementById("input_time");
-        const arr = Array.from(document.getElementsByClassName("table-input"));
+        const arr = [...document.getElementsByClassName("table-input")];
         arr.forEach((input) => {
             input.parentElement.innerHTML = input.value;
         });
@@ -186,8 +186,8 @@ document.addEventListener("DOMContentLoaded", function() {
         window.localStorage["qoollab_user_token"] = JSON.stringify(token);
         window.localStorage["qoollab_update_time"] = time;
         chrome.tabs.query({ url: "https://*/*/boards*" }, function(tabs) {
-            for (let i = 0; i < tabs.length; i++) {
-                chrome.tabs.executeScript(tabs[i].id, {
+            tabs.forEach((tab) => {
+                chrome.tabs.executeScript(tab.id, {
                     code:
                         'window.localStorage["qoollab_user_token"] = ' +
                         JSON.stringify(token) +
@@ -206,7 +206,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         ) +
                         ";",
                 });
-            }
+            });
         });
 
         const status = document.getElementById("status");

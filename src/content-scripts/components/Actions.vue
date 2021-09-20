@@ -81,12 +81,14 @@ export default {
             this.$emit("signalMarkAsDraft");
         },
         checkWasntApproved() {
-            for (let i = 0; i < this.mergeInfo.approvers.length; ++i) {
-                if (this.mergeInfo.approvers[i].user.id === this.userInfo.id) {
-                    return false;
+            let flag = true;
+            this.mergeInfo.approvers.forEach(approver => {
+                if (approver.user.id === this.userInfo.id) {
+                    flag = false;
+                    return;
                 }
-            }
-            return true;
+            });
+            return flag;
         },
     },
 };

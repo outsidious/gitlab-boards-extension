@@ -32,9 +32,9 @@ function processCard(qoollabCard) {
         const cardFooter = qoollabCard.querySelector(".board-card-footer");
         cardFooter.setAttribute("id", "card-footer" + issueId);
         cardFooter.parentElement.appendChild(cardFooter);
-        for (let child of cardFooter.children) {
+        cardFooter.children.forEach((child) => {
             child.remove();
-        }
+        });
         new Vue({
             el: "#card-footer" + issueId,
             render: (h) => h(CardFooterComponent),
@@ -44,13 +44,13 @@ function processCard(qoollabCard) {
 
 function processCards() {
     const cards = document.getElementsByClassName("board-card");
-    for (let card of cards) {
+    cards.forEach((card) => {
         const board = card.parentElement.parentElement.parentElement;
         const title = board.querySelector(
             "header > h3 > div.board-title-text > span"
         );
         if (title.getAttribute("title") !== "Closed") processCard(card);
-    }
+    });
 }
 
 if (
@@ -80,10 +80,10 @@ if (
     chrome.extension.onMessage.addListener(function(msg) {
         if (msg.action == "move-card") {
             const elements = document.getElementsByClassName("board-card");
-            for (let i = 0; i < elements.length; ++i) {
-                if (elements[i].getAttribute("data-issue-id") === msg.issue)
-                    processCard(elements[i]);
-            }
+            elements.forEach((elem) => {
+                if (elem.getAttribute("data-issue-id") === msg.issue)
+                    processCard(elem);
+            });
         }
     });
 }

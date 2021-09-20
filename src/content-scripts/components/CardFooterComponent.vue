@@ -199,13 +199,13 @@ export default {
         getRelatedMergesCallback(mergesInfo) {
             if (mergesInfo.length != 0) {
                 let theLatest = mergesInfo[0];
-                for (let i = 1; i < mergesInfo.length; ++i) {
+                mergesInfo.forEach((merge) => {
                     if (
-                        new Date(mergesInfo[i]["created_at"]) >
+                        new Date(merge["created_at"]) >
                         new Date(theLatest["created_at"])
                     )
-                        theLatest = mergesInfo[i];
-                }
+                        theLatest = merge;
+                });
                 this.issueInfo.lastRelatedMerge = {
                     ...this.issueInfo.lastRelatedMerge,
                 };
@@ -309,7 +309,7 @@ export default {
         this.issueLinkPreviewElement = qoollabCard.querySelector(
             ".preview-link"
         );
-        this.issueLinkPreviewElement.style.display = "none"
+        this.issueLinkPreviewElement.style.display = "none";
         this.issueId = qoollabCard.getAttribute("issue-id");
         this.createUpdateInterval();
         this.updateTimerId = setInterval(() => {
