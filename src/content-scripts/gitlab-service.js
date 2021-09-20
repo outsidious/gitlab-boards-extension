@@ -40,7 +40,7 @@ export class GitlabService {
     }
 
     getUserId(callback) {
-        const url = this.origin + "/api/v4/" + "personal_access_tokens";
+        const url = this.origin + "/api/v4/personal_access_tokens";
         this.userId = -1;
         const params = new AjaxParams(url, this.tokenHeader, "GET");
         params.success = (data) => {
@@ -56,25 +56,21 @@ export class GitlabService {
 
     getRelatedMerges(issueId, callback) {
         const url =
-            this.projectApiUrl +
-            "/issues/" +
-            issueId +
-            "/related_merge_requests";
+            this.projectApiUrl + `/issues/${issueId}/related_merge_requests`;
         $.get(url, (data) => {
             callback(data);
         });
     }
 
     getCurrentIssue(issueId, callback) {
-        const url = this.projectApiUrl + "/issues/?iids[]=" + issueId;
+        const url = this.projectApiUrl + `/issues/?iids[]=${issueId}`;
         $.get(url, (data) => {
             if (data.length) callback(data[0]);
         });
     }
 
     getMergeApprovals(mergeId, callback) {
-        const url =
-            this.projectApiUrl + "/merge_requests/" + mergeId + "/approvals";
+        const url = `${this.projectApiUrl}/merge_requests/${mergeId}/approvals`;
         let approvers = [];
         if (mergeId > 0) {
             const params = new AjaxParams(url, "GET");
@@ -88,21 +84,13 @@ export class GitlabService {
         }
     }
 
-    getChangesUrl(MergeId) {
-        return (
-            this.origin +
-            "/" +
-            this.projectName +
-            "/-/merge_requests/" +
-            MergeId +
-            "/diffs"
-        );
+    getChangesUrl(mergeId) {
+        return `${this.origin}/${this.projectName}/-/merge_requests/${mergeId}/diffs`;
     }
 
     runPipeline(pipelineId) {
         if (this.userToken) {
-            const url =
-                this.projectApiUrl + "/pipelines/" + pipelineId + "/retry";
+            const url = `${this.projectApiUrl}/pipelines/${pipelineId}/retry`;
             const params = new AjaxParams(url, this.tokenHeader, "POST");
             $.ajax(params);
         }
@@ -110,8 +98,7 @@ export class GitlabService {
 
     mergeRequest(mergeId) {
         if (this.userToken) {
-            const url =
-                this.projectApiUrl + "/merge_requests/" + mergeId + "/merge";
+            const url = `${this.projectApiUrl}/merge_requests/${mergeId}/merge`;
             const params = new AjaxParams(url, this.tokenHeader, "PUT");
             $.ajax(params);
         }
@@ -119,8 +106,7 @@ export class GitlabService {
 
     approveMerge(mergeId) {
         if (this.userToken) {
-            const url =
-                this.projectApiUrl + "/merge_requests/" + mergeId + "/approve";
+            const url = `${this.projectApiUrl}/merge_requests/${mergeId}/approve`;
             const params = new AjaxParams(url, this.tokenHeader, "POST");
             $.ajax(params);
         }
@@ -128,11 +114,7 @@ export class GitlabService {
 
     unapproveMerge(mergeId) {
         if (this.userToken) {
-            const url =
-                this.projectApiUrl +
-                "/merge_requests/" +
-                mergeId +
-                "/unapprove";
+            const url = `${this.projectApiUrl}/merge_requests/${mergeId}/unapprove`;
             const params = new AjaxParams(url, this.tokenHeader, "POST");
             $.ajax(params);
         }
@@ -141,12 +123,7 @@ export class GitlabService {
     markAsReady(mergeId, mergeTitle, callback) {
         if (this.userToken) {
             mergeTitle = mergeTitle.replace("Draft: ", "");
-            const url =
-                this.projectApiUrl +
-                "/merge_requests/" +
-                mergeId +
-                "?title=" +
-                mergeTitle;
+            const url = `${this.projectApiUrl}/merge_requests/${mergeId}?title=${mergeTitle}`;
             const params = new AjaxParams(url, this.tokenHeader, "PUT");
             params.success = () => {
                 callback();
@@ -157,12 +134,7 @@ export class GitlabService {
 
     markAsDraft(mergeId, mergeTitle, callback) {
         if (this.userToken) {
-            const url =
-                this.projectApiUrl +
-                "/merge_requests/" +
-                mergeId +
-                "?title=Draft: " +
-                mergeTitle;
+            const url = `${this.projectApiUrl}/merge_requests/${mergeId}?title=Draft: ${mergeTitle}`;
             const params = new AjaxParams(url, this.tokenHeader, "PUT");
             params.success = () => {
                 callback();

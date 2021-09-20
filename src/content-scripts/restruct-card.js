@@ -26,7 +26,7 @@ export function addIssueIdToCardHeader(document, qoollabCard, issueId) {
     //let cardHeader = qoollabCard.querySelector("li > div > div:nth-child(1)");
     const cardHeader = qoollabCard.querySelector("div > div:nth-child(1)");
     const issueIdElement = document.createElement("div");
-    issueIdElement.textContent = "#" + issueId;
+    issueIdElement.textContent = `#${issueId}`;
     issueIdElement.style =
         "color: rgba(146, 146, 146, 1); font-size: small; padding-left: 10px;";
     issueIdElement.classList.add("board-card-number");
@@ -35,47 +35,52 @@ export function addIssueIdToCardHeader(document, qoollabCard, issueId) {
 }
 
 export function addLinkPreviewToCard(card) {
-    const issueId =  card.querySelector('.board-card-number')
+    const issueId = card.querySelector(".board-card-number");
     const issueIdCon = issueId.parentElement;
     const newIdAndLinkCon = document.createElement("div");
     issueIdCon.removeChild(issueId);
     newIdAndLinkCon.appendChild(issueId);
     newIdAndLinkCon.style = "display: flex; align-items: center";
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.style.pointerEvents = "none";
     link.style.cursor = "default";
-    link.style.display = 'inline-flex';
-    link.target = '_blank';
+    link.style.display = "inline-flex";
+    link.target = "_blank";
     link.classList.add("preview-link");
     const imgDiv = document.createElement("div");
-    imgDiv.style = "display: flex; width: 100%; height: 100%; align-items: center";
-    link.appendChild(imgDiv)
-    const img = document.createElement('img');
-    img.style.height = '12px'
-    img.style.width = '12px'
-    img.style.marginLeft = '7px';
-    img.style.opacity= '0.5';
-    img.src = 'https://static.thenounproject.com/png/3629744-200.png';
+    imgDiv.style =
+        "display: flex; width: 100%; height: 100%; align-items: center";
+    link.appendChild(imgDiv);
+    const img = document.createElement("img");
+    img.style.height = "12px";
+    img.style.width = "12px";
+    img.style.marginLeft = "7px";
+    img.style.opacity = "0.5";
+    img.src = "https://static.thenounproject.com/png/3629744-200.png";
     imgDiv.append(img);
     newIdAndLinkCon.appendChild(link);
     issueIdCon.appendChild(newIdAndLinkCon);
 }
 
 export function addUpdateIconToCardHeader(document, qoollabCard) {
-    const icon = chrome.extension.getURL(require(`../assets/sprite_icons/retry.svg`));
+    const icon = chrome.extension.getURL(
+        require(`../assets/sprite_icons/retry.svg`)
+    );
     const cardHeader = qoollabCard.querySelector("div > div:nth-child(1)");
     const issueLink = cardHeader.querySelector(".board-card-title");
     issueLink.style.fontSize = "15px";
     issueLink.parentElement.removeChild(issueLink);
-    const elemIcon =  document.createElement("img");
+    const elemIcon = document.createElement("img");
     elemIcon.src = icon;
-    elemIcon.style = "width: 14px; height: 14px; min-width: 14px; min-height: 14px"
+    elemIcon.style =
+        "width: 14px; height: 14px; min-width: 14px; min-height: 14px";
     const divIcon = document.createElement("div");
     divIcon.classList.add("retry-icon");
-    divIcon.style = "margin-left: 8px;"
-    divIcon.appendChild(elemIcon)
+    divIcon.style = "margin-left: 8px;";
+    divIcon.appendChild(elemIcon);
     const divIconLink = document.createElement("div");
-    divIconLink.style = "display: flex; align-items: center; cursor: pointer; max-width: 80%";
+    divIconLink.style =
+        "display: flex; align-items: center; cursor: pointer; max-width: 80%";
     divIconLink.appendChild(issueLink);
     divIconLink.appendChild(divIcon);
     cardHeader.appendChild(divIconLink);

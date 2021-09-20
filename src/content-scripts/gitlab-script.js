@@ -30,13 +30,13 @@ function processCard(qoollabCard) {
         restruct.restructCardBody(document, qoollabCard);
 
         const cardFooter = qoollabCard.querySelector(".board-card-footer");
-        cardFooter.setAttribute("id", "card-footer" + issueId);
+        cardFooter.setAttribute("id", `card-footer${issueId}`);
         cardFooter.parentElement.appendChild(cardFooter);
         cardFooter.children.forEach((child) => {
             child.remove();
         });
         new Vue({
-            el: "#card-footer" + issueId,
+            el: `#card-footer${issueId}`,
             render: (h) => h(CardFooterComponent),
         });
     }

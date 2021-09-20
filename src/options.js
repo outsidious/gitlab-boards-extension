@@ -16,7 +16,7 @@ const addIcon = chrome.extension.getURL(require(`./assets/add.svg`));
 document.addEventListener("DOMContentLoaded", function() {
     const icon = chrome.extension.getURL(require(`./assets/logo3.svg`));
     const body = document.getElementsByTagName("body")[0];
-    body.style.backgroundImage = "url(" + "'" + icon + "')";
+    body.style.backgroundImage = `url('${icon}')`;
     body.style.backgroundRepeat = "repeat";
     body.style.backgroundAttachment = "fixed";
     body.style.backgroundSize = "100% 100%";
@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function() {
             td2.innerHTML = elem.backendURL;
             const removeButton = document.createElement("button");
             removeButton.classList.add("remove-button");
-            removeButton.innerHTML = "<img src='" + deleteIcon + "'>";
+            removeButton.innerHTML = `<img src='${deleteIcon}'>`;
             td3.appendChild(removeButton);
             tr.appendChild(td1);
             tr.appendChild(td2);
@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function() {
             td1.innerHTML = elem;
             const removeButton = document.createElement("button");
             removeButton.classList.add("remove-button");
-            removeButton.innerHTML = "<img src='" + deleteIcon + "'>";
+            removeButton.innerHTML = `<img src='${deleteIcon}'>`;
             td2.appendChild(removeButton);
             tr.appendChild(td1);
             tr.appendChild(td2);
@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 cell.classList.add("table-button");
                 const removeButton = document.createElement("button");
                 removeButton.classList.add("remove-button");
-                removeButton.innerHTML = "<img src='" + deleteIcon + "'>";
+                removeButton.innerHTML = `<img src='${deleteIcon}'>`;
                 cell.appendChild(removeButton);
                 removeButton.addEventListener(
                     "click",
@@ -188,23 +188,16 @@ document.addEventListener("DOMContentLoaded", function() {
         chrome.tabs.query({ url: "https://*/*/boards*" }, function(tabs) {
             tabs.forEach((tab) => {
                 chrome.tabs.executeScript(tab.id, {
-                    code:
-                        'window.localStorage["qoollab_user_token"] = ' +
-                        JSON.stringify(token) +
-                        ";" +
-                        'window.localStorage["qoollab_update_time"] = ' +
-                        time +
-                        ";" +
-                        'window.localStorage["qoollab_preview_arr"] = ' +
-                        JSON.stringify(
+                    code: `window.localStorage["qoollab_user_token"] = ${JSON.stringify(
+                        token
+                    )};\n
+                        window.localStorage["qoollab_update_time"] = ${time};\n
+                        window.localStorage["qoollab_preview_arr"] = ${JSON.stringify(
                             window.localStorage["qoollab_preview_arr"]
-                        ) +
-                        ";" +
-                        'window.localStorage["qoollab_domains_arr"] = ' +
-                        JSON.stringify(
+                        )};\n
+                        window.localStorage["qoollab_domains_arr"] = ${JSON.stringify(
                             window.localStorage["qoollab_domains_arr"]
-                        ) +
-                        ";",
+                        )};\n`,
                 });
             });
         });

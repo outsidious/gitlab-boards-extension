@@ -119,8 +119,7 @@ export default {
                 str === "draft" &&
                 !this.issueTitleElement.innerHTML.includes("Draft: ")
             ) {
-                this.issueTitleElement.innerHTML =
-                    "Draft: " + this.issueTitleElement.innerHTML;
+                this.issueTitleElement.innerHTML = `Draft: ${this.issueTitleElement.innerHTML}`;
             } else if (str === "ready") {
                 this.issueTitleElement.innerHTML = this.issueTitleElement.innerHTML.replace(
                     "Draft: ",
@@ -186,7 +185,7 @@ export default {
             if (milestoneInfo) {
                 const dueDate = new Date(milestoneInfo.due_date).toString();
                 const dueDateArr = dueDate.split(" ");
-                strDueDate = dueDateArr[1] + " " + dueDateArr[2];
+                strDueDate = `${dueDateArr[1]} ${dueDateArr[2]}`;
                 strTitle = milestoneInfo.title;
                 this.issueInfo.milestoneInfo.web_url = milestoneInfo.web_url;
             }
@@ -281,9 +280,7 @@ export default {
                 this.issueInfo.lastRelatedMerge.sourceBranch != ""
             ) {
                 this.setPreviewerLink(
-                    this.backendUrl +
-                        "/" +
-                        this.issueInfo.lastRelatedMerge.sourceBranch
+                    `${this.backendUrl}/${this.issueInfo.lastRelatedMerge.sourceBranch}`
                 );
             }
         },
