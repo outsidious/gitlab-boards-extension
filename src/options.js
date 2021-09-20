@@ -15,7 +15,7 @@ const addIcon = chrome.extension.getURL(require(`./assets/add.svg`));
 
 document.addEventListener("DOMContentLoaded", function() {
     const icon = chrome.extension.getURL(require(`./assets/logo3.svg`));
-    let body = document.getElementsByTagName("body")[0];
+    const body = document.getElementsByTagName("body")[0];
     body.style.backgroundImage = "url(" + "'" + icon + "')";
     body.style.backgroundRepeat = "repeat";
     body.style.backgroundAttachment = "fixed";
@@ -26,8 +26,8 @@ document.addEventListener("DOMContentLoaded", function() {
         button.src = addIcon;
         button.parentElement.addEventListener("click", addButtonHandler);
     });
-    let inputTokenField = document.getElementById("input_token");
-    let inputTimeField = document.getElementById("input_time");
+    const inputTokenField = document.getElementById("input_token");
+    const inputTimeField = document.getElementById("input_time");
     if (
         window.localStorage["qoollab_user_token"] &&
         window.localStorage["qoollab_user_token"] != ""
@@ -41,8 +41,8 @@ document.addEventListener("DOMContentLoaded", function() {
         window.localStorage["qoollab_update_time"] = 60;
     }
     inputTimeField.value = window.localStorage["qoollab_update_time"];
-    let previewTable = document.getElementById("preview-table");
-    let domainsTable = document.getElementById("domains-table");
+    const previewTable = document.getElementById("preview-table");
+    const domainsTable = document.getElementById("domains-table");
     if (window.localStorage["qoollab_preview_arr"]) {
         processPreviewTable(
             previewTable,
@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const rawSize = table.rows[0].cells.length;
         const raw = table.insertRow(qua);
         for (let i = 0; i < rawSize; ++i) {
-            let cell = raw.insertCell(i);
+            const cell = raw.insertCell(i);
             if (i == rawSize - 1) {
                 cell.classList.add("table-button");
                 const removeButton = document.createElement("button");
@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", function() {
         previewArr = [];
         let i = 1;
         while (i < table.rows.length) {
-            let row = table.rows[i];
+            const row = table.rows[i];
             if (
                 !row.cells[0].innerHTML.includes("/boards") ||
                 row.cells[1].innerHTML === ""
@@ -160,7 +160,7 @@ document.addEventListener("DOMContentLoaded", function() {
         domainsArr = [];
         let i = 1;
         while (i < table.rows.length) {
-            let row = table.rows[i];
+            const row = table.rows[i];
             if (row.cells[0].innerHTML === "") {
                 table.deleteRow(i);
                 i = i - 1;
@@ -186,7 +186,7 @@ document.addEventListener("DOMContentLoaded", function() {
         window.localStorage["qoollab_user_token"] = JSON.stringify(token);
         window.localStorage["qoollab_update_time"] = time;
         chrome.tabs.query({ url: "https://*/*/boards*" }, function(tabs) {
-            for (var i = 0; i < tabs.length; i++) {
+            for (let i = 0; i < tabs.length; i++) {
                 chrome.tabs.executeScript(tabs[i].id, {
                     code:
                         'window.localStorage["qoollab_user_token"] = ' +
@@ -209,7 +209,7 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
 
-        let status = document.getElementById("status");
+        const status = document.getElementById("status");
         status.innerHTML = "Info was updated.";
         setTimeout(function() {
             status.innerHTML = "";

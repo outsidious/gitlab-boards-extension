@@ -1,7 +1,7 @@
 chrome.webRequest.onCompleted.addListener(
     function(details) {
-        let url = details.url;
-        let issueId = url.slice(url.lastIndexOf("/") + 1);
+        const url = details.url;
+        const issueId = url.slice(url.lastIndexOf("/") + 1);
         chrome.tabs.query({ active: true, currentWindow: true }, function(
             tabs
         ) {

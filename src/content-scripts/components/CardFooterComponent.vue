@@ -57,10 +57,10 @@ if (window.localStorage["qoollab_user_token"]) {
     userToken = window.localStorage["qoollab_user_token"];
 }
 
-let pathName = window.location.pathname;
-let projectName = pathName.slice(1, pathName.indexOf("/-/"));
-let origin = window.location.origin;
-let gitlabService = new gitlab.GitlabService(origin, projectName, userToken);
+const pathName = window.location.pathname;
+const projectName = pathName.slice(1, pathName.indexOf("/-/"));
+const origin = window.location.origin;
+const gitlabService = new gitlab.GitlabService(origin, projectName, userToken);
 
 export default {
     data() {
@@ -302,7 +302,7 @@ export default {
         },
     },
     mounted() {
-        let qoollabCard = this.$el.parentElement.parentElement;
+        const qoollabCard = this.$el.parentElement.parentElement;
         this.issueTitleElement = qoollabCard.querySelector(
             "div > div > div > h4 > a"
         );

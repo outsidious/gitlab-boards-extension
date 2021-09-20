@@ -1,4 +1,4 @@
-let $ = require("jquery");
+const $ = require("jquery");
 
 class AjaxParams {
     constructor(url, headers = {}, method = "GET") {

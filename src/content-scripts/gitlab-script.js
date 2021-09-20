@@ -59,8 +59,8 @@ if (
         document.domain
     ) >= 0
 ) {
-    let timerId = setInterval(() => {
-        let cards = document.getElementsByClassName("board-card");
+    const timerId = setInterval(() => {
+        const cards = document.getElementsByClassName("board-card");
         let flag = true;
         cards.forEach((card) => {
             if (
@@ -79,7 +79,7 @@ if (
 
     chrome.extension.onMessage.addListener(function(msg) {
         if (msg.action == "move-card") {
-            let elements = document.getElementsByClassName("board-card");
+            const elements = document.getElementsByClassName("board-card");
             for (let i = 0; i < elements.length; ++i) {
                 if (elements[i].getAttribute("data-issue-id") === msg.issue)
                     processCard(elements[i]);
