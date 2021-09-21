@@ -23,7 +23,6 @@ export function setIssueIdAttribute(qoollabCard) {
 }
 
 export function addIssueIdToCardHeader(document, qoollabCard, issueId) {
-    //let cardHeader = qoollabCard.querySelector("li > div > div:nth-child(1)");
     const cardHeader = qoollabCard.querySelector("div > div:nth-child(1)");
     const issueIdElement = document.createElement("div");
     issueIdElement.textContent = `#${issueId}`;
@@ -98,7 +97,6 @@ export function restructCardBody(document, qoollabCard) {
         const labelsDiv = qoollabCard.querySelector(".board-card-labels");
         const cardBody = document.createElement("div");
         cardBody.style = "display: flex; align-items: center; margin-top: 5px";
-        //let labelsDivParent = qoollabCard.querySelector("li > div");
         const labelsDivParent = qoollabCard.querySelector("div");
         labelsDivParent.appendChild(cardBody);
         if (labelsDiv) cardBody.appendChild(labelsDiv);

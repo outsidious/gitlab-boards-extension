@@ -56,11 +56,9 @@ let userToken = "";
 if (window.localStorage["qoollab_user_token"]) {
     userToken = window.localStorage["qoollab_user_token"];
 }
-
 const pathName = window.location.pathname;
 const projectName = pathName.slice(1, pathName.indexOf("/-/"));
 const origin = window.location.origin;
-const gitlabService = new gitlab.GitlabService(origin, projectName, userToken);
 
 export default {
     data() {
@@ -97,6 +95,7 @@ export default {
             issueTitleElement: null,
             issueLinkPreviewElement: null,
             backendUrl: "",
+            gitlabService: null,
         };
     },
     beforeDestroy() {
@@ -129,54 +128,42 @@ export default {
         },
         setPreviewerLink(str) {
             this.issueLinkPreviewElement.href = str;
-            this.issueLinkPreviewElement.style.pointerEvents = "auto";
-            this.issueLinkPreviewElement.style.cursor = "pointer";
-            this.issueLinkPreviewElement.style.display = "";
+            this.issueLinkPreviewElement.style.removeProperty("display");
+            this.issueLinkPreviewElement.style =
+                "pointer-events: auto; cursor: pointer";
         },
         mergeRequest() {
-            gitlabService.updateUserInfo(this.updateUserInfoCallback);
-            gitlabService.mergeRequest(this.issueInfo.lastRelatedMerge.mergeId);
-            this.sendRequestsToGitlabService(this.issueId);
+            this.gitlabService.mergeRequest(
+                this.issueInfo.lastRelatedMerge.mergeId
+            );
         },
         approveRequest() {
-            gitlabService.updateUserInfo(this.updateUserInfoCallback);
             if (this.issueInfo.lastRelatedMerge.mergeId != -1)
-                gitlabService.approveMerge(
+                this.gitlabService.approveMerge(
                     this.issueInfo.lastRelatedMerge.mergeId
                 );
-            this.sendRequestsToGitlabService(this.issueId);
         },
         unapproveRequest() {
-            gitlabService.updateUserInfo(this.updateUserInfoCallback);
             if (this.issueInfo.lastRelatedMerge.mergeId != -1)
-                gitlabService.unapproveMerge(
+                this.gitlabService.unapproveMerge(
                     this.issueInfo.lastRelatedMerge.mergeId
                 );
-            this.sendRequestsToGitlabService(this.issueId);
         },
         markAsReady() {
             if (this.issueInfo.lastRelatedMerge.mergeId != -1) {
-                gitlabService.markAsReady(
+                this.gitlabService.markAsReady(
                     this.issueInfo.lastRelatedMerge.mergeId,
-                    this.issueInfo.lastRelatedMerge.mergeTitle,
-                    this.markAsReadyCallback
+                    this.issueInfo.lastRelatedMerge.mergeTitle
                 );
             }
         },
         markAsDraft() {
             if (this.issueInfo.lastRelatedMerge.mergeId != -1) {
-                gitlabService.markAsDraft(
+                this.gitlabService.markAsDraft(
                     this.issueInfo.lastRelatedMerge.mergeId,
-                    this.issueInfo.lastRelatedMerge.mergeTitle,
-                    this.markAsDraftCallback
+                    this.issueInfo.lastRelatedMerge.mergeTitle
                 );
             }
-        },
-        markAsReadyCallback() {
-            this.sendRequestsToGitlabService(this.issueId);
-        },
-        markAsDraftCallback() {
-            this.sendRequestsToGitlabService(this.issueId);
         },
         getMilestoneCallback(issueInfo) {
             const milestoneInfo = issueInfo["milestone"];
@@ -245,19 +232,16 @@ export default {
             this.getMilestoneCallback(issueInfo);
             this.getQuaMergesCallback(issueInfo);
         },
-        updateUserInfoCallback(userId) {
-            this.userInfo.id = userId;
-        },
         changeButtonMoreState() {
             this.buttonMore = !this.buttonMore;
         },
         sendRequestsToGitlabService(issueId) {
-            gitlabService.getCurrentIssue(issueId, this.getIssueCallback);
-            gitlabService.getRelatedMerges(
+            this.gitlabService.getCurrentIssue(issueId, this.getIssueCallback);
+            this.gitlabService.getRelatedMerges(
                 issueId,
                 this.getRelatedMergesCallback
             );
-            gitlabService.updateUserInfo(this.updateUserInfoCallback);
+            this.gitlabService.updateUserInfo(this.updateUserInfoCallback);
         },
         updateUpdateTime() {
             if (window.localStorage["qoollab_update_time"]) {
@@ -299,6 +283,17 @@ export default {
         },
     },
     mounted() {
+        this.gitlabService = new gitlab.GitlabService(
+            origin,
+            projectName,
+            userToken,
+            () => {
+                this.sendRequestsToGitlabService(this.issueId);
+            },
+            (userId) => {
+                this.userInfo.id = userId;
+            }
+        );
         const qoollabCard = this.$el.parentElement.parentElement;
         this.issueTitleElement = qoollabCard.querySelector(
             "div > div > div > h4 > a"
@@ -319,8 +314,11 @@ export default {
         }, 30000);
 
         this.$on("signalMergeLoaded", function(merge) {
-            gitlabService.getMergeApprovals(merge, this.getApprovalsCallback);
-            this.issueInfo.lastRelatedMerge.changesUrl = gitlabService.getChangesUrl(
+            this.gitlabService.getMergeApprovals(
+                merge,
+                this.getApprovalsCallback
+            );
+            this.issueInfo.lastRelatedMerge.changesUrl = this.gitlabService.getChangesUrl(
                 merge
             );
         });

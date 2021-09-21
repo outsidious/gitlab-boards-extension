@@ -55,15 +55,15 @@ function processCards() {
 export function startRendering() {
     const timerId = setInterval(() => {
         const cards = document.getElementsByClassName("board-card");
-        let flag = true;
+        let loaded = true;
         cards.forEach((card) => {
             if (
                 card.querySelectorAll("span[aria-label='Loading']").length != 0
             ) {
-                flag = false;
+                loaded = false;
             }
         });
-        if (flag) {
+        if (loaded) {
             clearInterval(timerId);
             setTimeout(() => {
                 processCards();
@@ -72,7 +72,7 @@ export function startRendering() {
     }, 1000);
 
     chrome.extension.onMessage.addListener(function(msg) {
-        if (msg.action == "move-card") {
+        if (msg.action === "move-card") {
             const elements = document.getElementsByClassName("board-card");
             elements.forEach((elem) => {
                 if (elem.getAttribute("data-issue-id") === msg.issue)

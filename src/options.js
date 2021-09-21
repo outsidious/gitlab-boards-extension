@@ -28,10 +28,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
     const inputTokenField = document.getElementById("input_token");
     const inputTimeField = document.getElementById("input_time");
-    if (
-        window.localStorage["qoollab_user_token"] &&
-        window.localStorage["qoollab_user_token"] != ""
-    ) {
+    if (window.localStorage["qoollab_user_token"]) {
         inputTokenField.value = window.localStorage["qoollab_user_token"].slice(
             1,
             -1
@@ -97,7 +94,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function removeButtonHandler(e) {
         let tr = e.path[3];
-        if (e.path[0].tagName == "BUTTON") tr = e.path[2];
+        if (e.path[0].tagName === "BUTTON") tr = e.path[2];
         const i = tr.rowIndex;
         tr.parentElement.deleteRow(i);
     }
@@ -109,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const raw = table.insertRow(qua);
         for (let i = 0; i < rawSize; ++i) {
             const cell = raw.insertCell(i);
-            if (i == rawSize - 1) {
+            if (i === rawSize - 1) {
                 cell.classList.add("table-button");
                 const removeButton = document.createElement("button");
                 removeButton.classList.add("remove-button");

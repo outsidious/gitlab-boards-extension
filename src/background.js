@@ -13,8 +13,6 @@ chrome.webRequest.onCompleted.addListener(
         });
     },
     {
-        urls: [
-            "*://*/*/boards*",
-        ],
+        urls: ["*://*/*/boards*"],
     }
 );

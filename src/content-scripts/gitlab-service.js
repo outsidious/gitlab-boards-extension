@@ -1,23 +1,26 @@
 const $ = require("jquery");
 
 class AjaxParams {
-    constructor(url, headers = {}, method = "GET") {
+    constructor(url, headers = {}, method = "GET", callback = () => {}) {
         this.url = url;
         this.headers = headers;
         this.method = method;
         this.complete = () => {};
-        this.success = () => {};
+        this.success = () => {
+            callback();
+        };
     }
 }
 
 export class GitlabService {
-    constructor(urlOrigin, projectName, userToken) {
+    constructor(urlOrigin, projectName, userToken, update, updateUserCallback) {
         this.origin = urlOrigin;
         this.projectName = projectName;
         this.apiURL = "/api/v4/projects/";
         this.userToken = "";
-        this.userId = -1;
         if (userToken) this.userToken = userToken;
+        this.updateInfo = update;
+        this.updateUserCallback = updateUserCallback;
         this.projectId = projectName.replaceAll("/", "%2F"); //formated project name might be used as project id
     }
 
@@ -31,27 +34,23 @@ export class GitlabService {
         };
     }
 
-    updateUserInfo(callback) {
+    updateUserInfo() {
         const newToken = window.localStorage["qoollab_user_token"];
         if (newToken) {
             this.userToken = newToken;
-            this.getUserId(callback);
+            const url = this.origin + "/api/v4/personal_access_tokens";
+            let userId = -1;
+            const params = new AjaxParams(url, this.tokenHeader, "GET");
+            params.success = (data) => {
+                if (data.length) {
+                    userId = data[0]["user_id"];
+                }
+            };
+            params.complete = () => {
+                this.updateUserCallback(userId);
+            };
+            $.ajax(params);
         }
-    }
-
-    getUserId(callback) {
-        const url = this.origin + "/api/v4/personal_access_tokens";
-        this.userId = -1;
-        const params = new AjaxParams(url, this.tokenHeader, "GET");
-        params.success = (data) => {
-            if (data.length) {
-                this.userId = data[0]["user_id"];
-            }
-        };
-        params.complete = () => {
-            callback(this.userId);
-        };
-        $.ajax(params);
     }
 
     getRelatedMerges(issueId, callback) {
@@ -89,56 +88,86 @@ export class GitlabService {
     }
 
     runPipeline(pipelineId) {
+        this.updateUserInfo();
         if (this.userToken) {
             const url = `${this.projectApiUrl}/pipelines/${pipelineId}/retry`;
-            const params = new AjaxParams(url, this.tokenHeader, "POST");
+            const params = new AjaxParams(
+                url,
+                this.tokenHeader,
+                "POST",
+                this.updateInfo
+            );
             $.ajax(params);
         }
     }
 
     mergeRequest(mergeId) {
+        this.updateUserInfo();
         if (this.userToken) {
             const url = `${this.projectApiUrl}/merge_requests/${mergeId}/merge`;
-            const params = new AjaxParams(url, this.tokenHeader, "PUT");
+            const params = new AjaxParams(
+                url,
+                this.tokenHeader,
+                "PUT",
+                this.updateInfo
+            );
             $.ajax(params);
         }
     }
 
     approveMerge(mergeId) {
+        this.updateUserInfo();
         if (this.userToken) {
             const url = `${this.projectApiUrl}/merge_requests/${mergeId}/approve`;
-            const params = new AjaxParams(url, this.tokenHeader, "POST");
+            const params = new AjaxParams(
+                url,
+                this.tokenHeader,
+                "POST",
+                this.updateInfo
+            );
             $.ajax(params);
         }
     }
 
     unapproveMerge(mergeId) {
+        this.updateUserInfo();
         if (this.userToken) {
             const url = `${this.projectApiUrl}/merge_requests/${mergeId}/unapprove`;
-            const params = new AjaxParams(url, this.tokenHeader, "POST");
+            const params = new AjaxParams(
+                url,
+                this.tokenHeader,
+                "POST",
+                this.updateInfo
+            );
             $.ajax(params);
         }
     }
 
-    markAsReady(mergeId, mergeTitle, callback) {
+    markAsReady(mergeId, mergeTitle) {
+        this.updateUserInfo();
         if (this.userToken) {
             mergeTitle = mergeTitle.replace("Draft: ", "");
             const url = `${this.projectApiUrl}/merge_requests/${mergeId}?title=${mergeTitle}`;
-            const params = new AjaxParams(url, this.tokenHeader, "PUT");
-            params.success = () => {
-                callback();
-            };
+            const params = new AjaxParams(
+                url,
+                this.tokenHeader,
+                "PUT",
+                this.updateInfo
+            );
             $.ajax(params);
         }
     }
 
-    markAsDraft(mergeId, mergeTitle, callback) {
+    markAsDraft(mergeId, mergeTitle) {
+        this.updateUserInfo();
         if (this.userToken) {
             const url = `${this.projectApiUrl}/merge_requests/${mergeId}?title=Draft: ${mergeTitle}`;
-            const params = new AjaxParams(url, this.tokenHeader, "PUT");
-            params.success = () => {
-                callback();
-            };
+            const params = new AjaxParams(
+                url,
+                this.tokenHeader,
+                "PUT",
+                this.updateInfo
+            );
             $.ajax(params);
         }
     }
