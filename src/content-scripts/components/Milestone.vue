@@ -1,34 +1,25 @@
 <template>
     <div class="milestone-container">
-        <img alt="clock-icon" class="img-icon" :src="clockIconUrl" />
+        <svg class="s16 base-color" data-testid="clock-icon">
+            <use :xlink:href="iconsUrl + clockIconUrl"></use>
+        </svg>
         {{ due_date }}
     </div>
 </template>
 
 <script>
 export default {
-    props: ["due_date"],
+    props: ["due_date", "iconsUrl"],
     data() {
         return {
-            clockIconUrl: "",
+            clockIconUrl: "#clock",
         };
-    },
-    mounted() {
-        this.clockIconUrl = chrome.extension.getURL(
-            require(`../../assets/sprite_icons/clock.svg`)
-        );
     },
 };
 </script>
 
 <style scoped>
-.img-icon {
-    position: relative;
-    bottom: 0.1rem;
+.base-color {
+    fill: #929292;
 }
-
-/*
-.milestone-container {
-    width: 35%;
-}*/
 </style>

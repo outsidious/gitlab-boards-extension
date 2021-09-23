@@ -20,6 +20,7 @@
             <div class="gitlab-info">
                 <milestone-component
                     v-bind:due_date="issueInfo.milestoneInfo.due_date"
+                    v-bind:iconsUrl="iconsUrl"
                 >
                 </milestone-component>
                 <merge-request
@@ -32,6 +33,7 @@
                 </merge-request>
                 <approve
                     v-bind:approvers="issueInfo.lastRelatedMerge.approvers"
+                    v-bind:iconsUrl="iconsUrl"
                 >
                 </approve>
                 <div

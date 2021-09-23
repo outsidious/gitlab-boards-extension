@@ -39,12 +39,6 @@ export default {
 </script>
 
 <style scoped>
-.img-icon {
-    position: relative;
-    bottom: 0.1rem;
-    padding-right: 1px;
-}
-
 .base-color {
     fill: #929292;
 }
