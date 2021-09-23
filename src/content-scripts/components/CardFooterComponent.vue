@@ -379,4 +379,8 @@ export default {
 .button-more:hover {
     background-color: rgba(41, 41, 97, 0.08);
 }
+
+.base-color {
+    fill: #929292;
+}
 </style>

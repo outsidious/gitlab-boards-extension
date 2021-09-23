@@ -1,29 +1,25 @@
 <template>
     <div>
-        <img alt="approve-icon" class="img-icon" :src="approveIconUrl" />
+        <svg class="s16 base-color" data-testid="approval-icon">
+            <use :xlink:href="iconsUrl + approveIconUrl"></use>
+        </svg>
         {{ approvers.length }}
     </div>
 </template>
 
 <script>
 export default {
-    props: ["approvers"],
+    props: ["approvers", "iconsUrl"],
     data() {
         return {
-            approveIconUrl: "",
+            approveIconUrl: "#approval",
         };
-    },
-    mounted() {
-        this.approveIconUrl = chrome.extension.getURL(
-            require(`../../assets/sprite_icons/approval-solid.svg`)
-        );
     },
 };
 </script>
 
 <style scoped>
-.img-icon {
-    position: relative;
-    bottom: 0.1rem;
+.base-color {
+    fill: #929292;
 }
 </style>
