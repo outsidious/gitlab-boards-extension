@@ -21,6 +21,7 @@
         </actions>
         <br />
         <details-comp
+            v-bind:iconsUrl="iconsUrl"
             v-bind:milestoneInfo="issueInfo.milestoneInfo"
             v-bind:mergeInfo="issueInfo.lastRelatedMerge"
         >
@@ -42,7 +43,7 @@
 <script>
 import "vue-material-design-icons/styles.css";
 export default {
-    props: ["issueInfo", "userInfo"],
+    props: ["issueInfo", "userInfo", "iconsUrl"],
     methods: {
         /*
         runPipeline() {

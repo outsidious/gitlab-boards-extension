@@ -8,6 +8,7 @@
             <hidden-part
                 v-bind:issueInfo="issueInfo"
                 v-bind:userInfo="userInfo"
+                v-bind:iconsUrl="iconsUrl"
                 v-on:signalMarkAsReady="markAsReady"
                 v-on:signalMarkAsDraft="markAsDraft"
                 v-on:signalMerge="mergeRequest"

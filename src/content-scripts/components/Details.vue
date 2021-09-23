@@ -17,6 +17,18 @@
         <div class="space"></div>
         <div v-if="mergeInfo.mergeTitle !== ''" class="elem-container">
             <div class="help-title">Merge:</div>
+            <a>
+                <svg
+                    v-if="mergeInfo.mergeConflicts"
+                    class="conflicts-icon s20"
+                    data-testid="conflicts-icon"
+                >
+                    <use :xlink:href="iconsUrl + conflictsIconUrl"></use>
+                </svg>
+                <md-tooltip md-direction="left">
+                    There are merge conflicts
+                </md-tooltip>
+            </a>
             <a
                 :href="this.mergeInfo.changesUrl.slice(0, -6)"
                 class="text-title"
@@ -62,8 +74,12 @@
 <script>
 import "vue-material-design-icons/styles.css";
 export default {
-    props: ["milestoneInfo", "mergeInfo"],
-    methods: {},
+    props: ["milestoneInfo", "mergeInfo", "iconsUrl"],
+    data() {
+        return {
+            conflictsIconUrl: "#status_warning",
+        };
+    },
 };
 </script>
 
@@ -92,6 +108,7 @@ a {
 
 .elem-container {
     display: flex;
+    align-items: center;
 }
 
 .approvers-container {
@@ -128,5 +145,14 @@ img {
 .space {
     width: 100%;
     height: 8px;
+}
+
+.s20 {
+    width: 20px;
+    height: 20px;
+}
+
+.conflicts-icon {
+    cursor: pointer;
 }
 </style>
