@@ -27,6 +27,7 @@
                     v-bind:mergeStatus="
                         issueInfo.lastRelatedMerge.pipelineStatus
                     "
+                    v-bind:iconsUrl="iconsUrl"
                 >
                 </merge-request>
                 <approve
@@ -95,6 +96,7 @@ export default {
             issueTitleElement: null,
             issueLinkPreviewElement: null,
             backendUrl: "",
+            iconsUrl: "",
             gitlabService: null,
         };
     },
@@ -192,9 +194,7 @@ export default {
                     )
                         theLatest = merge;
                 });
-                this.issueInfo.lastRelatedMerge = {
-                    ...this.issueInfo.lastRelatedMerge,
-                };
+
                 this.issueInfo.lastRelatedMerge.mergeId = theLatest["iid"]; // lastRelated in var
                 this.issueInfo.lastRelatedMerge.sourceBranch =
                     theLatest["source_branch"];
@@ -294,6 +294,10 @@ export default {
                 this.userInfo.id = userId;
             }
         );
+        const firstIconUrl = document
+            .querySelector("use[href|='/assets/icons']")
+            .getAttribute("href");
+        this.iconsUrl = firstIconUrl.slice(0, firstIconUrl.indexOf("#"));
         const qoollabCard = this.$el.parentElement.parentElement;
         this.issueTitleElement = qoollabCard.querySelector(
             "div > div > div > h4 > a"

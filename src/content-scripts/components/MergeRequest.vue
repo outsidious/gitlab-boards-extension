@@ -1,45 +1,39 @@
 <template>
     <div class="merge-flex-container">
-        <img alt="branch-icon" class="img-icon" :src="branchIconUrl" />
+        <svg class="s16 base-color" data-testid="git-merge-icon">
+            <use :xlink:href="iconsUrl + branchIconUrl"></use>
+        </svg>
         {{ mergesQua }}
-        <img
+        <svg
             v-if="mergeStatus === 'passed' || mergeStatus === 'success'"
-            class="img-icon"
-            :src="checkIconUrl"
-        />
-        <img
+            class="s16 success-color"
+            data-testid="success-icon"
+        >
+            <use :xlink:href="iconsUrl + successIconUrl"></use>
+        </svg>
+        <svg
             v-else-if="mergeStatus === 'failed'"
-            class="img-icon"
-            :src="clearIconUrl"
-        />
-        <img v-else class="img-icon" :src="notfoundIconUrl" />
+            class="s16 failed-color"
+            data-testid="failed-icon"
+        >
+            <use :xlink:href="iconsUrl + failedIconUrl"></use>
+        </svg>
+        <svg v-else class="s16 not-found-color" data-testid="not-found-icon">
+            <use :xlink:href="iconsUrl + notfoundIconUrl"></use>
+        </svg>
     </div>
 </template>
 
 <script>
 export default {
-    props: ["mergesQua", "mergeStatus"],
+    props: ["mergesQua", "mergeStatus", "iconsUrl"],
     data() {
         return {
-            branchIconUrl: "",
-            checkIconUrl: "",
-            successIconUrl: "",
-            notfoundIconUrl: "",
+            branchIconUrl: "#git-merge",
+            successIconUrl: "#status_success",
+            failedIconUrl: "#status_failed",
+            notfoundIconUrl: "#question-o",
         };
-    },
-    mounted() {
-        this.branchIconUrl = chrome.extension.getURL(
-            require(`../../assets/sprite_icons/branch.svg`)
-        );
-        this.checkIconUrl = chrome.extension.getURL(
-            require(`../../assets/sprite_icons/check-circle.svg`)
-        );
-        this.clearIconUrl = chrome.extension.getURL(
-            require(`../../assets/sprite_icons/status_failed.svg`)
-        );
-        this.notfoundIconUrl = chrome.extension.getURL(
-            require(`../../assets/sprite_icons/question.svg`)
-        );
     },
 };
 </script>
@@ -49,5 +43,21 @@ export default {
     position: relative;
     bottom: 0.1rem;
     padding-right: 1px;
+}
+
+.base-color {
+    fill: #929292;
+}
+
+.success-color {
+    fill: #27ae60;
+}
+
+.failed-color {
+    fill: #b21616;
+}
+
+.not-found-color {
+    fill: #ffc807;
 }
 </style>
