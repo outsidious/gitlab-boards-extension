@@ -40,9 +40,11 @@
                 <div
                     class="button-more"
                     @click.stop="changeButtonMoreState()"
-                    @focusin.stop
-                    @focusout.stop
+                    @mouseup.stop
                     @mousedown.stop
+                    @focus.stop
+                    @pointerdown.stop
+                    @pointerup.stop
                 >
                     <button-more v-bind:buttonMoreState="buttonMore">
                     </button-more>
