@@ -13,7 +13,7 @@
 
 <script>
 export default {
-    props: ["buttonMoreState"]
+    props: ["buttonMoreState"],
 };
 </script>
 

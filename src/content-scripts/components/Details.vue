@@ -7,9 +7,12 @@
             <a
                 :href="this.milestoneInfo.web_url"
                 class="text-title"
-                @click.stop
-                @focusin.stop
+                @mouseup.stop
                 @mousedown.stop
+                @click.stop
+                @focus.stop
+                @pointerdown.stop
+                @pointerup.stop
             >
                 {{ milestoneInfo.milestoneTitle }}
             </a>
@@ -32,9 +35,12 @@
             <a
                 :href="this.mergeInfo.changesUrl.slice(0, -6)"
                 class="text-title"
-                @click.stop
-                @focusin.stop
+                @mouseup.stop
                 @mousedown.stop
+                @click.stop
+                @focus.stop
+                @pointerdown.stop
+                @pointerup.stop
             >
                 "{{ mergeInfo.mergeTitle }}"
             </a>
@@ -53,9 +59,12 @@
                 <div class="img-space"></div>
                 <md-avatar class="md-small">
                     <a
-                        @click.stop
-                        @focusin.stop
+                        @mouseup.stop
                         @mousedown.stop
+                        @click.stop
+                        @focus.stop
+                        @pointerdown.stop
+                        @pointerup.stop
                         class="img-container"
                         v-bind:href="item.user.web_url"
                     >

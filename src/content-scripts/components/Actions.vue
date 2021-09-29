@@ -1,11 +1,17 @@
 <template>
     <div class="component-container">
         <div class="help-text">actions</div>
-        <div class="buttons-container">
+        <div
+            @mouseup.stop
+            @mousedown.stop
+            @click.stop
+            @focus.stop
+            @pointerdown.stop
+            @pointerup.stop
+            class="buttons-container"
+        >
             <md-button
                 v-on:click="merge()"
-                @focusin.stop
-                @mousedown.stop
                 class="merge-button btn btn-info mr-3 btn-md gl-button"
                 v-bind="{
                     disabled:
@@ -21,8 +27,6 @@
             <md-button
                 v-if="checkWasntApproved()"
                 v-on:click="approve()"
-                @focusin.stop
-                @mousedown.stop
                 class="btn mr-3 btn-info btn-md gl-button"
                 v-bind="{
                     disabled: this.mergeInfo.mergeId === -1,
@@ -33,8 +37,6 @@
             <md-button
                 v-else
                 v-on:click="unapprove()"
-                @focusin.stop
-                @mousedown.stop
                 class="btn mr-3 btn-warning btn-md gl-button btn-warning-secondary"
             >
                 Disapprove
@@ -43,16 +45,12 @@
             <md-button
                 v-if="mergeInfo.draft"
                 v-on:click="markAsReady()"
-                @focusin.stop
-                @mousedown.stop
                 class="btn btn-default btn-md gl-button"
                 >Mark as ready</md-button
             >
             <md-button
                 v-else
                 v-on:click="markAsDraft()"
-                @focusin.stop
-                @mousedown.stop
                 class="btn btn-default btn-md gl-button"
                 >Mark as draft</md-button
             >

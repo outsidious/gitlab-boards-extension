@@ -9,7 +9,7 @@ export default {
     name: "HelloWorld",
     methods: {
         openOptions() {
-			chrome.tabs.create({'url': "/options.html" } )
+            chrome.tabs.create({ url: "/options.html" });
         },
     },
 };
@@ -19,14 +19,14 @@ export default {
 .popup-elem {
     color: black;
     font-weight: 600;
-	font-size: 18pt;
+    font-size: 18pt;
 }
 
 .popup-container {
-	width: inherit;
-	height: inherit;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+    width: inherit;
+    height: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 </style>
