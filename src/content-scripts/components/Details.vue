@@ -41,13 +41,13 @@
         </div>
         <div class="space"></div>
         <div
-            v-if="mergeInfo.approvers.length != 0"
+            v-if="issueInfo.approvers.length != 0"
             class="elem-container approvers-container"
         >
             <div class="help-title">Approvers:</div>
             <div
                 class="avatar-container"
-                v-for="item in mergeInfo.approvers"
+                v-for="item in issueInfo.approvers"
                 :key="item.user.id"
             >
                 <div class="img-space"></div>
@@ -74,10 +74,11 @@
 <script>
 import "vue-material-design-icons/styles.css";
 export default {
-    props: ["milestoneInfo", "mergeInfo", "iconsUrl"],
+    props: ["milestoneInfo", "issueInfo", "iconsUrl"],
     data() {
         return {
             conflictsIconUrl: "#status_warning",
+            mergeInfo: this.issueInfo.lastRelatedMerge,
         };
     },
 };

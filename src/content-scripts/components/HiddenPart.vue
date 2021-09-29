@@ -15,15 +15,16 @@
             v-on:signalMerge="merge"
             v-on:signalMarkAsReady="markAsReady"
             v-on:signalMarkAsDraft="markAsDraft"
-            v-bind:mergeInfo="issueInfo.lastRelatedMerge"
+            v-bind:issueInfo="issueInfo"
             v-bind:userInfo="userInfo"
+            v-bind:mergeInfo="issueInfo.lastRelatedMerge"
         >
         </actions>
         <br />
         <details-comp
             v-bind:iconsUrl="iconsUrl"
             v-bind:milestoneInfo="issueInfo.milestoneInfo"
-            v-bind:mergeInfo="issueInfo.lastRelatedMerge"
+            v-bind:issueInfo="issueInfo"
         >
         </details-comp>
 

@@ -33,7 +33,7 @@
                 >
                 </merge-request>
                 <approve
-                    v-bind:approvers="issueInfo.lastRelatedMerge.approvers"
+                    v-bind:approvers="issueInfo.approvers"
                     v-bind:iconsUrl="iconsUrl"
                 >
                 </approve>
@@ -74,6 +74,7 @@ export default {
                     due_date: "-",
                 },
                 mergesQua: "-",
+                approvers: [],
                 lastRelatedMerge: {
                     mergeStatus: "",
                     mergeTitle: "",
@@ -82,7 +83,6 @@ export default {
                     mergeConflicts: false,
                     pipelineId: -1,
                     pipelineStatus: "undefined",
-                    approvers: [],
                     changesUrl: "",
                     draft: false,
                     sourceBranch: "",
@@ -137,10 +137,14 @@ export default {
             this.issueLinkPreviewElement.style =
                 "pointer-events: auto; cursor: pointer";
         },
+        changeButtonMoreState() {
+            this.buttonMore = !this.buttonMore;
+        },
         mergeRequest() {
-            this.gitlabService.mergeRequest(
-                this.issueInfo.lastRelatedMerge.mergeId
-            );
+            if (this.issueInfo.lastRelatedMerge.mergeId != -1)
+                this.gitlabService.mergeRequest(
+                    this.issueInfo.lastRelatedMerge.mergeId
+                );
         },
         approveRequest() {
             if (this.issueInfo.lastRelatedMerge.mergeId != -1)
@@ -187,6 +191,30 @@ export default {
         getQuaMergesCallback(issueInfo) {
             this.issueInfo.mergesQua = issueInfo["merge_requests_count"];
         },
+        setIssueInfo({
+            iid,
+            source_branch,
+            description,
+            merge_status,
+            state,
+            title,
+            has_conflicts = false,
+            head_pipeline = null,
+        }) {
+            this.issueInfo.lastRelatedMerge = {
+                state,
+                mergeId: iid,
+                sourceBranch: source_branch,
+                mergeTitle: description,
+                mergeStatus: merge_status,
+                draft: title.includes("Draft: "),
+                mergeConflicts: has_conflicts,
+                pipelineStatus: head_pipeline
+                    ? head_pipeline.status
+                    : "undefined",
+                pipelineId: head_pipeline ? head_pipeline.id : -1,
+            };
+        },
         getRelatedMergesCallback(mergesInfo) {
             if (mergesInfo.length != 0) {
                 let theLatest = mergesInfo[0];
@@ -197,30 +225,10 @@ export default {
                     )
                         theLatest = merge;
                 });
-
-                this.issueInfo.lastRelatedMerge.mergeId = theLatest["iid"]; // lastRelated in var
-                this.issueInfo.lastRelatedMerge.sourceBranch =
-                    theLatest["source_branch"];
-                this.issueInfo.lastRelatedMerge.mergeTitle =
-                    theLatest["description"];
-                this.issueInfo.lastRelatedMerge.mergeStatus =
-                    theLatest["merge_status"];
-                this.issueInfo.lastRelatedMerge.state = theLatest["state"];
-                this.issueInfo.lastRelatedMerge.draft = theLatest[
-                    "title"
-                ].includes("Draft: ");
+                this.setIssueInfo(theLatest);
                 if (this.issueInfo.lastRelatedMerge.draft)
                     this.setTitleStatus("draft");
                 else this.setTitleStatus("ready");
-                if (theLatest["has_conflicts"])
-                    this.issueInfo.lastRelatedMerge.mergeConflicts =
-                        theLatest["has_conflicts"];
-                if (theLatest["head_pipeline"]) {
-                    this.issueInfo.lastRelatedMerge.pipelineStatus =
-                        theLatest["head_pipeline"].status;
-                    this.issueInfo.lastRelatedMerge.pipelineId =
-                        theLatest["head_pipeline"].id;
-                }
                 this.updateBackendUrl();
             }
             this.$emit(
@@ -229,14 +237,11 @@ export default {
             );
         },
         getApprovalsCallback(approvers) {
-            this.issueInfo.lastRelatedMerge.approvers = approvers;
+            this.issueInfo.approvers = approvers;
         },
         getIssueCallback(issueInfo) {
             this.getMilestoneCallback(issueInfo);
             this.getQuaMergesCallback(issueInfo);
-        },
-        changeButtonMoreState() {
-            this.buttonMore = !this.buttonMore;
         },
         sendRequestsToGitlabService(issueId) {
             this.gitlabService.getCurrentIssue(issueId, this.getIssueCallback);
@@ -244,7 +249,6 @@ export default {
                 issueId,
                 this.getRelatedMergesCallback
             );
-            this.gitlabService.updateUserInfo(this.updateUserInfoCallback);
         },
         updateUpdateTime() {
             if (window.localStorage["qoollab_update_time"]) {
@@ -263,7 +267,7 @@ export default {
                 }
             });
             if (
-                this.backendUrl != "" &&
+                this.backendUrl &&
                 this.issueInfo.lastRelatedMerge.sourceBranch != ""
             ) {
                 this.setPreviewerLink(

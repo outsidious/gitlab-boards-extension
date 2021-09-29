@@ -63,7 +63,7 @@
 <script>
 import "vue-material-design-icons/styles.css";
 export default {
-    props: ["mergeInfo", "userInfo"],
+    props: ["issueInfo", "mergeInfo", "userInfo"],
     methods: {
         merge() {
             this.$emit("signalMerge");
@@ -82,7 +82,7 @@ export default {
         },
         checkWasntApproved() {
             let flag = true;
-            this.mergeInfo.approvers.forEach(approver => {
+            this.issueInfo.approvers.forEach((approver) => {
                 if (approver.user.id === this.userInfo.id) {
                     flag = false;
                     return;
