@@ -1,4 +1,4 @@
-# Qoollab     
+# GitLab boards extension     
 Улучшенное отображение карточек в GitLab Issues/Boards.     
       
 # Описание     
