@@ -1,0 +1,182 @@
+<html>
+    <head>
+        <title>Qoollab Options</title>
+    </head>
+
+    <body>
+        <div class="parent">
+            <b>Your access token:</b>
+            <br />
+            <div class="block">
+                <div>
+                    <input type="text" size="30" id="input_token" />
+                </div>
+            </div>
+        </div>
+
+        <div class="parent">
+            <b> Update info every:</b>
+            <br />
+            <div class="block">
+                <div>
+                    <input type="text" size="10" id="input_time" />
+                    (sec)
+                </div>
+            </div>
+        </div>
+
+        <div class="parent">
+            <b> Preview (Gitlab CD):</b>
+            <br />
+            <div class="block">
+                <table id="preview-table">
+                    <tr class="first-tr">
+                        <td>URL to 'git.../[PROJECT NAME]/-/boards' page</td>
+                        <td>URL to backend</td>
+                        <td class="table-button">
+                            <button class="add-button">
+                                <img class="add-image" />
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="parent">
+            <b> Working domains:</b>
+            <br />
+            <div class="block">
+                <table id="domains-table">
+                    <tr class="first-tr">
+                        <td>Domain (for example: 'git.qoollo.com')</td>
+                        <td class="table-button">
+                            <button class="add-button">
+                                <img class="add-image" />
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="parent">
+            <button id="save">Save changes</button>
+            <div id="status"></div>
+        </div>
+    </body>
+
+    <script src="options.js"></script>
+
+    <style>
+        body {
+            background-color: EC9548;
+        }
+
+        b {
+            font-size: 16px;
+        }
+
+        .parent {
+            margin-left: 5px;
+        }
+
+        button {
+            margin-left: 10px;
+        }
+
+        #save {
+            margin-left: 0;
+            background-color: FFC2AC;
+            border-radius: 8px;
+            font-size: 20px;
+            border-color: tan;
+            padding: 5px 10px;
+        }
+
+        .block {
+            display: flex;
+            padding-bottom: 20px;
+            padding-top: 5px;
+        }
+
+        table {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        th {
+            border: 1px solid black;
+        }
+
+        td {
+            border: 1px solid black;
+            padding: 5px 15px 5px 15px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .first-tr {
+            font-weight: 600;
+            border: 2px solid black;
+        }
+
+        .table-button {
+            width: 27px;
+            height: 27px;
+        }
+
+        .remove-button {
+            border-radius: 4px;
+            padding: 2px;
+            margin: 0;
+            border: none;
+            background-color: B94331;
+            cursor: pointer;
+        }
+
+        .remove-button:hover {
+            background-color: 8d2f29;
+        }
+
+        .remove-button:active {
+            box-shadow: 0 3px 683d3d;
+            transform: translateY(1px);
+        }
+
+        .add-button {
+            border-radius: 4px;
+            padding: 2px;
+            margin: 0;
+            border: none;
+            background-color: 56812b;
+            cursor: pointer;
+        }
+
+        .add-button:hover {
+            background-color: 3a662f;
+        }
+
+        .add-button:active {
+            box-shadow: 0 3px 683d3d;
+            transform: translateY(1px);
+        }
+
+        img {
+            width: 22px;
+            height: 22px;
+        }
+
+        input {
+            background-color: FFC2AC;
+            font-size: 17px;
+            border-color: tan;
+            border-radius: 3px;
+        }
+
+        .table-input {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</html>
